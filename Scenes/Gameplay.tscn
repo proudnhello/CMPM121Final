@@ -1,0 +1,24 @@
+[gd_scene load_steps=4 format=3 uid="uid://bgh1ayrmhacoe"]
+
+[ext_resource type="Texture2D" uid="uid://dm1v2tfuxacr4" path="res://Sprites/Character/bean-294077_1280.png" id="1_lv6rf"]
+[ext_resource type="Script" path="res://Scripts/Character/CharacterMovement.cs" id="2_nvx61"]
+[ext_resource type="Script" path="res://Scripts/Grid/GridRenderer.cs" id="3_h0kew"]
+
+[node name="Node2D" type="Node2D"]
+
+[node name="Character" type="Sprite2D" parent="."]
+scale = Vector2(0.243182, 0.243182)
+texture = ExtResource("1_lv6rf")
+script = ExtResource("2_nvx61")
+moveSpeed = 20.0
+
+[node name="Camera2D" type="Camera2D" parent="."]
+scale = Vector2(0.243182, 0.243182)
+zoom = Vector2(0.3, 0.3)
+position_smoothing_enabled = true
+
+[node name="Grid" type="Node2D" parent="."]
+scale = Vector2(0.243182, 0.243182)
+script = ExtResource("3_h0kew")
+gridSize = 64.0
+gridCellSize = 5.0
