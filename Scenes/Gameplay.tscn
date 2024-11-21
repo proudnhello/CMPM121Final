@@ -1,9 +1,8 @@
-[gd_scene load_steps=5 format=3 uid="uid://bgh1ayrmhacoe"]
+[gd_scene load_steps=4 format=3 uid="uid://bgh1ayrmhacoe"]
 
 [ext_resource type="Texture2D" uid="uid://dm1v2tfuxacr4" path="res://Sprites/Character/bean-294077_1280.png" id="1_lv6rf"]
 [ext_resource type="Script" path="res://Scripts/Character/CharacterMovement.cs" id="2_nvx61"]
 [ext_resource type="Script" path="res://Scripts/Grid/GridManager.cs" id="3_03wem"]
-[ext_resource type="Script" path="res://Scripts/Grid/GridRenderer.cs" id="3_h0kew"]
 
 [node name="Node2D" type="Node2D"]
 
@@ -26,12 +25,9 @@ scale = Vector2(10, 10)
 text = "PROGRESS TIME"
 
 [node name="GridManager" type="Node2D" parent="."]
-scale = Vector2(0.243182, 0.243182)
 script = ExtResource("3_03wem")
 gridDimensions = 9
-
-[node name="GridRenderer" type="Node2D" parent="GridManager"]
-script = ExtResource("3_h0kew")
-gridCellSize = 10.0
+maxWaterLevelIncrease = 5
+maxSunLevel = 20
 
 [connection signal="pressed" from="Camera2D/ProgressTimeButton" to="GridManager" method="ProgressTime"]

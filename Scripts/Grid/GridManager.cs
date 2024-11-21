@@ -23,36 +23,51 @@ public class Grid {
 		return currentCells;
 	}
 
-	public void Iterate() {
+	public void StepTime(int maxWaterLevelIncrease, int maxSunLevel) {
 		
 		// iterate through currentCells and store changes in swapCells, then swap pointers;
 		for (int i = 0; i < currentCells.Length; i++) {
 			int x = i % dimensions;
 			int y = Mathf.FloorToInt(i / dimensions);
+			
+			// Increase water level by a random amount
+			swapCells[i].waterLevel = currentCells[i].waterLevel + Mathf.FloorToInt(GD.RandRange(0, maxWaterLevelIncrease));
 
-			swapCells[i].waterLevel = currentCells[i].waterLevel + 1;
+			// Set sun level to a random amount
+			swapCells[i].sunLevel = Mathf.FloorToInt(GD.RandRange(0, maxSunLevel));
 		}
 
-        (swapCells, currentCells) = (currentCells, swapCells);
-    }
+		(swapCells, currentCells) = (currentCells, swapCells);
+	}
 }
 
 public partial class GridManager : Node
 {
 	[Export(PropertyHint.Range, "1, 200")] public int gridDimensions;
+	[Export] public int maxWaterLevelIncrease;
+	[Export] public int maxSunLevel;
 
-	public GridRenderer GridRenderer;
 	public Grid grid;
 
 	public override void _Ready()
 	{
 		grid = new Grid(gridDimensions);
-		GridRenderer = GetNode<GridRenderer>("/root/Node2D/GridManager/GridRenderer");
+		GD.Randomize();
 	}
 
 	public void ProgressTime() {
-		grid.Iterate();
-		GridRenderer.RenderGrid(grid.GetCells());
+		// Progress time by one step
+		grid.StepTime(maxWaterLevelIncrease, maxSunLevel);
+		RenderGrid();
+	}
+
+	public void RenderGrid()
+	{ 
+		for (int i = 0; i < grid.currentCells.Length; i++) {
+			int x = i % gridDimensions;
+			int y = Mathf.FloorToInt(i / gridDimensions);
+			Cell cell = grid.currentCells[i];
+			GD.Print($"Cell at {x}, {y} has water level {cell.waterLevel} and sun level {cell.sunLevel}");
+		}
 	}
 }
-
