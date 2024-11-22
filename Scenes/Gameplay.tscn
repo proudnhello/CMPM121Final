@@ -1,7 +1,7 @@
 [gd_scene load_steps=7 format=3 uid="uid://bgh1ayrmhacoe"]
 
 [ext_resource type="Texture2D" uid="uid://dm1v2tfuxacr4" path="res://Sprites/Character/bean-294077_1280.png" id="1_lv6rf"]
-[ext_resource type="Resource" path="res://GridOptions.tres" id="2_iycgm"]
+[ext_resource type="Resource" uid="uid://boc2rni7drg05" path="res://GridOptions.tres" id="2_iycgm"]
 [ext_resource type="Script" path="res://Scripts/Character/CharacterMovement.cs" id="2_nvx61"]
 [ext_resource type="Script" path="res://Scripts/Grid/GridManager.cs" id="3_03wem"]
 [ext_resource type="PackedScene" uid="uid://ctgicajw68chx" path="res://Scenes/Cell.tscn" id="4_amv5q"]
@@ -33,11 +33,10 @@ texture = ExtResource("1_lv6rf")
 script = ExtResource("2_nvx61")
 
 [node name="Inventory" parent="." instance=ExtResource("6_48ej5")]
-offset_left = -1276.0
-offset_top = 617.0
-offset_right = -1276.0
-offset_bottom = 617.0
+offset_left = -1790.0
+offset_top = 476.0
+offset_right = -1690.0
+offset_bottom = 576.0
 scale = Vector2(11.5859, 11.534)
-startingSeedCount = 3
 
 [connection signal="pressed" from="Camera2D/ProgressTimeButton" to="GridManager" method="ProgressTime"]
