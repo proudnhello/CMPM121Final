@@ -23,6 +23,11 @@ public class Grid {
 		return currentCells;
 	}
 
+	// Fetch the cell at (x, y) in the grid
+	public Cell FetchCell(int x, int y) {
+		return currentCells[y * dimensions + x];
+	}
+
 	public void StepTime(int maxWaterLevelIncrease, int maxSunLevel) {
 		
 		// iterate through currentCells and store changes in swapCells, then swap pointers;
@@ -47,12 +52,21 @@ public partial class GridManager : Node
 	[Export] public int maxWaterLevelIncrease;
 	[Export] public int maxSunLevel;
 
+	[Export] PackedScene cellScene;
+
 	public Grid grid;
+	
+	Node2D[][] gridSprites;
 
 	public override void _Ready()
 	{
 		grid = new Grid(gridDimensions);
+		gridSprites = new Node2D[gridDimensions][];
+		for (int i = 0; i < gridDimensions; i++) {
+			gridSprites[i] = new Node2D[gridDimensions];
+		}
 		GD.Randomize();
+		RenderGrid();
 	}
 
 	public void ProgressTime() {
@@ -63,11 +77,24 @@ public partial class GridManager : Node
 
 	public void RenderGrid()
 	{ 
-		for (int i = 0; i < grid.currentCells.Length; i++) {
-			int x = i % gridDimensions;
-			int y = Mathf.FloorToInt(i / gridDimensions);
-			Cell cell = grid.currentCells[i];
-			GD.Print($"Cell at {x}, {y} has water level {cell.waterLevel} and sun level {cell.sunLevel}");
+		// Iterate through the grid and render the cells
+		for (int i = 0; i < gridDimensions; i++){
+			for (int j = 0; j < gridDimensions; j++){
+				Cell cell = grid.FetchCell(i, j);
+
+				// If the cell is null, create a new cell
+				if (gridSprites[i][j] == null) {
+					Node2D cellNode = (Node2D)cellScene.Instantiate();
+					// Get the sprite of the cell, so we know the size of it, so we can position it correctly
+					Sprite2D cellSprite = cellNode.GetNode<Sprite2D>("Ground");
+					cellNode.Position = new Vector2(
+						(i - gridDimensions / 2) * cellSprite.Texture.GetWidth() * cellSprite.Scale[0],
+						(j - gridDimensions / 2) * cellSprite.Texture.GetWidth() * cellSprite.Scale[1]
+					);
+					gridSprites[i][j] = cellNode;
+					AddChild(gridSprites[i][j]);
+				}
+			}
 		}
 	}
 }

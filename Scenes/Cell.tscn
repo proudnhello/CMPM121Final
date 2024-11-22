@@ -1,0 +1,32 @@
+[gd_scene load_steps=3 format=3 uid="uid://ctgicajw68chx"]
+
+[ext_resource type="LabelSettings" uid="uid://q6pelwgu6mad" path="res://TextSettings/CellLabelSettings.tres" id="1_t4g1h"]
+
+[sub_resource type="CanvasTexture" id="CanvasTexture_geoto"]
+
+[node name="Cell" type="Node2D"]
+
+[node name="Ground" type="Sprite2D" parent="."]
+self_modulate = Color(0.803922, 0.521569, 0.247059, 1)
+scale = Vector2(400, 400)
+texture = SubResource("CanvasTexture_geoto")
+
+[node name="Water" type="Label" parent="."]
+self_modulate = Color(0, 0.492431, 0.900718, 1)
+offset_left = -200.0
+offset_top = -200.0
+offset_right = 200.0
+text = "0"
+label_settings = ExtResource("1_t4g1h")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Sunlight" type="Label" parent="."]
+self_modulate = Color(1, 0.998461, 0.225522, 1)
+offset_left = -200.0
+offset_right = 200.0
+offset_bottom = 200.0
+text = "0"
+label_settings = ExtResource("1_t4g1h")
+horizontal_alignment = 1
+vertical_alignment = 1
