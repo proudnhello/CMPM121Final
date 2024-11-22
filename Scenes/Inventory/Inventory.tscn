@@ -1,0 +1,22 @@
+[gd_scene load_steps=3 format=3 uid="uid://xe45agcpxv3b"]
+
+[ext_resource type="Script" path="res://Scripts/Character/Inventory.cs" id="1_inmvg"]
+[ext_resource type="PackedScene" uid="uid://b6knu5fswvd0n" path="res://Scenes/Inventory/item_slot.tscn" id="2_px2bb"]
+
+[node name="Inventory" type="Control"]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 258.0
+offset_top = 285.0
+offset_right = 258.0
+offset_bottom = 285.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_inmvg")
+startingSeedCount = 3
+
+[node name="ItemSlot" parent="." instance=ExtResource("2_px2bb")]
+layout_mode = 0
