@@ -3,7 +3,8 @@ using System;
 
 public partial class CharacterMovement : Node2D
 {
-	public int movementDistance = -1;
+	[Export] GridManager gridManager;
+	int movementDistance = -1;
 	Vector2 gridPosition = Vector2.Zero;
 	int maxDimension;
 	
@@ -12,10 +13,9 @@ public partial class CharacterMovement : Node2D
 		maxDimension = _maxDimension;
 		gridPosition = startPosition;
 		Position = new Vector2(gridPosition.X - Mathf.FloorToInt(maxDimension/2), gridPosition.Y - Mathf.FloorToInt(maxDimension/2) ) * distance;
-		GD.Print("Movement distance set to " + distance);
 	}
 
-	public void SetPosition(int x, int y){
+	public void MovePosition(int x, int y){
 		// check extrema
 		if (x == -1 && gridPosition.X == 0 || x == 1 && gridPosition.X == maxDimension
 		|| y == -1 && gridPosition.Y == 0 || y == 1 && gridPosition.Y == maxDimension) return;
@@ -32,19 +32,27 @@ public partial class CharacterMovement : Node2D
 		}
 		if (Input.IsActionJustPressed("move_left")) {
 			// Move left
-			SetPosition(-1, 0);
+			MovePosition(-1, 0);
 		}
 		if (Input.IsActionJustPressed("move_right")) {
 			// Move right
-			SetPosition(1, 0);
+			MovePosition(1, 0);
 		}
 		if (Input.IsActionJustPressed("move_up")) {
 			// Move up
-			SetPosition(0, -1);
+			gridManager.HarvestPlant((int)gridPosition.X, (int)gridPosition.Y);
+			MovePosition(0, -1);
 		}
 		if (Input.IsActionJustPressed("move_down")) {
 			// Move down
-			SetPosition(0, 1);
+			MovePosition(0, 1);
+		}
+		if (Input.IsActionJustPressed("plant_seed")) {
+			// Move down
+			gridManager.PlantSeed((int)gridPosition.X, (int)gridPosition.Y);
+		}
+		if (Input.IsActionJustPressed("harvest")) {
+			gridManager.HarvestPlant((int)gridPosition.X, (int)gridPosition.Y);
 		}
 	}
 	

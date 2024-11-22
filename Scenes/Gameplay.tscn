@@ -26,9 +26,10 @@ options = ExtResource("2_iycgm")
 player = NodePath("../Character")
 cellScene = ExtResource("4_amv5q")
 
-[node name="Character" type="Sprite2D" parent="."]
+[node name="Character" type="Sprite2D" parent="." node_paths=PackedStringArray("gridManager")]
 scale = Vector2(0.2, 0.2)
 texture = ExtResource("1_lv6rf")
 script = ExtResource("2_nvx61")
+gridManager = NodePath("../GridManager")
 
 [connection signal="pressed" from="Camera2D/ProgressTimeButton" to="GridManager" method="ProgressTime"]

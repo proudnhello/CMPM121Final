@@ -1,6 +1,7 @@
 using Godot;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 public struct Cell {
 	public int waterLevel;
@@ -29,32 +30,33 @@ public class Grid {
 		return currentCells[y * op.gridDimensions + x];
 	}
 
-	public void StepTime(int maxWaterLevelIncrease, int maxSunLevel) {
-		
+	public void StepTime() {
+
 		// iterate through currentCells and store changes in swapCells, then swap pointers;
 		for (int i = 0; i < currentCells.Length; i++) {
 			int x = i % op.gridDimensions;
 			int y = Mathf.FloorToInt(i / op.gridDimensions);
 			
 			// Increase water level by a random amount
-			swapCells[i].waterLevel = currentCells[i].waterLevel + Mathf.FloorToInt(GD.RandRange(0, maxWaterLevelIncrease));
+			swapCells[i].waterLevel = currentCells[i].waterLevel + Mathf.FloorToInt(GD.RandRange(0, op.maxWaterLevelIncrease));
 
 			// Set sun level to a random amount
-			swapCells[i].sunLevel = Mathf.FloorToInt(GD.RandRange(0, maxSunLevel));
+			swapCells[i].sunLevel = Mathf.FloorToInt(GD.RandRange(0, op.maxSunLevel));
 		}
 
 		(swapCells, currentCells) = (currentCells, swapCells);
 	}
 
 	public void PlantSeed(int x, int y) {
-		Cell cell = FetchCell(x, y);
-		cell.plantType = GD.RandRange(1, 3);
-		cell.plantLevel = 1;
-		cell.waterLevel = Mathf.FloorToInt(GD.RandRange(0, 3));
+		int index = y * op.gridDimensions + x;
+		currentCells[index].plantType = GD.RandRange(1, 3);
+		currentCells[index].plantLevel = 1;
 	}
 
 	public void HarvestPlant(int x, int y) {
-		Cell cell = FetchCell(x, y);
+		int index = y * op.gridDimensions + x;
+		currentCells[index].plantType = 0;
+		currentCells[index].plantLevel = 0;
 	}
 }
 
@@ -84,6 +86,7 @@ public partial class GridManager : Node
 		CharacterMovement playerMovement = (CharacterMovement)player;
 		// Get the sprite of the cell, so we know the size of it, so we can position it correctly
 		// I don't like that we have to make a new cellSprite just to get the size of the cell, but idk how else to
+		
 		Sprite2D cellSprite = (Sprite2D)cellScene.Instantiate().GetNode("Background");
 		playerMovement.Init(Mathf.FloorToInt(cellSprite.Texture.GetWidth() * cellSprite.Scale[0]), 
 							options.gridDimensions-1, 
@@ -93,7 +96,7 @@ public partial class GridManager : Node
 
 	public void ProgressTime() {
 		// Progress time by one step
-		//grid.StepTime(maxWaterLevelIncrease, maxSunLevel);
+		grid.StepTime();
 		RenderGrid();
 	}
 
@@ -124,19 +127,20 @@ public partial class GridManager : Node
 
 		// Set the cell's levels
 		UpdateCell cellScript = (UpdateCell)gridSprites[x][y];
-		cellScript.UpdateWaterLevel(cell.waterLevel);
-		cellScript.UpdateSunLevel(cell.sunLevel);
+		cellScript.UpdateLabels(cell);
 	}
 
 	public void PlantSeed(int x, int y) {
 		if (grid.FetchCell(x, y).plantType != 0) return;
 		grid.PlantSeed(x, y);
+		GD.Print("Planting " + grid.FetchCell(x, y).plantType + " at (" + x + ", " + y + ")");
 		RenderCell(x, y);
 	}
 
 	public void HarvestPlant(int x, int y) {
 		if (grid.FetchCell(x, y).plantType == 0) return;
 		grid.HarvestPlant(x, y);
+		GD.Print("Harvesting at (" + x + ", " + y + ")");
 		RenderCell(x, y);
 	}
 }
