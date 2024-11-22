@@ -42,14 +42,20 @@ public class Grid {
 
 			// Set sun level to a random amount
 			swapCells[i].sunLevel = Mathf.FloorToInt(GD.RandRange(0, op.maxSunLevel));
+
+			// If the cell has a plant, save the plant type and level across
+			swapCells[i].plantType = currentCells[i].plantType;
+
+			// TODO: Make plants actually grow
+			swapCells[i].plantLevel = currentCells[i].plantLevel;
 		}
 
 		(swapCells, currentCells) = (currentCells, swapCells);
 	}
 
-	public void PlantSeed(int x, int y) {
+	public void PlantSeed(int x, int y, int plantType) {
 		int index = y * op.gridDimensions + x;
-		currentCells[index].plantType = GD.RandRange(1, 3);
+		currentCells[index].plantType = plantType;
 		currentCells[index].plantLevel = 1;
 	}
 
@@ -67,6 +73,8 @@ public partial class GridManager : Node
 	[Export] Node2D player;
 
 	[Export] PackedScene cellScene;
+
+	[Export] public int numberOfPlantTypes = 3;
 
 	public Grid grid;
 	
@@ -130,9 +138,9 @@ public partial class GridManager : Node
 		cellScript.UpdateLabels(cell);
 	}
 
-	public void PlantSeed(int x, int y) {
+	public void PlantSeed(int x, int y, int plantType) {
 		if (grid.FetchCell(x, y).plantType != 0) return;
-		grid.PlantSeed(x, y);
+		grid.PlantSeed(x, y, plantType);
 		GD.Print("Planting " + grid.FetchCell(x, y).plantType + " at (" + x + ", " + y + ")");
 		RenderCell(x, y);
 	}
