@@ -3,17 +3,35 @@ using System;
 
 public partial class CharacterMovement : Node2D
 {
-	[Export] public float moveSpeed = 10f;
-	public override void _Ready()
-	{
-		
+	public int movementDistance = -1;
+	
+	public void SetMovementDistance(int distance) {
+		movementDistance = distance;
+		GD.Print("Movement distance set to " + distance);
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
 	{
-		Vector2 move = new Vector2(Input.GetAxis("move_left", "move_right"), Input.GetAxis("move_up", "move_down")).Normalized() * moveSpeed;
-		Translate(move);
+		if (movementDistance == -1) {
+			return;
+		}
+		if (Input.IsActionJustPressed("move_left")) {
+			// Move left
+			Translate(new Vector2(-movementDistance, 0));
+		}
+		if (Input.IsActionJustPressed("move_right")) {
+			// Move right
+			Translate(new Vector2(movementDistance, 0));
+		}
+		if (Input.IsActionJustPressed("move_up")) {
+			// Move up
+			Translate(new Vector2(0, -movementDistance));
+		}
+		if (Input.IsActionJustPressed("move_down")) {
+			// Move down
+			Translate(new Vector2(0, movementDistance));
+		}
 	}
 	
 	
