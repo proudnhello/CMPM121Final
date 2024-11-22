@@ -1,6 +1,7 @@
-[gd_scene load_steps=5 format=3 uid="uid://bgh1ayrmhacoe"]
+[gd_scene load_steps=6 format=3 uid="uid://bgh1ayrmhacoe"]
 
 [ext_resource type="Texture2D" uid="uid://dm1v2tfuxacr4" path="res://Sprites/Character/bean-294077_1280.png" id="1_lv6rf"]
+[ext_resource type="Resource" uid="uid://boc2rni7drg05" path="res://GridOptions.tres" id="2_iycgm"]
 [ext_resource type="Script" path="res://Scripts/Character/CharacterMovement.cs" id="2_nvx61"]
 [ext_resource type="Script" path="res://Scripts/Grid/GridManager.cs" id="3_03wem"]
 [ext_resource type="PackedScene" uid="uid://ctgicajw68chx" path="res://Scenes/Cell.tscn" id="4_amv5q"]
@@ -21,15 +22,14 @@ text = "PROGRESS TIME"
 
 [node name="GridManager" type="Node2D" parent="." node_paths=PackedStringArray("player")]
 script = ExtResource("3_03wem")
-gridDimensions = 5
-maxWaterLevelIncrease = 10
-maxSunLevel = 10
+options = ExtResource("2_iycgm")
 player = NodePath("../Character")
 cellScene = ExtResource("4_amv5q")
 
-[node name="Character" type="Sprite2D" parent="."]
+[node name="Character" type="Sprite2D" parent="." node_paths=PackedStringArray("gridManager")]
 scale = Vector2(0.2, 0.2)
 texture = ExtResource("1_lv6rf")
 script = ExtResource("2_nvx61")
+gridManager = NodePath("../GridManager")
 
 [connection signal="pressed" from="Camera2D/ProgressTimeButton" to="GridManager" method="ProgressTime"]
