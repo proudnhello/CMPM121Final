@@ -1,0 +1,9 @@
+[gd_resource type="Resource" load_steps=2 format=3 uid="uid://boc2rni7drg05"]
+
+[ext_resource type="Script" path="res://Scripts/Grid/GridOptions.cs" id="1_uuxn8"]
+
+[resource]
+script = ExtResource("1_uuxn8")
+gridDimensions = 5
+maxWaterLevelIncrease = 5
+maxSunLevel = 10

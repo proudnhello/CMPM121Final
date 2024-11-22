@@ -5,7 +5,6 @@ public partial class CharacterMovement : Node2D
 {
 	public int movementDistance = -1;
 	Vector2 gridPosition = Vector2.Zero;
-
 	int maxDimension;
 	
 	public void Init(int distance, int _maxDimension, Vector2 startPosition) {
@@ -23,7 +22,6 @@ public partial class CharacterMovement : Node2D
 
 		Translate(new Vector2(x * movementDistance, y * movementDistance));
 		gridPosition = new Vector2(gridPosition.X + x, gridPosition.Y + y);
-		GD.Print(gridPosition);
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
