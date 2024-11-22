@@ -4,10 +4,26 @@ using System;
 public partial class CharacterMovement : Node2D
 {
 	public int movementDistance = -1;
+	Vector2 gridPosition = Vector2.Zero;
+
+	int maxDimension;
 	
-	public void SetMovementDistance(int distance) {
+	public void Init(int distance, int _maxDimension, Vector2 startPosition) {
 		movementDistance = distance;
+		maxDimension = _maxDimension;
+		gridPosition = startPosition;
+		Position = new Vector2(gridPosition.X - Mathf.FloorToInt(maxDimension/2), gridPosition.Y - Mathf.FloorToInt(maxDimension/2) ) * distance;
 		GD.Print("Movement distance set to " + distance);
+	}
+
+	public void SetPosition(int x, int y){
+		// check extrema
+		if (x == -1 && gridPosition.X == 0 || x == 1 && gridPosition.X == maxDimension
+		|| y == -1 && gridPosition.Y == 0 || y == 1 && gridPosition.Y == maxDimension) return;
+
+		Translate(new Vector2(x * movementDistance, y * movementDistance));
+		gridPosition = new Vector2(gridPosition.X + x, gridPosition.Y + y);
+		GD.Print(gridPosition);
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -18,19 +34,19 @@ public partial class CharacterMovement : Node2D
 		}
 		if (Input.IsActionJustPressed("move_left")) {
 			// Move left
-			Translate(new Vector2(-movementDistance, 0));
+			SetPosition(-1, 0);
 		}
 		if (Input.IsActionJustPressed("move_right")) {
 			// Move right
-			Translate(new Vector2(movementDistance, 0));
+			SetPosition(1, 0);
 		}
 		if (Input.IsActionJustPressed("move_up")) {
 			// Move up
-			Translate(new Vector2(0, -movementDistance));
+			SetPosition(0, -1);
 		}
 		if (Input.IsActionJustPressed("move_down")) {
 			// Move down
-			Translate(new Vector2(0, movementDistance));
+			SetPosition(0, 1);
 		}
 	}
 	

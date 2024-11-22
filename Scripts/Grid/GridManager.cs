@@ -75,7 +75,9 @@ public partial class GridManager : Node
 		// Get the sprite of the cell, so we know the size of it, so we can position it correctly
 		// I don't like that we have to make a new cellSprite just to get the size of the cell, but idk how else to
 		Sprite2D cellSprite = (Sprite2D)cellScene.Instantiate().GetNode("Background");
-		playerMovement.SetMovementDistance(Mathf.FloorToInt(cellSprite.Texture.GetWidth() * cellSprite.Scale[0]));
+		playerMovement.Init(Mathf.FloorToInt(cellSprite.Texture.GetWidth() * cellSprite.Scale[0]), 
+							gridDimensions-1, 
+							new Vector2(Mathf.FloorToInt(gridDimensions/2), Mathf.FloorToInt(gridDimensions/2)));
 		cellSprite.Free();
 	}
 

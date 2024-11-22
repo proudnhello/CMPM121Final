@@ -22,8 +22,8 @@ text = "PROGRESS TIME"
 [node name="GridManager" type="Node2D" parent="." node_paths=PackedStringArray("player")]
 script = ExtResource("3_03wem")
 gridDimensions = 5
-maxWaterLevelIncrease = 5
-maxSunLevel = 20
+maxWaterLevelIncrease = 10
+maxSunLevel = 10
 player = NodePath("../Character")
 cellScene = ExtResource("4_amv5q")
 
