@@ -86,7 +86,7 @@ public partial class GridManager : Node
 				if (gridSprites[i][j] == null) {
 					Node2D cellNode = (Node2D)cellScene.Instantiate();
 					// Get the sprite of the cell, so we know the size of it, so we can position it correctly
-					Sprite2D cellSprite = cellNode.GetNode<Sprite2D>("Ground");
+					Sprite2D cellSprite = cellNode.GetNode<Sprite2D>("Background");
 					cellNode.Position = new Vector2(
 						(i - gridDimensions / 2) * cellSprite.Texture.GetWidth() * cellSprite.Scale[0],
 						(j - gridDimensions / 2) * cellSprite.Texture.GetWidth() * cellSprite.Scale[1]
@@ -94,6 +94,11 @@ public partial class GridManager : Node
 					gridSprites[i][j] = cellNode;
 					AddChild(gridSprites[i][j]);
 				}
+
+				// Set the cell's levels
+				UpdateCell cellScript = (UpdateCell)gridSprites[i][j];
+				cellScript.UpdateWaterLevel(cell.waterLevel);
+				cellScript.UpdateSunLevel(cell.sunLevel);
 			}
 		}
 	}
