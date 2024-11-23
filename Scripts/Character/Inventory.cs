@@ -65,13 +65,14 @@ public partial class Inventory : Node
 		slotScript.UpdateAmount(items[(int)item]);
 	}
 
-	public void RemoveItem(ItemType item, int amount){
+	public bool RemoveItem(ItemType item, int amount){
 		if(items[(int)item] >= amount){
 			items[(int)item] -= amount;
 			UpdateItemSlot slotScript = (UpdateItemSlot)itemSlotSprites[(int)item];
 			slotScript.UpdateAmount(items[(int)item]);
+			return true;
 		}
-		return;
+		return false;
 	}
 
 	public int GetItemAmnt(ItemType item){

@@ -146,6 +146,8 @@ public partial class GridManager : Node
 
 	[Export] public int numberOfPlantTypes = 3;
 
+	[Export] Node2D inventory;
+
 	public Grid grid;
 	
 	Node2D[][] gridSprites;
@@ -210,6 +212,7 @@ public partial class GridManager : Node
 
 	public void PlantSeed(int x, int y, int plantType) {
 		if (grid.FetchCell(x, y).plantType != 0) return;
+		if((bool)inventory.Call("RemoveItem", plantType, 1)) return;
 		grid.PlantSeed(x, y, plantType);
 		GD.Print("Planting " + grid.FetchCell(x, y).plantType + " at (" + x + ", " + y + ")");
 		RenderCell(x, y);
@@ -217,6 +220,7 @@ public partial class GridManager : Node
 
 	public void HarvestPlant(int x, int y) {
 		if (grid.FetchCell(x, y).plantType == 0) return;
+		inventory.Call("AddItem", grid.FetchCell(x, y).plantType, 1);
 		grid.HarvestPlant(x, y);
 		GD.Print("Harvesting at (" + x + ", " + y + ")");
 		RenderCell(x, y);

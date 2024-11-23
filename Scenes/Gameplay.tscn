@@ -22,11 +22,12 @@ offset_bottom = -4092.0
 scale = Vector2(10, 10)
 text = "PROGRESS TIME"
 
-[node name="GridManager" type="Node2D" parent="." node_paths=PackedStringArray("player")]
+[node name="GridManager" type="Node2D" parent="." node_paths=PackedStringArray("player", "inventory")]
 script = ExtResource("3_03wem")
 options = ExtResource("2_iycgm")
 player = NodePath("../Character")
 cellScene = ExtResource("4_amv5q")
+inventory = NodePath("../Inventory")
 
 [node name="Character" type="Sprite2D" parent="." node_paths=PackedStringArray("gridManager")]
 scale = Vector2(0.2, 0.2)
@@ -34,7 +35,7 @@ texture = ExtResource("1_lv6rf")
 script = ExtResource("2_nvx61")
 gridManager = NodePath("../GridManager")
 
-[node name="Node2D" type="Node2D" parent="."]
+[node name="Inventory" type="Node2D" parent="."]
 position = Vector2(-1678, -709)
 script = ExtResource("6_bc6ck")
 itemSlotScene = ExtResource("7_x7taq")
