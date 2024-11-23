@@ -20,16 +20,12 @@ public partial class Inventory : Node
 	public Node2D[] itemSlotSprites;
 	
 	public void DisplayInventorySlot(int slotNum){
+		int pixelsBetweenSlots = 215;
 		int inventorySize = numUniqueItems;
 		if(itemSlotSprites[slotNum] == null){
 				Node2D slotNode = (Node2D)itemSlotScene.Instantiate();
 				Sprite2D slotSprite = (Sprite2D)slotNode.GetNode("Slot");
-				// --------- DOESNT POSITION CORRECTLY ------------
-				slotSprite.Position = new Vector2(
-					0, 
-					(slotNum - inventorySize / 2) * slotSprite.Texture.GetWidth() 
-				);
-				// ---------------------------------------------------------------------------------
+				slotNode.Position = new Vector2(0, (slotNum - inventorySize / 2) * slotSprite.Texture.GetWidth() + slotNum * pixelsBetweenSlots);
 			itemSlotSprites[slotNum] = slotNode;
 			AddChild(itemSlotSprites[slotNum]);
 		}
@@ -60,6 +56,7 @@ public partial class Inventory : Node
 		itemSlotSprites = new Node2D[numUniqueItems];
 		InitializeInventory();
 		DisplayInventory();
+		
 	}
 
 	public void AddItem(ItemType item, int amount){

@@ -35,7 +35,7 @@ script = ExtResource("2_nvx61")
 gridManager = NodePath("../GridManager")
 
 [node name="Node2D" type="Node2D" parent="."]
-position = Vector2(-1675, -709)
+position = Vector2(-1678, -709)
 script = ExtResource("6_bc6ck")
 itemSlotScene = ExtResource("7_x7taq")
 
