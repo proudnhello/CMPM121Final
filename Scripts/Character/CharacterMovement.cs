@@ -40,7 +40,6 @@ public partial class CharacterMovement : Node2D
 		}
 		if (Input.IsActionJustPressed("move_up")) {
 			// Move up
-			//gridManager.HarvestPlant((int)gridPosition.X, (int)gridPosition.Y);
 			MovePosition(0, -1);
 		}
 		if (Input.IsActionJustPressed("move_down")) {
