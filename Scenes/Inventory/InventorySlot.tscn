@@ -1,0 +1,23 @@
+[gd_scene load_steps=4 format=3 uid="uid://curr4cg8rotrm"]
+
+[ext_resource type="Script" path="res://Scripts/Character/UpdateItemSlot.cs" id="1_qn5uc"]
+[ext_resource type="LabelSettings" uid="uid://q6pelwgu6mad" path="res://TextSettings/CellLabelSettings.tres" id="2_uw5mo"]
+
+[sub_resource type="CanvasTexture" id="CanvasTexture_awvi3"]
+
+[node name="InventorySlot" type="Node2D" node_paths=PackedStringArray("amountLabel")]
+script = ExtResource("1_qn5uc")
+amountLabel = NodePath("Label")
+
+[node name="Slot" type="Sprite2D" parent="."]
+self_modulate = Color(1, 0.82133, 0.649871, 1)
+scale = Vector2(200, 200)
+texture = SubResource("CanvasTexture_awvi3")
+
+[node name="Label" type="Label" parent="."]
+offset_left = 52.0
+offset_top = -10.0
+offset_right = 98.0
+offset_bottom = 100.0
+text = "0"
+label_settings = ExtResource("2_uw5mo")
