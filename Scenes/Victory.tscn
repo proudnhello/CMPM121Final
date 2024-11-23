@@ -1,0 +1,21 @@
+[gd_scene load_steps=2 format=3 uid="uid://goxlbw188v7k"]
+
+[sub_resource type="CanvasTexture" id="CanvasTexture_xng1r"]
+
+[node name="Victory" type="Node2D"]
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(578, 325)
+scale = Vector2(1169.54, 692.43)
+texture = SubResource("CanvasTexture_xng1r")
+
+[node name="Label" type="Label" parent="."]
+offset_top = 87.0
+offset_right = 1147.0
+offset_bottom = 402.0
+scale = Vector2(1, 0.992573)
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 191
+text = "YOU WIN!!
+ALT F4 NOW"
+horizontal_alignment = 1

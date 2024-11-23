@@ -20,6 +20,7 @@ offset_top = -4145.0
 offset_right = -7461.0
 offset_bottom = -4092.0
 scale = Vector2(10, 10)
+focus_mode = 0
 text = "PROGRESS TIME"
 
 [node name="GridManager" type="Node2D" parent="." node_paths=PackedStringArray("player")]

@@ -26,6 +26,16 @@ public partial class Inventory : Node
 	}
 	public List<int> items = new List<int>();
 	public Node2D[] itemSlotSprites;
+
+	public void WinGame() {
+		GetTree().ChangeSceneToFile("res://Scenes/Victory.tscn");
+	}
+
+	public void checkWin() {
+		if (items[(int)ItemType.PLANT1] >= 3 && items[(int)ItemType.PLANT2] >= 3 && items[(int)ItemType.PLANT3] >= 3) {
+			WinGame();
+		}
+	}
 	
 	public void DisplayInventorySlot(int slotNum){
 		int pixelsBetweenSlots = 215;
@@ -60,11 +70,13 @@ public partial class Inventory : Node
 	public void _on_harvest_plant_signal(int plantType){
 		ItemType item = (ItemType)plantType + 3;
 		AddItem(item, 1);
+		checkWin();
 	}
 
 	public void _on_plant_seed_signal(int plantType){
 		ItemType item = (ItemType)plantType;
 		RemoveItem(item, 1);
+		checkWin();
 	}
 
 	// Called when the node enters the scene tree for the first time.
