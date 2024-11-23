@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="PlantGrowthRequirement" load_steps=2 format=3 uid="uid://0kqksewhbv38"]
+
+[ext_resource type="Script" path="res://Scripts/Grid/PlantGrowthRequirement.cs" id="1_kdhhc"]
+
+[resource]
+script = ExtResource("1_kdhhc")
+waterRequirement = 1
+sunRequirement = 2
+maxGrowthLevel = 3
+minLikePlants = 4
+maxLikePlants = 8
+minAdjPlants = 4
+maxAdjPlants = 10

@@ -27,7 +27,18 @@ public class Grid {
 
 	// Fetch the cell at (x, y) in the grid
 	public Cell FetchCell(int x, int y) {
+		if (x < 0 || x >= op.gridDimensions || y < 0 || y >= op.gridDimensions) {
+			Cell invalidCell = new Cell();
+			// -1000 is an invalid water level
+			invalidCell.waterLevel = -1000;
+			return invalidCell;
+		}
 		return currentCells[y * op.gridDimensions + x];
+	}
+
+	// Check if the cell is valid
+	public bool checkCellValidity(Cell cell){
+		return cell.waterLevel != -1000;
 	}
 
 	public void StepTime() {
@@ -43,14 +54,67 @@ public class Grid {
 			// Set sun level to a random amount
 			swapCells[i].sunLevel = Mathf.FloorToInt(GD.RandRange(0, op.maxSunLevel));
 
-			// If the cell has a plant, save the plant type and level across
+			// If the cell has a plant, save the plant type across
 			swapCells[i].plantType = currentCells[i].plantType;
 
-			// TODO: Make plants actually grow
-			swapCells[i].plantLevel = currentCells[i].plantLevel;
+			// If the cell has a plant, check if it can grow
+			if (currentCells[i].plantType == 0){
+				swapCells[i].plantLevel = 0;
+				continue;
+			}
+
+			// 
+			if (CheckPlantRequirements(currentCells[i], x, y)) {
+				swapCells[i].plantLevel = GrowPlant(currentCells[i]);
+			}else{
+				swapCells[i].plantLevel = currentCells[i].plantLevel;
+			}
 		}
 
 		(swapCells, currentCells) = (currentCells, swapCells);
+	}
+
+	// Grows the plant in the cell, returns the new plant level
+	public int GrowPlant(Cell cell) {
+		return cell.plantLevel + 1;
+	}
+
+	// Checks if the plant in the cell can grow
+	public bool CheckPlantRequirements(Cell cell, int x, int y) {
+		PlantGrowthRequirement requirements = op.GetPlantRequirements(cell.plantType);
+		// Check the simple requirements that don't require other cells
+		if (!requirements.checkSimpleRequirements(cell)) {
+			return false;
+		}
+
+		// Check the requirements that require other cells
+		int adjacentPlants = 0;
+		int likePlants = 0;
+		// Check the 8 adjacent cells 
+		for (int dx = -1; dx <= 1; dx++) {
+			for (int dy = -1; dy <= 1; dy++) {
+				if (dx == 0 && dy == 0) continue; // Skip the current cell
+				Cell adjacentCell = FetchCell(x + dx, y + dy);
+				if (!checkCellValidity(adjacentCell)) {
+					continue;
+				}
+				if (adjacentCell.plantType != 0){
+					adjacentPlants++;
+				}
+				if (adjacentCell.plantType == cell.plantType) {
+					likePlants++;
+				}
+			}
+		}
+
+		// Check if the number of adjacent plants and like plants meet the requirements
+		if (adjacentPlants < requirements.minAdjPlants || 
+		likePlants < requirements.minLikePlants || 
+		likePlants > requirements.maxLikePlants || 
+		adjacentPlants > requirements.maxAdjPlants) {
+			return false;
+		}
+		return true;
 	}
 
 	public void PlantSeed(int x, int y, int plantType) {
