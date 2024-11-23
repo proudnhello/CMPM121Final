@@ -8,6 +8,6 @@ waterRequirement = 1
 sunRequirement = 2
 maxGrowthLevel = 3
 minLikePlants = 4
-maxLikePlants = 8
+maxLikePlants = 10
 minAdjPlants = 4
 maxAdjPlants = 10

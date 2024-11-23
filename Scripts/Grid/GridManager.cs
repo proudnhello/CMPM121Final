@@ -50,6 +50,10 @@ public class Grid {
 			
 			// Increase water level by a random amount
 			swapCells[i].waterLevel = currentCells[i].waterLevel + Mathf.FloorToInt(GD.RandRange(0, op.maxWaterLevelIncrease));
+			// Cap the water level at maxWater
+			if (swapCells[i].waterLevel > op.maxWater) {
+				swapCells[i].waterLevel = op.maxWater;
+			}
 
 			// Set sun level to a random amount
 			swapCells[i].sunLevel = Mathf.FloorToInt(GD.RandRange(0, op.maxSunLevel));
@@ -65,7 +69,7 @@ public class Grid {
 
 			// 
 			if (CheckPlantRequirements(currentCells[i], x, y)) {
-				swapCells[i].plantLevel = GrowPlant(currentCells[i]);
+				swapCells[i] = GrowPlant(currentCells[i]);
 			}else{
 				swapCells[i].plantLevel = currentCells[i].plantLevel;
 			}
@@ -75,8 +79,10 @@ public class Grid {
 	}
 
 	// Grows the plant in the cell, returns the new plant level
-	public int GrowPlant(Cell cell) {
-		return cell.plantLevel + 1;
+	public Cell GrowPlant(Cell cell) {
+		cell.plantLevel++;
+		cell.waterLevel -= op.GetPlantRequirements(cell.plantType).waterRequirement;
+		return cell;
 	}
 
 	// Checks if the plant in the cell can grow
