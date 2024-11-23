@@ -225,7 +225,7 @@ public partial class GridManager : Node
 	public delegate void HarvestPlantSignalEventHandler(int plantType);
 
 	public void HarvestPlant(int x, int y) {
-		if (grid.FetchCell(x, y).plantType == 0) return;
+		if (grid.FetchCell(x, y).plantType == 0 || grid.FetchCell(x, y).plantLevel < 3) return;
 		EmitSignal("HarvestPlantSignal", grid.FetchCell(x, y).plantType - 1);
 		grid.HarvestPlant(x, y);
 		GD.Print("Harvesting at (" + x + ", " + y + ")");
