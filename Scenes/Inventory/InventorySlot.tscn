@@ -1,4 +1,4 @@
-[gd_scene load_steps=4 format=3 uid="uid://curr4cg8rotrm"]
+[gd_scene load_steps=4 format=3 uid="uid://jeilmlgew1bx"]
 
 [ext_resource type="Script" path="res://Scripts/Character/UpdateItemSlot.cs" id="1_qn5uc"]
 [ext_resource type="LabelSettings" uid="uid://q6pelwgu6mad" path="res://TextSettings/CellLabelSettings.tres" id="2_uw5mo"]

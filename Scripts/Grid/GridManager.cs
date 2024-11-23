@@ -210,17 +210,23 @@ public partial class GridManager : Node
 		cellScript.UpdateLabels(cell);
 	}
 
+	[Signal]
+	public delegate void PlantSeedSignalEventHandler(int plantType);
+
 	public void PlantSeed(int x, int y, int plantType) {
-		if (grid.FetchCell(x, y).plantType != 0) return;
-		if((bool)inventory.Call("RemoveItem", plantType, 1)) return;
+		if (grid.FetchCell(x, y).plantType != 0 || Inventory.instance.items[plantType - 1] <= 0) return;
+		EmitSignal("PlantSeedSignal", plantType - 1);
 		grid.PlantSeed(x, y, plantType);
 		GD.Print("Planting " + grid.FetchCell(x, y).plantType + " at (" + x + ", " + y + ")");
 		RenderCell(x, y);
 	}
 
+	[Signal]
+	public delegate void HarvestPlantSignalEventHandler(int plantType);
+
 	public void HarvestPlant(int x, int y) {
 		if (grid.FetchCell(x, y).plantType == 0) return;
-		inventory.Call("AddItem", grid.FetchCell(x, y).plantType, 1);
+		EmitSignal("HarvestPlantSignal", grid.FetchCell(x, y).plantType - 1);
 		grid.HarvestPlant(x, y);
 		GD.Print("Harvesting at (" + x + ", " + y + ")");
 		RenderCell(x, y);

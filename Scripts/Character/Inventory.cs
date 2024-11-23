@@ -5,9 +5,17 @@ using System.Diagnostics;
 
 public partial class Inventory : Node
 {
+
+	public static Inventory instance;
+
 	[Export] public int numUniqueItems = 6;
 	[Export] PackedScene itemSlotScene;
-	[Export] public int startingSeedCount = 3;
+	[Export] public int numStartSeed1 = 3;
+
+	[Export] public int numStartSeed2 = 3;
+
+	[Export] public int numStartSeed3 = 8;
+
 	public enum ItemType {
 		SEED1,
 		SEED2,
@@ -41,18 +49,28 @@ public partial class Inventory : Node
 	}
 
 	public void InitializeInventory(){
-		foreach (int itemIdx in Enum.GetValues<ItemType>()){
-			if(itemIdx < 3){
-				items.Add(startingSeedCount);
-			} else {
-				items.Add(0);
-			}
+		items.Add(numStartSeed1);
+		items.Add(numStartSeed2);
+		items.Add(numStartSeed3);
+		for(int i = 0; i < 3; i++) {
+			items.Add(0);
 		}
+	}
+
+	public void _on_harvest_plant_signal(int plantType){
+		ItemType item = (ItemType)plantType + 3;
+		AddItem(item, 1);
+	}
+
+	public void _on_plant_seed_signal(int plantType){
+		ItemType item = (ItemType)plantType;
+		RemoveItem(item, 1);
 	}
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
+		instance = this;
 		itemSlotSprites = new Node2D[numUniqueItems];
 		InitializeInventory();
 		DisplayInventory();
