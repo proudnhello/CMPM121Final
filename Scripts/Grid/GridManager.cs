@@ -47,21 +47,19 @@ public class Grid {
 		else return true;
 	}
 
-	public void StepTime() {
+	public void StepTime(int seed) {
+		RandomNumberGenerator rng = new RandomNumberGenerator();
+		rng.Seed = (ulong)seed;
 		// iterate through currentCells and store changes in swapCells, then swap pointers;
 		for (int i = 0; i < currentCells.Length; i++) {
 			int x = i % op.gridDimensions;
 			int y = Mathf.FloorToInt(i / op.gridDimensions);
 			
 			// Increase water level by a random amount
-			swapCells[i].waterLevel = currentCells[i].waterLevel + Mathf.FloorToInt(GD.RandRange(0, op.maxWaterLevelIncrease));
-			// Cap the water level at maxWater
-			if (swapCells[i].waterLevel > op.maxWater) {
-				swapCells[i].waterLevel = op.maxWater;
-			}
+			swapCells[i].waterLevel = currentCells[i].waterLevel + rng.RandiRange(0, op.maxWaterLevelIncrease);
 
 			// Set sun level to a random amount
-			swapCells[i].sunLevel = Mathf.FloorToInt(GD.RandRange(0, op.maxSunLevel));
+			swapCells[i].sunLevel = rng.RandiRange(0, op.maxSunLevel);
 
 			// If the cell has a plant, save the plant type across
 			swapCells[i].plantType = currentCells[i].plantType;
@@ -97,7 +95,22 @@ public class Grid {
 	}
 
 	public void UnStepTime(int[] actionInfo) {
+		RandomNumberGenerator rng = new RandomNumberGenerator();
+		rng.Seed = (ulong)actionInfo[1];
+		// iterate through currentCells and store changes in swapCells, then swap pointers;
+		for (int i = 0; i < currentCells.Length; i++) {
+			int x = i % op.gridDimensions;
+			int y = Mathf.FloorToInt(i / op.gridDimensions);
+			
+			// Decreace water level by the same random amount
+			swapCells[i].waterLevel = currentCells[i].waterLevel - rng.RandiRange(0, op.maxWaterLevelIncrease);
 
+			int test = rng.RandiRange(0, op.maxSunLevel);
+			// Set sun level to the save random value
+			swapCells[i].sunLevel = test;
+			GD.Print(test);
+		}
+		(swapCells, currentCells) = (currentCells, swapCells);
 	}
 
 	public void UnPlantSeed(int[] actionInfo) {
@@ -200,6 +213,8 @@ public partial class GridManager : Node
 		actionTracker = new();
 		gridRenderer = new(grid, options, this);
 
+		GD.Seed((uint)actionTracker.GetSeed());
+
 		// Set the player's movement distance
 		CharacterMovement playerMovement = (CharacterMovement)player;
 		
@@ -208,8 +223,8 @@ public partial class GridManager : Node
 	}
 
 	
-	void StepTime() {
-		grid.StepTime();
+	void StepTime(int seed) {
+		grid.StepTime(seed);
 		gridRenderer.RenderGrid();
 	}
 
@@ -249,9 +264,10 @@ public partial class GridManager : Node
 
 	
 	public void ProgressTimeButton() {
+		int timeStepSeed = (int)GD.Randi();
 		// Progress time by one step
-		actionTracker.StepTime();
-		StepTime();
+		actionTracker.StepTime(timeStepSeed);
+		StepTime(timeStepSeed);
 	}
 
 	public void UnPlantSeed(int[] actionInfo) {
@@ -266,13 +282,17 @@ public partial class GridManager : Node
 		gridRenderer.RenderCell(actionInfo[1], actionInfo[2]);
 	}
 
+	public void UnStepTime(int[] actionInfo) {
+		grid.UnStepTime(actionInfo);
+		gridRenderer.RenderGrid();
+	}
+
 	public void UndoActionButton() {
 		int[] actionInfo = actionTracker.UndoAction();
 		if (actionInfo == null) return;
 
 		if (actionInfo[0] == 0) {
-			grid.UnStepTime(actionInfo);
-			gridRenderer.RenderGrid();
+			UnStepTime(actionInfo);
 		} else if (actionInfo[0] == 1) {
 			UnPlantSeed(actionInfo);
 		} else if (actionInfo[0] == 2) {
@@ -285,7 +305,7 @@ public partial class GridManager : Node
 		if (actionInfo == null) return;
 
 		if (actionInfo[0] == 0) {
-			StepTime();
+			StepTime(actionInfo[1]);
 		} else if (actionInfo[0] == 1) {
 			PlantSeed(actionInfo[1], actionInfo[2], actionInfo[3]);
 		} else if (actionInfo[0] == 2) {

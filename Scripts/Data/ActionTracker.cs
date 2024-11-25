@@ -8,19 +8,29 @@ public class ActionTracker
     Stack<int[]> actions;
     Stack<int[]> redoActions;
 
-    int timeProgressCounter = 0;
+    int seed;
 
     public ActionTracker() {
         // Load from memory first
-
         actions = new();
         redoActions = new();
+        seed = (int)Time.GetTicksMsec();
+        actions.Push(new int[]{-1, seed}); // -1 tells the loader what seed to use
     }
 
-    public void StepTime() {
-        actions.Push(new int[]{0, timeProgressCounter});
-        GD.Seed((ulong)timeProgressCounter);
-        timeProgressCounter++;
+    public ActionTracker(int seed) {
+        actions = new();
+        redoActions = new();
+        this.seed = seed;
+        actions.Push(new int[]{-1, seed});
+    }
+
+    public int GetSeed() {
+        return seed;
+    }
+
+    public void StepTime(int seed) {
+        actions.Push(new int[]{0, seed});
         redoActions.Clear();
         GD.Print(actions.Count);
     }
