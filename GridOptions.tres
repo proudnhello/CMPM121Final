@@ -11,5 +11,5 @@ gridDimensions = 5
 maxWaterLevelIncrease = 5
 maxSunLevel = 10
 numberOfPlantTypes = 3
-plantRequirements = Array[Resource]([ExtResource("1_8duo3"), ExtResource("2_v8gqo"), ExtResource("3_71jsm")])
+plantRequirements = Array[Object]([ExtResource("1_8duo3"), ExtResource("2_v8gqo"), ExtResource("3_71jsm")])
 maxWater = 25

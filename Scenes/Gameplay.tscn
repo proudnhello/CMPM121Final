@@ -14,15 +14,6 @@
 scale = Vector2(0.243182, 0.243182)
 zoom = Vector2(0.3, 0.3)
 
-[node name="ProgressTimeButton" type="Button" parent="Camera2D"]
-offset_left = -7607.0
-offset_top = -4145.0
-offset_right = -7461.0
-offset_bottom = -4092.0
-scale = Vector2(10, 10)
-focus_mode = 0
-text = "PROGRESS TIME"
-
 [node name="GridManager" type="Node2D" parent="." node_paths=PackedStringArray("player")]
 script = ExtResource("3_03wem")
 options = ExtResource("2_iycgm")
@@ -40,6 +31,38 @@ position = Vector2(-1678, -709)
 script = ExtResource("6_bc6ck")
 itemSlotScene = ExtResource("7_x7taq")
 
-[connection signal="pressed" from="Camera2D/ProgressTimeButton" to="GridManager" method="ProgressTime"]
+[node name="UI" type="CanvasLayer" parent="."]
+follow_viewport_enabled = true
+
+[node name="ProgressTimeButton" type="Button" parent="UI"]
+offset_left = 1349.0
+offset_top = -1001.0
+offset_right = 1495.0
+offset_bottom = -948.0
+scale = Vector2(3.24, 3.24)
+focus_mode = 0
+text = "PROGRESS TIME"
+
+[node name="UndoButton" type="Button" parent="UI"]
+offset_left = 1349.0
+offset_top = -781.0
+offset_right = 1495.0
+offset_bottom = -728.0
+scale = Vector2(3.24, 3.24)
+focus_mode = 0
+text = "UNDO"
+
+[node name="RedoButton" type="Button" parent="UI"]
+offset_left = 1349.0
+offset_top = -570.0
+offset_right = 1495.0
+offset_bottom = -517.0
+scale = Vector2(3.24, 3.24)
+focus_mode = 0
+text = "REDO"
+
 [connection signal="HarvestPlantSignal" from="GridManager" to="Inventory" method="_on_harvest_plant_signal"]
 [connection signal="PlantSeedSignal" from="GridManager" to="Inventory" method="_on_plant_seed_signal"]
+[connection signal="pressed" from="UI/ProgressTimeButton" to="GridManager" method="ProgressTimeButton"]
+[connection signal="pressed" from="UI/UndoButton" to="GridManager" method="UndoActionButton"]
+[connection signal="pressed" from="UI/RedoButton" to="GridManager" method="RedoActionButton"]

@@ -49,11 +49,11 @@ public partial class CharacterMovement : Node2D
 		for (int i = 1; i <= gridManager.numberOfPlantTypes; i++) {
 			// If the player presses a number key, plant the corresponding seed
 			if (Input.IsActionJustPressed("plant_seed" + i)) {
-				gridManager.PlantSeed((int)gridPosition.X, (int)gridPosition.Y, i);
+				gridManager.TryPlantSeed((int)gridPosition.X, (int)gridPosition.Y, i);
 			}
 		}
 		if (Input.IsActionJustPressed("harvest")) {
-			gridManager.HarvestPlant((int)gridPosition.X, (int)gridPosition.Y);
+			gridManager.TryHarvestPlant((int)gridPosition.X, (int)gridPosition.Y);
 		}
 	}
 	
