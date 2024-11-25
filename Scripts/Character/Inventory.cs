@@ -67,15 +67,17 @@ public partial class Inventory : Node
 		}
 	}
 
-	public void _on_harvest_plant_signal(int plantType){
+	public void _on_harvest_plant_signal(int plantType, int number){
+		GD.Print("Harvesting plant");
 		ItemType item = (ItemType)plantType + 3;
-		AddItem(item, 1);
+		AddItem(item, number);
 		checkWin();
 	}
 
-	public void _on_plant_seed_signal(int plantType){
+	public void _on_plant_seed_signal(int plantType, int number){
+		GD.Print("Planting seed");
 		ItemType item = (ItemType)plantType;
-		RemoveItem(item, 1);
+		AddItem(item, number);
 		checkWin();
 	}
 

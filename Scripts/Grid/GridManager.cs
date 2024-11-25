@@ -33,6 +33,10 @@ public class Grid {
 		return currentCells[y * op.gridDimensions + x];
 	}
 
+	public void SetCell(int x, int y, Cell cell) {
+		currentCells[y * op.gridDimensions + x] = cell;
+	}
+
 	public bool CanPlant(int x, int y, int plantType) {
 		if (FetchCell(x, y).plantType != 0 || Inventory.instance.items[plantType - 1] <= 0) return false;
 		else return true;
@@ -97,11 +101,26 @@ public class Grid {
 	}
 
 	public void UnPlantSeed(int[] actionInfo) {
+		int x = actionInfo[1];
+		int y = actionInfo[2];
+		Cell cell = FetchCell(x, y);
+		
+		cell.plantType = 0;
+		cell.plantLevel = 0;
 
+		SetCell(x, y, cell);
 	}
 	
 	public void UnHarvestPlant(int[] actionInfo) {
+		int x = actionInfo[1];
+		int y = actionInfo[2];
+		Cell cell = FetchCell(x, y);
+		PlantGrowthRequirement requirements = op.GetPlantRequirements(actionInfo[3]);
+		
+		cell.plantType = actionInfo[3];
+		cell.plantLevel = requirements.maxGrowthLevel;
 
+		SetCell(x, y, cell);
 	}
 
 	// Grows the plant in the cell, returns the new plant level
@@ -196,21 +215,21 @@ public partial class GridManager : Node
 
 	
 	void PlantSeed(int x, int y, int plantType) {
-		EmitSignal("PlantSeedSignal", plantType - 1);
+		EmitSignal("PlantSeedSignal", plantType - 1, -1);
 		grid.PlantSeed(x, y, plantType);
 		gridRenderer.RenderCell(x, y);
 	}
 
 	
 	void HarvestPlant(int x, int y) {
-		EmitSignal("HarvestPlantSignal", grid.FetchCell(x, y).plantType - 1);
+		EmitSignal("HarvestPlantSignal", grid.FetchCell(x, y).plantType - 1, 1);
 		grid.HarvestPlant(x, y);
 		gridRenderer.RenderCell(x, y);
 	}
 
 
 	[Signal]
-	public delegate void PlantSeedSignalEventHandler(int plantType);
+	public delegate void PlantSeedSignalEventHandler(int plantType, int number);
 
 	public void TryPlantSeed(int x, int y, int plantType) {
 		if (!grid.CanPlant(x, y, plantType)) return;
@@ -219,11 +238,12 @@ public partial class GridManager : Node
 	}
 
 	[Signal]
-	public delegate void HarvestPlantSignalEventHandler(int plantType);
+	public delegate void HarvestPlantSignalEventHandler(int plantType, int number);
 
 	public void TryHarvestPlant(int x, int y) {
 		if (!grid.CanHarvest(x, y)) return;
-		actionTracker.HarvestPlant(x, y);
+		Cell cell = grid.FetchCell(x, y);
+		actionTracker.HarvestPlant(x, y, cell.plantType);
 		HarvestPlant(x, y);
 	}
 
@@ -234,6 +254,18 @@ public partial class GridManager : Node
 		StepTime();
 	}
 
+	public void UnPlantSeed(int[] actionInfo) {
+		grid.UnPlantSeed(actionInfo);
+		EmitSignal("PlantSeedSignal", actionInfo[3] - 1, 1);
+		gridRenderer.RenderCell(actionInfo[1], actionInfo[2]);
+	}
+
+	public void UnHarvestPlant(int[] actionInfo) {
+		grid.UnHarvestPlant(actionInfo);
+		EmitSignal("HarvestPlantSignal", actionInfo[3] - 1, -1);
+		gridRenderer.RenderCell(actionInfo[1], actionInfo[2]);
+	}
+
 	public void UndoActionButton() {
 		int[] actionInfo = actionTracker.UndoAction();
 		if (actionInfo == null) return;
@@ -242,11 +274,9 @@ public partial class GridManager : Node
 			grid.UnStepTime(actionInfo);
 			gridRenderer.RenderGrid();
 		} else if (actionInfo[0] == 1) {
-			grid.UnPlantSeed(actionInfo);
-			gridRenderer.RenderCell(actionInfo[1], actionInfo[2]);
+			UnPlantSeed(actionInfo);
 		} else if (actionInfo[0] == 2) {
-			grid.UnHarvestPlant(actionInfo);
-			gridRenderer.RenderCell(actionInfo[1], actionInfo[2]);
+			UnHarvestPlant(actionInfo);
 		}
 	}
 

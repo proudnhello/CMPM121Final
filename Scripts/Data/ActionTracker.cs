@@ -32,8 +32,8 @@ public class ActionTracker
 
     }
 
-    public void HarvestPlant(int x, int y) {
-        actions.Push(new int[]{2, x, y});
+    public void HarvestPlant(int x, int y, int plantType) {
+        actions.Push(new int[]{2, x, y, plantType});
         redoActions.Clear();
         GD.Print(actions.Count);
     }
