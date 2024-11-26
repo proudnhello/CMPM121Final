@@ -48,18 +48,23 @@ public class Grid {
 	}
 
 	public void StepTime(int seed) {
-		RandomNumberGenerator rng = new RandomNumberGenerator();
-		rng.Seed = (ulong)seed;
+		// The rng seperation is for when we need to undo actions, the sun will need to use the previous time step's seed, while the water will use the current time step's seed
+		// So we can't just use one rng for both
+		RandomNumberGenerator waterRNG = new RandomNumberGenerator();
+		RandomNumberGenerator sunRNG = new RandomNumberGenerator();
+
+		waterRNG.Seed = (ulong)seed;
+		sunRNG.Seed = (ulong)seed;
 		// iterate through currentCells and store changes in swapCells, then swap pointers;
 		for (int i = 0; i < currentCells.Length; i++) {
 			int x = i % op.gridDimensions;
 			int y = Mathf.FloorToInt(i / op.gridDimensions);
 			
 			// Increase water level by a random amount
-			swapCells[i].waterLevel = currentCells[i].waterLevel + rng.RandiRange(0, op.maxWaterLevelIncrease);
+			swapCells[i].waterLevel = currentCells[i].waterLevel + waterRNG.RandiRange(0, op.maxWaterLevelIncrease);
 
 			// Set sun level to a random amount
-			swapCells[i].sunLevel = rng.RandiRange(0, op.maxSunLevel);
+			swapCells[i].sunLevel = sunRNG.RandiRange(0, op.maxSunLevel);
 
 			// If the cell has a plant, save the plant type across
 			swapCells[i].plantType = currentCells[i].plantType;
@@ -94,21 +99,25 @@ public class Grid {
 		currentCells[index].plantLevel = 0;
 	}
 
-	public void UnStepTime(int[] actionInfo) {
-		RandomNumberGenerator rng = new RandomNumberGenerator();
-		rng.Seed = (ulong)actionInfo[1];
+	public void UnStepTime(int waterSeed, int sunSeed) {
+		RandomNumberGenerator waterRNG = new RandomNumberGenerator();
+		waterRNG.Seed = (ulong)waterSeed;
+		RandomNumberGenerator sunRNG = new RandomNumberGenerator();
+		sunRNG.Seed = (ulong)sunSeed;
 		// iterate through currentCells and store changes in swapCells, then swap pointers;
 		for (int i = 0; i < currentCells.Length; i++) {
 			int x = i % op.gridDimensions;
 			int y = Mathf.FloorToInt(i / op.gridDimensions);
 			
 			// Decreace water level by the same random amount
-			swapCells[i].waterLevel = currentCells[i].waterLevel - rng.RandiRange(0, op.maxWaterLevelIncrease);
+			swapCells[i].waterLevel = currentCells[i].waterLevel - waterRNG.RandiRange(0, op.maxWaterLevelIncrease);
 
-			int test = rng.RandiRange(0, op.maxSunLevel);
-			// Set sun level to the save random value
-			swapCells[i].sunLevel = test;
-			GD.Print(test);
+			// If the sun seed is 0, that means we've reached the start of the game, so we need to set the sun level to 0
+			if (sunSeed == 0){
+				swapCells[i].sunLevel = 0;
+			}else{
+				swapCells[i].sunLevel = sunRNG.RandiRange(0, op.maxSunLevel);
+			}
 		}
 		(swapCells, currentCells) = (currentCells, swapCells);
 	}
@@ -206,6 +215,7 @@ public partial class GridManager : Node
 	public GridRenderer gridRenderer;
 	
 	Node2D[][] gridSprites;
+	public int baseSeed;
 
 	public override void _Ready()
 	{
@@ -214,6 +224,7 @@ public partial class GridManager : Node
 		gridRenderer = new(grid, options, this);
 
 		GD.Seed((uint)actionTracker.GetSeed());
+		baseSeed = actionTracker.GetSeed();
 
 		// Set the player's movement distance
 		CharacterMovement playerMovement = (CharacterMovement)player;
@@ -264,9 +275,9 @@ public partial class GridManager : Node
 
 	
 	public void ProgressTimeButton() {
-		int timeStepSeed = (int)GD.Randi();
-		// Progress time by one step
-		actionTracker.StepTime(timeStepSeed);
+		 // Progress time by one step
+		int timeStepSeed = actionTracker.StepTime();
+		
 		StepTime(timeStepSeed);
 	}
 
@@ -283,7 +294,11 @@ public partial class GridManager : Node
 	}
 
 	public void UnStepTime(int[] actionInfo) {
-		grid.UnStepTime(actionInfo);
+		int waterSeed = actionInfo[1];
+		int sunSeed = actionInfo[1] - 1;
+		if (sunSeed < actionTracker.GetSeed()) sunSeed = 0;
+		grid.UnStepTime(waterSeed, sunSeed);
+		actionTracker.UnStepTime();
 		gridRenderer.RenderGrid();
 	}
 

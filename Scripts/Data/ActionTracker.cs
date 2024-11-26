@@ -9,13 +9,17 @@ public class ActionTracker
     Stack<int[]> redoActions;
 
     int seed;
+    int programCounter;
 
     public ActionTracker() {
         // Load from memory first
         actions = new();
         redoActions = new();
         seed = (int)Time.GetTicksMsec();
+        // We use 0 to represent no seed, so we need to make sure the seed is not 0
+        if (seed == 0) seed = 1;
         actions.Push(new int[]{-1, seed}); // -1 tells the loader what seed to use
+        programCounter = 0;
     }
 
     public ActionTracker(int seed) {
@@ -23,16 +27,24 @@ public class ActionTracker
         redoActions = new();
         this.seed = seed;
         actions.Push(new int[]{-1, seed});
+        programCounter = 0;
     }
 
     public int GetSeed() {
         return seed;
     }
 
-    public void StepTime(int seed) {
-        actions.Push(new int[]{0, seed});
+    public int StepTime() {
+        int stepSeed = seed + programCounter;
+        programCounter++;
+        actions.Push(new int[]{0, stepSeed});
         redoActions.Clear();
         GD.Print(actions.Count);
+        return stepSeed;
+    }
+
+    public void UnStepTime() {
+        programCounter--;
     }
 
     public void PlantSeed(int x, int y, int plantType) {
@@ -49,7 +61,8 @@ public class ActionTracker
     }
 
     public int[] UndoAction() {
-        if (actions.Count == 0) return null;
+        // For save purposes, action 0 will contain the seed, so we need to make sure we don't undo that
+        if (actions.Count <= 1) return null;
         int[] action = actions.Pop();
         GD.Print(action.Stringify());
         redoActions.Push(action);
