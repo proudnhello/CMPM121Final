@@ -2,6 +2,7 @@ using Godot;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 
 public struct Cell {
 	public int waterLevel;
@@ -37,6 +38,10 @@ public class Grid {
 		currentCells[y * op.gridDimensions + x] = cell;
 	}
 
+	public int FetchIndex(int x, int y){
+		return y * op.gridDimensions + x;
+	}
+
 	public bool CanPlant(int x, int y, int plantType) {
 		if (FetchCell(x, y).plantType != 0 || Inventory.instance.items[plantType - 1] <= 0) return false;
 		else return true;
@@ -47,8 +52,10 @@ public class Grid {
 		else return true;
 	}
 
-	public void StepTime(int seed) {
+	// Returns a list of all the cells that grew a plant
+	public int[] StepTime(int seed) {
 		// The rng seperation is for when we need to undo actions, the sun will need to use the previous time step's seed, while the water will use the current time step's seed
+		List<int> growth = new List<int>();
 		// So we can't just use one rng for both
 		RandomNumberGenerator waterRNG = new RandomNumberGenerator();
 		RandomNumberGenerator sunRNG = new RandomNumberGenerator();
@@ -75,15 +82,19 @@ public class Grid {
 				continue;
 			}
 
-			// 
+			// If the plant can grow, grow it
 			if (CheckPlantRequirements(currentCells[i], x, y)) {
-				swapCells[i] = GrowPlant(currentCells[i]);
+				swapCells[i].plantLevel++;
+				swapCells[i].waterLevel -= op.GetPlantRequirements(swapCells[i].plantType).waterRequirement;
+				growth.Add(x);
+				growth.Add(y);
 			}else{
 				swapCells[i].plantLevel = currentCells[i].plantLevel;
 			}
 		}
 
 		(swapCells, currentCells) = (currentCells, swapCells);
+		return growth.ToArray();
 	}
 
 	
@@ -99,7 +110,17 @@ public class Grid {
 		currentCells[index].plantLevel = 0;
 	}
 
-	public void UnStepTime(int waterSeed, int sunSeed) {
+	public void UnStepTime(int waterSeed, int sunSeed, int[] actionInfo) {
+		// Action info will contain a list of all of the cells that grew a plant, so we need to un-grow them and add the water back
+		for (int i = 2; i < actionInfo.Length; i+=2) {
+			int x = actionInfo[i];
+			int y = actionInfo[i+1];
+			int index = FetchIndex(x, y);
+
+			currentCells[index].plantLevel--;
+			currentCells[index].waterLevel += op.GetPlantRequirements(currentCells[index].plantType).waterRequirement;
+		}
+
 		RandomNumberGenerator waterRNG = new RandomNumberGenerator();
 		waterRNG.Seed = (ulong)waterSeed;
 		RandomNumberGenerator sunRNG = new RandomNumberGenerator();
@@ -118,7 +139,12 @@ public class Grid {
 			}else{
 				swapCells[i].sunLevel = sunRNG.RandiRange(0, op.maxSunLevel);
 			}
+
+			// If the cell has a plant, save the plant type across
+			swapCells[i].plantType = currentCells[i].plantType;
+			swapCells[i].plantLevel = currentCells[i].plantLevel;
 		}
+
 		(swapCells, currentCells) = (currentCells, swapCells);
 	}
 
@@ -234,9 +260,10 @@ public partial class GridManager : Node
 	}
 
 	
-	void StepTime(int seed) {
-		grid.StepTime(seed);
+	int[] StepTime(int seed) {
+		int[] grownPlants = grid.StepTime(seed);
 		gridRenderer.RenderGrid();
+		return grownPlants;
 	}
 
 	
@@ -276,9 +303,9 @@ public partial class GridManager : Node
 	
 	public void ProgressTimeButton() {
 		 // Progress time by one step
-		int timeStepSeed = actionTracker.StepTime();
-		
-		StepTime(timeStepSeed);
+		int timeStepSeed = actionTracker.GetNextSeed();
+		int[] grownPlants = StepTime(timeStepSeed);
+		actionTracker.StepTime(timeStepSeed, grownPlants);
 	}
 
 	public void UnPlantSeed(int[] actionInfo) {
@@ -297,7 +324,7 @@ public partial class GridManager : Node
 		int waterSeed = actionInfo[1];
 		int sunSeed = actionInfo[1] - 1;
 		if (sunSeed < actionTracker.GetSeed()) sunSeed = 0;
-		grid.UnStepTime(waterSeed, sunSeed);
+		grid.UnStepTime(waterSeed, sunSeed, actionInfo);
 		actionTracker.UnStepTime();
 		gridRenderer.RenderGrid();
 	}

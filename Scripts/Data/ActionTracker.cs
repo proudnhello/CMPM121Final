@@ -1,6 +1,7 @@
 using Godot;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 
 public class ActionTracker 
@@ -34,13 +35,19 @@ public class ActionTracker
         return seed;
     }
 
-    public int StepTime() {
+    public int GetNextSeed() {
         int stepSeed = seed + programCounter;
         programCounter++;
-        actions.Push(new int[]{0, stepSeed});
-        redoActions.Clear();
-        GD.Print(actions.Count);
         return stepSeed;
+    }
+
+    public void StepTime(int stepSeed, int[] grownPlants) {
+        int[] typeSeed = new int[]{0, stepSeed};
+        if(grownPlants.Length != 0) {
+            GD.Print("Grown plants: " + grownPlants.Stringify());
+        }
+        actions.Push(typeSeed.Concat(grownPlants).ToArray());
+        redoActions.Clear();
     }
 
     public void UnStepTime() {
@@ -50,14 +57,12 @@ public class ActionTracker
     public void PlantSeed(int x, int y, int plantType) {
         actions.Push(new int[]{1, x, y, plantType});
         redoActions.Clear();
-        GD.Print(actions.Count);
 
     }
 
     public void HarvestPlant(int x, int y, int plantType) {
         actions.Push(new int[]{2, x, y, plantType});
         redoActions.Clear();
-        GD.Print(actions.Count);
     }
 
     public int[] UndoAction() {
