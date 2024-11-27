@@ -1,0 +1,46 @@
+[gd_scene load_steps=2 format=3 uid="uid://coxggvb3me7fq"]
+
+[ext_resource type="Script" path="res://Scripts/Data/BackButton.cs" id="1_nhrg5"]
+
+[node name="Control" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Button" type="Button" parent="."]
+layout_mode = 0
+offset_top = 584.0
+offset_right = 148.0
+offset_bottom = 648.0
+text = "Back"
+script = ExtResource("1_nhrg5")
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 0
+offset_left = 392.0
+offset_top = 27.0
+offset_right = 703.0
+offset_bottom = 113.0
+theme_override_font_sizes/font_size = 35
+text = "Gameplay Tutorial"
+
+[node name="Label2" type="Label" parent="."]
+layout_mode = 0
+offset_left = 41.0
+offset_top = 95.0
+offset_right = 1112.0
+offset_bottom = 365.0
+theme_override_font_sizes/font_size = 26
+text = "- WASD keys to move
+- Space key to harvest
+- Number keys \"1\", \"2\", and \"3\" to plant
+- Click \"Progress Time\" to increment water level as well as randomize sun level
+- \"Undo\" button to undo action, \"Redo\" Button to redo action 
+- Each plant has different requirements for growth
+- Win condition = Harvest 3 plants of each
+- Enjoy :3"
+
+[connection signal="pressed" from="Button" to="Button" method="_on_pressed"]

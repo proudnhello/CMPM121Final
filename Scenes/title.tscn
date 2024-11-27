@@ -1,0 +1,42 @@
+[gd_scene load_steps=3 format=3 uid="uid://cg0j6nm1ryjg0"]
+
+[ext_resource type="Script" path="res://Scripts/Data/StartButton.cs" id="1_4j5vt"]
+[ext_resource type="Script" path="res://Scripts/Data/TutorialButton.cs" id="2_u2h3x"]
+
+[node name="Control" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Button" type="Button" parent="."]
+layout_mode = 0
+offset_left = 469.0
+offset_top = 374.0
+offset_right = 648.0
+offset_bottom = 431.0
+text = "Start Game"
+script = ExtResource("1_4j5vt")
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 0
+offset_left = 327.0
+offset_top = 133.0
+offset_right = 779.0
+offset_bottom = 256.0
+theme_override_font_sizes/font_size = 40
+text = "CMPM 121 Final Project"
+
+[node name="Button2" type="Button" parent="."]
+layout_mode = 0
+offset_left = 470.0
+offset_top = 445.0
+offset_right = 647.0
+offset_bottom = 502.0
+text = "Tutorial"
+script = ExtResource("2_u2h3x")
+
+[connection signal="pressed" from="Button" to="Button" method="_on_pressed"]
+[connection signal="pressed" from="Button2" to="Button2" method="_on_pressed"]
