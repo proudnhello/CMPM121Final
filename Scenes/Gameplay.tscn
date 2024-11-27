@@ -90,6 +90,21 @@ texture = ExtResource("7_73caw")
 flip_h = true
 flip_v = true
 
+[node name="SaveMenu" type="MenuButton" parent="UI"]
+offset_left = 1419.0
+offset_top = 96.0
+offset_right = 1494.0
+offset_bottom = 127.0
+scale = Vector2(4.53265, 5.15413)
+text = "Save File
+"
+item_count = 3
+popup/item_0/text = "File 1"
+popup/item_1/text = "File 2"
+popup/item_1/id = 1
+popup/item_2/text = "File 3"
+popup/item_2/id = 2
+
 [connection signal="HarvestPlantSignal" from="GridManager" to="Inventory" method="_on_harvest_plant_signal"]
 [connection signal="PlantSeedSignal" from="GridManager" to="Inventory" method="_on_plant_seed_signal"]
 [connection signal="pressed" from="UI/ProgressTimeButton" to="GridManager" method="ProgressTimeButton"]
