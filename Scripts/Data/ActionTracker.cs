@@ -80,8 +80,8 @@ public class ActionTracker
         return action;
     }
 
-    public void Save() {
-        using var saveFile = FileAccess.Open("user://save.save", FileAccess.ModeFlags.Write);
+    public void Save(string saveName) {
+        using var saveFile = FileAccess.Open("user://" + saveName + ".save", FileAccess.ModeFlags.Write);
         var actionArray = actions.ToArray();
         Array.Reverse(actionArray);
         foreach (var action in actionArray) {
@@ -97,13 +97,14 @@ public class ActionTracker
         }
     }
 
-    public int[][] Load() {
-        if (!FileAccess.FileExists("user://save.save")) return null;
+    public int[][] Load(string saveName) {
+        string savePath = "user://" + saveName + ".save";
+        if (!FileAccess.FileExists(savePath)) return null;
 
         actions = new();
         redoActions = new();
 
-        using var saveFile = FileAccess.Open("user://save.save", FileAccess.ModeFlags.Read);
+        using var saveFile = FileAccess.Open(savePath, FileAccess.ModeFlags.Read);
 
         int parseStage = 0;
         while (saveFile.GetPosition() < saveFile.GetLength()) {
@@ -124,7 +125,7 @@ public class ActionTracker
         this.seed = actionArray[0][1];
 
         programCounter = -1;
-        foreach (var action in actionArray) if (action.Length == 2) programCounter++;
+        foreach (var action in actionArray) if (action[0] == 0) GD.Print("increment counter"); programCounter++;
         
         return actionArray;
     }

@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading;
 
 public struct Cell {
 	public int waterLevel;
@@ -57,14 +58,18 @@ public class Grid {
 			currentCells[i].waterLevel = 0;  currentCells[i].sunLevel = 0; currentCells[i].plantType = 0; currentCells[i].plantLevel = 0;
 		}
 
-		foreach (var actionInfo in actions) {
+		actions = actions.Reverse().ToArray();
 
+		foreach (var actionInfo in actions) {
 			if (actionInfo[0] == 0) {
-			StepTime(actionInfo[1]);
+				StepTime(actionInfo[1]);
+				GD.Print("Loaded step time");
 			} else if (actionInfo[0] == 1) {
 				PlantSeed(actionInfo[1], actionInfo[2], actionInfo[3]);
+				GD.Print("Loaded plant seed at ", actionInfo[1], " ",actionInfo[2]);
 			} else if (actionInfo[0] == 2) {
 				HarvestPlant(actionInfo[1], actionInfo[2]);
+				GD.Print("Loaded harvest plant at ", actionInfo[1], " ",actionInfo[2]);
 			}
 		}
 	}
@@ -372,12 +377,12 @@ public partial class GridManager : Node
 		}
 	}
 
-	public void Save() {
-		actionTracker.Save();
+	public void Save(string saveName) {
+		actionTracker.Save(saveName);
 	}
 
-	public void Load() {
-		int[][] actions = actionTracker.Load();
+	public void Load(string saveName) {
+		int[][] actions = actionTracker.Load(saveName);
 		GD.Print(actions.Length);
 		if (actions == null) return;
 
