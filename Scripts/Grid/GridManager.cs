@@ -52,6 +52,23 @@ public class Grid {
 		else return true;
 	}
 
+	public void LoadFromMemory(int[][] actions) {
+		for (int i = 0; i < currentCells.Length; i++) {
+			currentCells[i].waterLevel = 0;  currentCells[i].sunLevel = 0; currentCells[i].plantType = 0; currentCells[i].plantLevel = 0;
+		}
+
+		foreach (var actionInfo in actions) {
+
+			if (actionInfo[0] == 0) {
+			StepTime(actionInfo[1]);
+			} else if (actionInfo[0] == 1) {
+				PlantSeed(actionInfo[1], actionInfo[2], actionInfo[3]);
+			} else if (actionInfo[0] == 2) {
+				HarvestPlant(actionInfo[1], actionInfo[2]);
+			}
+		}
+	}
+
 	// Returns a list of all the cells that grew a plant
 	public int[] StepTime(int seed) {
 		// The rng seperation is for when we need to undo actions, the sun will need to use the previous time step's seed, while the water will use the current time step's seed
@@ -353,5 +370,19 @@ public partial class GridManager : Node
 		} else if (actionInfo[0] == 2) {
 			HarvestPlant(actionInfo[1], actionInfo[2]);
 		}
+	}
+
+	public void Save() {
+		actionTracker.Save();
+	}
+
+	public void Load() {
+		int[][] actions = actionTracker.Load();
+		GD.Print(actions.Length);
+		if (actions == null) return;
+
+		grid.LoadFromMemory(actions);
+		Inventory.instance.LoadFromMemory(actions);
+		gridRenderer.RenderGrid();
 	}
 }

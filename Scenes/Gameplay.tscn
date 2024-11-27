@@ -1,10 +1,11 @@
-[gd_scene load_steps=7 format=3 uid="uid://bgh1ayrmhacoe"]
+[gd_scene load_steps=8 format=3 uid="uid://bgh1ayrmhacoe"]
 
 [ext_resource type="Texture2D" uid="uid://dm1v2tfuxacr4" path="res://Sprites/Character/bean-294077_1280.png" id="1_lv6rf"]
 [ext_resource type="Resource" uid="uid://boc2rni7drg05" path="res://GridOptions.tres" id="2_iycgm"]
 [ext_resource type="Script" path="res://Scripts/Character/CharacterMovement.cs" id="2_nvx61"]
 [ext_resource type="Script" path="res://Scripts/Grid/GridManager.cs" id="3_03wem"]
 [ext_resource type="Script" path="res://Scripts/Character/Inventory.cs" id="6_bc6ck"]
+[ext_resource type="Texture2D" uid="uid://f64e06o4povh" path="res://Sprites/UI/FloppyDisk.png" id="7_73caw"]
 [ext_resource type="PackedScene" uid="uid://jeilmlgew1bx" path="res://Scenes/Inventory/InventorySlot.tscn" id="7_x7taq"]
 
 [node name="Node2D" type="Node2D"]
@@ -61,8 +62,38 @@ scale = Vector2(3.24, 3.24)
 focus_mode = 0
 text = "REDO"
 
+[node name="SaveButton" type="Button" parent="UI"]
+offset_left = 1617.0
+offset_top = -358.0
+offset_right = 1763.0
+offset_bottom = -305.0
+scale = Vector2(1.4, 3.7)
+focus_mode = 0
+
+[node name="Sprite2D" type="Sprite2D" parent="UI/SaveButton"]
+position = Vector2(71.4286, 27.027)
+scale = Vector2(0.462857, 0.175135)
+texture = ExtResource("7_73caw")
+
+[node name="SaveButton2" type="Button" parent="UI"]
+offset_left = 1617.0
+offset_top = -137.0
+offset_right = 1763.0
+offset_bottom = -84.0
+scale = Vector2(1.4, 3.7)
+focus_mode = 0
+
+[node name="Sprite2D" type="Sprite2D" parent="UI/SaveButton2"]
+position = Vector2(71.4286, 27.027)
+scale = Vector2(0.462857, 0.175135)
+texture = ExtResource("7_73caw")
+flip_h = true
+flip_v = true
+
 [connection signal="HarvestPlantSignal" from="GridManager" to="Inventory" method="_on_harvest_plant_signal"]
 [connection signal="PlantSeedSignal" from="GridManager" to="Inventory" method="_on_plant_seed_signal"]
 [connection signal="pressed" from="UI/ProgressTimeButton" to="GridManager" method="ProgressTimeButton"]
 [connection signal="pressed" from="UI/UndoButton" to="GridManager" method="UndoActionButton"]
 [connection signal="pressed" from="UI/RedoButton" to="GridManager" method="RedoActionButton"]
+[connection signal="pressed" from="UI/SaveButton" to="GridManager" method="Save"]
+[connection signal="pressed" from="UI/SaveButton2" to="GridManager" method="Load"]

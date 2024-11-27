@@ -69,7 +69,6 @@ public class ActionTracker
         // For save purposes, action 0 will contain the seed, so we need to make sure we don't undo that
         if (actions.Count <= 1) return null;
         int[] action = actions.Pop();
-        GD.Print(action.Stringify());
         redoActions.Push(action);
         return action;
     }
@@ -77,8 +76,56 @@ public class ActionTracker
     public int[] RedoAction() {
         if (redoActions.Count == 0) return null;
         int[] action = redoActions.Pop();
-        GD.Print(action.Stringify());
         actions.Push(action);
         return action;
+    }
+
+    public void Save() {
+        using var saveFile = FileAccess.Open("user://save.save", FileAccess.ModeFlags.Write);
+        var actionArray = actions.ToArray();
+        Array.Reverse(actionArray);
+        foreach (var action in actionArray) {
+            var jsonAction = Json.Stringify(action);
+            saveFile.StoreLine(jsonAction);
+        }
+        saveFile.StoreLine("");
+        var redoActionArray = redoActions.ToArray();
+        Array.Reverse(redoActionArray);
+        foreach (var action in redoActionArray) {
+            var jsonAction = Json.Stringify(action);
+            saveFile.StoreLine(jsonAction);
+        }
+    }
+
+    public int[][] Load() {
+        if (!FileAccess.FileExists("user://save.save")) return null;
+
+        actions = new();
+        redoActions = new();
+
+        using var saveFile = FileAccess.Open("user://save.save", FileAccess.ModeFlags.Read);
+
+        int parseStage = 0;
+        while (saveFile.GetPosition() < saveFile.GetLength()) {
+            var jsonAction = saveFile.GetLine();
+
+            if (jsonAction == "") {
+                parseStage++;
+                continue;
+            }
+
+            int[] action = (int[])Json.ParseString(jsonAction);
+
+            if (parseStage == 0) actions.Push(action);
+            else redoActions.Push(action);
+        }
+
+        var actionArray = actions.ToArray();
+        this.seed = actionArray[0][1];
+
+        programCounter = -1;
+        foreach (var action in actionArray) if (action.Length == 2) programCounter++;
+        
+        return actionArray;
     }
 }
