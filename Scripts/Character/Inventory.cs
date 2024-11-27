@@ -67,6 +67,11 @@ public partial class Inventory : Node
 		}
 	}
 
+	public void ResetInventory(){
+		items.Clear();
+		InitializeInventory();
+	}
+
 	public void _on_harvest_plant_signal(int plantType, int number){
 		GD.Print("Harvesting plant");
 		ItemType item = (ItemType)plantType + 3;

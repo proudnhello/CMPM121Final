@@ -371,6 +371,8 @@ public partial class GridManager : Node
 		GD.Print(actions.Length);
 		if (actions == null) return;
 		GetTree().Paused = true;
+		grid.ClearBoard();
+		Inventory.instance.ResetInventory();
 		actions = actions.Reverse().ToArray();
 		foreach (var actionInfo in actions) {
 			if (actionInfo[0] == 0) {
