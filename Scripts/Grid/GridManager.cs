@@ -368,7 +368,6 @@ public partial class GridManager : Node
 
 	public void Load(string saveName) {
 		int[][] actions = actionTracker.Load(saveName);
-		GD.Print(actions.Length);
 		if (actions == null) return;
 		GetTree().Paused = true;
 		grid.ClearBoard();

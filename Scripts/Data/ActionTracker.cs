@@ -122,10 +122,19 @@ public class ActionTracker
         }
 
         var actionArray = actions.ToArray();
-        this.seed = actionArray[0][1];
+        if (actionArray[actionArray.Length - 1][0] != -1){
+            GD.Print("No seed found in save file");
+            return null;
+        }
+        this.seed = actionArray[actionArray.Length - 1][1];
 
         programCounter = -1;
-        foreach (var action in actionArray) if (action[0] == 0) GD.Print("increment counter"); programCounter++;
+        foreach (var action in actionArray) {
+            if (action[0] == 0) {
+                programCounter++;
+                GD.Print("increment counter ", programCounter); 
+            }
+        }
         
         return actionArray;
     }
