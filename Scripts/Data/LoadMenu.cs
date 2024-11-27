@@ -1,33 +1,31 @@
 using Godot;
 using System;
-using System.Net;
 
-public partial class SaveMenu : MenuButton
+public partial class LoadMenu : MenuButton
 {
 	[Export] GridManager gridManager;
-
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
-		MenuButton saveMenu = this;
-		PopupMenu popupMenu = saveMenu.GetPopup();
-		popupMenu.Connect("id_pressed", new Callable(this, nameof(SaveToFile)));
+		MenuButton loadMenu = this;
+		PopupMenu popupMenu = loadMenu.GetPopup();
+		popupMenu.Connect("id_pressed", new Callable(this, nameof(LoadFromFile)));
 	}
 
-	private void SaveToFile(int fileID)
+	private void LoadFromFile(int fileID)
 	{
 		// id is defined inside the Godot editor
 		// click on SaveMenu -> Items to see or make changes to id 
 		switch (fileID)
 		{
 			case 1:
-				gridManager.Save("File1");
+				gridManager.Load("File1");
 				break;
 			case 2:
-				gridManager.Save("File2");
+				gridManager.Load("File2");
 				break;
 			case 3:
-				gridManager.Save("File3");
+				gridManager.Load("File3");
 				break;
 		}
 	}

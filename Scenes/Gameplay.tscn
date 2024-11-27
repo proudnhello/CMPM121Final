@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://bgh1ayrmhacoe"]
+[gd_scene load_steps=10 format=3 uid="uid://bgh1ayrmhacoe"]
 
 [ext_resource type="Texture2D" uid="uid://dm1v2tfuxacr4" path="res://Sprites/Character/bean-294077_1280.png" id="1_lv6rf"]
 [ext_resource type="Resource" uid="uid://boc2rni7drg05" path="res://GridOptions.tres" id="2_iycgm"]
@@ -8,6 +8,7 @@
 [ext_resource type="Texture2D" uid="uid://f64e06o4povh" path="res://Sprites/UI/FloppyDisk.png" id="7_73caw"]
 [ext_resource type="PackedScene" uid="uid://jeilmlgew1bx" path="res://Scenes/Inventory/InventorySlot.tscn" id="7_x7taq"]
 [ext_resource type="Script" path="res://Scripts/Data/SaveMenu.cs" id="8_t2ced"]
+[ext_resource type="Script" path="res://Scripts/Data/LoadMenu.cs" id="9_xjjsr"]
 
 [node name="Node2D" type="Node2D"]
 
@@ -107,6 +108,23 @@ popup/item_1/id = 2
 popup/item_2/text = "File 3"
 popup/item_2/id = 3
 script = ExtResource("8_t2ced")
+gridManager = NodePath("../../GridManager")
+
+[node name="LoadMenu" type="MenuButton" parent="UI" node_paths=PackedStringArray("gridManager")]
+offset_left = 1395.0
+offset_top = 242.0
+offset_right = 1517.0
+offset_bottom = 273.0
+scale = Vector2(3.63739, 4.82325)
+text = "Load From File"
+item_count = 3
+popup/item_0/text = "File 1"
+popup/item_0/id = 1
+popup/item_1/text = "File 2"
+popup/item_1/id = 2
+popup/item_2/text = "File 3"
+popup/item_2/id = 3
+script = ExtResource("9_xjjsr")
 gridManager = NodePath("../../GridManager")
 
 [connection signal="HarvestPlantSignal" from="GridManager" to="Inventory" method="_on_harvest_plant_signal"]
