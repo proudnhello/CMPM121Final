@@ -53,24 +53,9 @@ public class Grid {
 		else return true;
 	}
 
-	public void LoadFromMemory(int[][] actions) {
+	public void ClearBoard() {
 		for (int i = 0; i < currentCells.Length; i++) {
 			currentCells[i].waterLevel = 0;  currentCells[i].sunLevel = 0; currentCells[i].plantType = 0; currentCells[i].plantLevel = 0;
-		}
-
-		actions = actions.Reverse().ToArray();
-
-		foreach (var actionInfo in actions) {
-			if (actionInfo[0] == 0) {
-				StepTime(actionInfo[1]);
-				GD.Print("Loaded step time");
-			} else if (actionInfo[0] == 1) {
-				PlantSeed(actionInfo[1], actionInfo[2], actionInfo[3]);
-				GD.Print("Loaded plant seed at ", actionInfo[1], " ",actionInfo[2]);
-			} else if (actionInfo[0] == 2) {
-				HarvestPlant(actionInfo[1], actionInfo[2]);
-				GD.Print("Loaded harvest plant at ", actionInfo[1], " ",actionInfo[2]);
-			}
 		}
 	}
 
@@ -385,9 +370,23 @@ public partial class GridManager : Node
 		int[][] actions = actionTracker.Load(saveName);
 		GD.Print(actions.Length);
 		if (actions == null) return;
+		GetTree().Paused = true;
+		actions = actions.Reverse().ToArray();
+		foreach (var actionInfo in actions) {
+			if (actionInfo[0] == 0) {
+				StepTime(actionInfo[1]);
+				GD.Print("Loaded step time");
+			} else if (actionInfo[0] == 1) {
+				PlantSeed(actionInfo[1], actionInfo[2], actionInfo[3]);
+				GD.Print("Loaded plant seed at ", actionInfo[1], " ",actionInfo[2]);
+			} else if (actionInfo[0] == 2) {
+				HarvestPlant(actionInfo[1], actionInfo[2]);
+				GD.Print("Loaded harvest plant at ", actionInfo[1], " ",actionInfo[2]);
+			}
+		}
 
-		grid.LoadFromMemory(actions);
 		Inventory.instance.LoadFromMemory(actions);
+		GetTree().Paused = false;
 		gridRenderer.RenderGrid();
 	}
 }
