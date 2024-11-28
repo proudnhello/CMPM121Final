@@ -1,10 +1,11 @@
-[gd_scene load_steps=10 format=3 uid="uid://bgh1ayrmhacoe"]
+[gd_scene load_steps=11 format=3 uid="uid://bgh1ayrmhacoe"]
 
 [ext_resource type="Texture2D" uid="uid://dm1v2tfuxacr4" path="res://Sprites/Character/bean-294077_1280.png" id="1_lv6rf"]
 [ext_resource type="Resource" uid="uid://boc2rni7drg05" path="res://GridOptions.tres" id="2_iycgm"]
-[ext_resource type="Script" path="res://Scripts/Character/CharacterMovement.cs" id="2_nvx61"]
 [ext_resource type="Script" path="res://Scripts/Grid/GridManager.cs" id="3_03wem"]
+[ext_resource type="Script" path="res://Scripts/Character/character.gd" id="6_a5swx"]
 [ext_resource type="Script" path="res://Scripts/Character/Inventory.cs" id="6_bc6ck"]
+[ext_resource type="PackedScene" uid="uid://ctgicajw68chx" path="res://Scenes/Cell.tscn" id="6_o1l52"]
 [ext_resource type="Texture2D" uid="uid://f64e06o4povh" path="res://Sprites/UI/FloppyDisk.png" id="7_73caw"]
 [ext_resource type="PackedScene" uid="uid://jeilmlgew1bx" path="res://Scenes/Inventory/InventorySlot.tscn" id="7_x7taq"]
 [ext_resource type="Script" path="res://Scripts/Data/SaveMenu.cs" id="8_t2ced"]
@@ -25,14 +26,14 @@ itemSlotScene = ExtResource("7_x7taq")
 script = ExtResource("3_03wem")
 options = ExtResource("2_iycgm")
 player = NodePath("../Character")
-cellScene = ExtResource("7_x7taq")
+cellScene = ExtResource("6_o1l52")
 inventory = NodePath("../Inventory")
 
-[node name="Character" type="Sprite2D" parent="." node_paths=PackedStringArray("gridManager")]
+[node name="Character" type="Sprite2D" parent="." node_paths=PackedStringArray("grid_manager")]
 scale = Vector2(0.2, 0.2)
 texture = ExtResource("1_lv6rf")
-script = ExtResource("2_nvx61")
-gridManager = NodePath("../GridManager")
+script = ExtResource("6_a5swx")
+grid_manager = NodePath("../GridManager")
 
 [node name="UI" type="CanvasLayer" parent="."]
 follow_viewport_enabled = true

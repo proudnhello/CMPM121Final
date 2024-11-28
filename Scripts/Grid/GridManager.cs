@@ -234,7 +234,7 @@ public partial class GridManager : Node
 {
 	[Export] GridOptions options;
 	
-	[Export] Node2D player;
+	[Export] Node player;
 
 	[Export] PackedScene cellScene;
 
@@ -259,10 +259,8 @@ public partial class GridManager : Node
 		GD.Seed((uint)actionTracker.GetSeed());
 		baseSeed = actionTracker.GetSeed();
 
-		// Set the player's movement distance
-		CharacterMovement playerMovement = (CharacterMovement)player;
-		
-		playerMovement.Init(gridRenderer.GetCellSize(), options.gridDimensions-1, 
+		// Set the player's movement distance		
+		player.Call("init", gridRenderer.GetCellSize(), options.gridDimensions-1, 
 			new Vector2(Mathf.FloorToInt(options.gridDimensions/2), Mathf.FloorToInt(options.gridDimensions/2)));
 
 		if(SceneSwitcher.Instance.filepath != null){
