@@ -264,6 +264,11 @@ public partial class GridManager : Node
 		
 		playerMovement.Init(gridRenderer.GetCellSize(), options.gridDimensions-1, 
 			new Vector2(Mathf.FloorToInt(options.gridDimensions/2), Mathf.FloorToInt(options.gridDimensions/2)));
+
+		if(SceneSwitcher.Instance.filepath != null){
+			GD.Print("save file: ", SceneSwitcher.Instance.filepath);
+			Load(SceneSwitcher.Instance.filepath);
+		}
 	}
 
 	
@@ -374,6 +379,7 @@ public partial class GridManager : Node
 	}
 
 	public void Load(string saveName) {
+		GD.Print("Loading save file: ", saveName);
 		int[][] actions = actionTracker.Load(saveName);
 		if (actions == null) return;
 		GetTree().Paused = true;

@@ -16,6 +16,11 @@
 scale = Vector2(0.243182, 0.243182)
 zoom = Vector2(0.3, 0.3)
 
+[node name="Inventory" type="Node2D" parent="."]
+position = Vector2(-1678, -709)
+script = ExtResource("6_bc6ck")
+itemSlotScene = ExtResource("7_x7taq")
+
 [node name="GridManager" type="Node2D" parent="." node_paths=PackedStringArray("player", "inventory")]
 script = ExtResource("3_03wem")
 options = ExtResource("2_iycgm")
@@ -28,11 +33,6 @@ scale = Vector2(0.2, 0.2)
 texture = ExtResource("1_lv6rf")
 script = ExtResource("2_nvx61")
 gridManager = NodePath("../GridManager")
-
-[node name="Inventory" type="Node2D" parent="."]
-position = Vector2(-1678, -709)
-script = ExtResource("6_bc6ck")
-itemSlotScene = ExtResource("7_x7taq")
 
 [node name="UI" type="CanvasLayer" parent="."]
 follow_viewport_enabled = true

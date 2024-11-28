@@ -1,7 +1,7 @@
 using Godot;
 using System;
 
-public partial class StartButton : Node
+public partial class ContinueButton : Button
 {
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
@@ -14,7 +14,11 @@ public partial class StartButton : Node
 	}
 
 	public void _on_pressed(){
-		SceneSwitcher.Instance.StartSceneFromScratch();
+		if(FileAccess.FileExists("user://AutoSave.save")) {
+			SceneSwitcher.Instance.StartSceneFromFile("AutoSave");
+		}
+		else {
+			GD.Print("No save file found.");
+		}
 	}
-
 }
