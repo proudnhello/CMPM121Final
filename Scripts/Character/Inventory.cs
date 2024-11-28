@@ -70,6 +70,7 @@ public partial class Inventory : Node
 	public void ResetInventory(){
 		items.Clear();
 		InitializeInventory();
+		DisplayInventory();
 	}
 
 	public void _on_harvest_plant_signal(int plantType, int number){

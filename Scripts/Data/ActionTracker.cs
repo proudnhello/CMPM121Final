@@ -143,7 +143,6 @@ public class ActionTracker
         foreach (var action in actionArray) {
             if (action[0] == 0) {
                 programCounter++;
-                GD.Print("increment counter ", programCounter); 
             }
         }
         
