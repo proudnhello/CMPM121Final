@@ -36,7 +36,23 @@ The F0 requirements were satisfied in the same ways as our last devlog. Players 
 
 ### F1 Requirements
 - F1.A: For F1.A, we ultimately used an array of structs to represent the board state. In our GridManager script, we have the struct Cell, which contains 4 integers. They represent the level of sun in the cell, the amount of water in the cell, the plant type (if any) currently growing in that cell, and finally the maturity of the plant in the cell. We then have an array of these structs, which represents the board at any point in the game. As in C\#, structs and arrays are arrayed contigiously in memory (assuming neither contains any pointers, which ours do not), this ultimately creates one contigious byte array in memory. An image illustrating this approach can be seen below.
-[![](https://mermaid.ink/img/pako:eNptkl9LwzAUxb9KuE8KzWjSLH_6JvqoMJwgSF-yNduKaTKyVK1j3920nRNU8pTfOffcy-UeYe1rAyVgjCsXm2hNiSq4NdaimxB0X0HlRm2v168m4pWJunII5bggg3M0Ib9BQ8kBXbE8R6s-mgOy3m0zFEPn1jqaGm18QMHoWq8a28T-ekhGqKCYiUvLfIJMYl5cIJkgZ5iPzmXnbLPdxTOWWIyTPKcuYWKCYjEf2MJqF9FTvzdngWOhfoR782bspMgcy-JvumRYil_pUmJF_ktXFKv5P-nDgwxaE1rd1GnZx8FdQdyZNpUOFbUOrxVkE1818bAw4dG_T2La6RBzShm6i37ZuzWUabEmg-C77Q7KjbaH9Ov2dRrzrtHboNsL3Wv34n37XZK-UB7hA0qSz6jIiaAFY4IpNmcZ9AnzxBWnihSCUcLU_JTB55hAZjlJfs6p5JRwJXkGpm6iDw_TGY3XdPoCID6xRg?type=png)](https://mermaid.live/edit#pako:eNptkl9LwzAUxb9KuE8KzWjSLH_6JvqoMJwgSF-yNduKaTKyVK1j3920nRNU8pTfOffcy-UeYe1rAyVgjCsXm2hNiSq4NdaimxB0X0HlRm2v168m4pWJunII5bggg3M0Ib9BQ8kBXbE8R6s-mgOy3m0zFEPn1jqaGm18QMHoWq8a28T-ekhGqKCYiUvLfIJMYl5cIJkgZ5iPzmXnbLPdxTOWWIyTPKcuYWKCYjEf2MJqF9FTvzdngWOhfoR782bspMgcy-JvumRYil_pUmJF_ktXFKv5P-nDgwxaE1rd1GnZx8FdQdyZNpUOFbUOrxVkE1818bAw4dG_T2La6RBzShm6i37ZuzWUabEmg-C77Q7KjbaH9Ov2dRrzrtHboNsL3Wv34n37XZK-UB7hA0qSz6jIiaAFY4IpNmcZ9AnzxBWnihSCUcLU_JTB55hAZjlJfs6p5JRwJXkGpm6iDw_TGY3XdPoCID6xRg) 
+```mermaid
+---
+title: "Cell Array Layout"
+---
+packet-beta
+  0-31: "Array of Cells (400 bytes long, truncated for readability)"
+  32-47: "Cell 0"
+  48-63: "Cell 1"
+  64-67: "Sunlight"
+  68-71: "Water"
+  72-75: "Plant Type"
+  76-79: "Plant Level"
+  80-83: "Sunlight"
+  84-87: "Water"
+  88-91: "Plant Type"
+  92-95: "Plant Level"
+```
 - F1.B: We satisfied this requirement by adding save and load buttons to the game scene. When clicked, players can choose between three save files to write their save to. After saving, players can use the load button to go back to that save file, reverting their changes no matter how much progress they have made since then. This also allows players to easily swap between save files at any point in their gameplay.
 - F1.C: This requirement was satisfied with the addition of an autosave function to the ActionTracker class. The autosave function is called after any major action taken by a player (progressing time, planting a seed, or harvesting), and provides players with a safety net in case their game crashes before they can save. Players cannot manually overwrite the autosave save file, to stop them from unintentonally destroying their progress. When players start the game, they are prompted to either start a new game or load previously saved data (either from an autosave or from a player-chosen save file).
 - F1.D: Players are presented with undo and redo buttons, which allow them to undo or redo any major action (progressing time, planting a seed, or harvesting). Players can undo indefinitely (until the start of gameplay), even from loaded save files. Players can also redo as many undos as are present in the stack, allowing them to redo anything they may have un-done on accident (even if they saved after undoing).
