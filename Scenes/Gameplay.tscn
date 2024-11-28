@@ -64,42 +64,16 @@ scale = Vector2(3.24, 3.24)
 focus_mode = 0
 text = "REDO"
 
-[node name="SaveButton" type="Button" parent="UI"]
-offset_left = 1617.0
-offset_top = -358.0
-offset_right = 1763.0
-offset_bottom = -305.0
-scale = Vector2(1.4, 3.7)
-focus_mode = 0
-
-[node name="Sprite2D" type="Sprite2D" parent="UI/SaveButton"]
-position = Vector2(71.4286, 27.027)
-scale = Vector2(0.462857, 0.175135)
-texture = ExtResource("7_73caw")
-
-[node name="SaveButton2" type="Button" parent="UI"]
-offset_left = 1617.0
-offset_top = -137.0
-offset_right = 1763.0
-offset_bottom = -84.0
-scale = Vector2(1.4, 3.7)
-focus_mode = 0
-
-[node name="Sprite2D" type="Sprite2D" parent="UI/SaveButton2"]
-position = Vector2(71.4286, 27.027)
-scale = Vector2(0.462857, 0.175135)
-texture = ExtResource("7_73caw")
-flip_h = true
-flip_v = true
-
 [node name="SaveMenu" type="MenuButton" parent="UI" node_paths=PackedStringArray("gridManager")]
-offset_left = 1399.0
-offset_top = 91.0
-offset_right = 1474.0
-offset_bottom = 122.0
-scale = Vector2(4.53265, 5.15413)
-text = "Save To File
+offset_left = 1484.0
+offset_top = -365.0
+offset_right = 1752.0
+offset_bottom = -101.0
+scale = Vector2(0.728246, 0.804006)
+tooltip_text = "Save Game"
+text = "
 "
+icon = ExtResource("7_73caw")
 item_count = 3
 popup/item_0/text = "File 1"
 popup/item_0/id = 1
@@ -111,12 +85,14 @@ script = ExtResource("8_t2ced")
 gridManager = NodePath("../../GridManager")
 
 [node name="LoadMenu" type="MenuButton" parent="UI" node_paths=PackedStringArray("gridManager")]
-offset_left = 1395.0
-offset_top = 242.0
-offset_right = 1517.0
-offset_bottom = 273.0
-scale = Vector2(3.63739, 4.82325)
-text = "Load From File"
+offset_left = 1685.0
+offset_top = 85.0
+offset_right = 1949.0
+offset_bottom = 349.0
+rotation = -3.13759
+scale = Vector2(0.784271, 0.812167)
+tooltip_text = "Load Game"
+icon = ExtResource("7_73caw")
 item_count = 3
 popup/item_0/text = "File 1"
 popup/item_0/id = 1
