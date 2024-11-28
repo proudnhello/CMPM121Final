@@ -270,6 +270,7 @@ public partial class GridManager : Node
 	int[] StepTime(int seed) {
 		int[] grownPlants = grid.StepTime(seed);
 		gridRenderer.RenderGrid();
+		actionTracker.autoSave();
 		return grownPlants;
 	}
 
@@ -278,6 +279,7 @@ public partial class GridManager : Node
 		EmitSignal("PlantSeedSignal", plantType - 1, -1);
 		grid.PlantSeed(x, y, plantType);
 		gridRenderer.RenderCell(x, y);
+		actionTracker.autoSave();
 	}
 
 	
@@ -285,6 +287,7 @@ public partial class GridManager : Node
 		EmitSignal("HarvestPlantSignal", grid.FetchCell(x, y).plantType - 1, 1);
 		grid.HarvestPlant(x, y);
 		gridRenderer.RenderCell(x, y);
+		actionTracker.autoSave();
 	}
 
 
@@ -313,18 +316,21 @@ public partial class GridManager : Node
 		int timeStepSeed = actionTracker.GetNextSeed();
 		int[] grownPlants = StepTime(timeStepSeed);
 		actionTracker.StepTime(timeStepSeed, grownPlants);
+		actionTracker.autoSave();
 	}
 
 	public void UnPlantSeed(int[] actionInfo) {
 		grid.UnPlantSeed(actionInfo);
 		EmitSignal("PlantSeedSignal", actionInfo[3] - 1, 1);
 		gridRenderer.RenderCell(actionInfo[1], actionInfo[2]);
+		actionTracker.autoSave();
 	}
 
 	public void UnHarvestPlant(int[] actionInfo) {
 		grid.UnHarvestPlant(actionInfo);
 		EmitSignal("HarvestPlantSignal", actionInfo[3] - 1, -1);
 		gridRenderer.RenderCell(actionInfo[1], actionInfo[2]);
+		actionTracker.autoSave();
 	}
 
 	public void UnStepTime(int[] actionInfo) {
@@ -334,6 +340,7 @@ public partial class GridManager : Node
 		grid.UnStepTime(waterSeed, sunSeed, actionInfo);
 		actionTracker.UnStepTime();
 		gridRenderer.RenderGrid();
+		actionTracker.autoSave();
 	}
 
 	public void UndoActionButton() {

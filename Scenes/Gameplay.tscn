@@ -132,5 +132,3 @@ gridManager = NodePath("../../GridManager")
 [connection signal="pressed" from="UI/ProgressTimeButton" to="GridManager" method="ProgressTimeButton"]
 [connection signal="pressed" from="UI/UndoButton" to="GridManager" method="UndoActionButton"]
 [connection signal="pressed" from="UI/RedoButton" to="GridManager" method="RedoActionButton"]
-[connection signal="pressed" from="UI/SaveButton" to="GridManager" method="Save" binds= ["save1"]]
-[connection signal="pressed" from="UI/SaveButton2" to="GridManager" method="Load" binds= ["save1"]]

@@ -82,6 +82,17 @@ public class ActionTracker
 
     public void Save(string saveName) {
         using var saveFile = FileAccess.Open("user://" + saveName + ".save", FileAccess.ModeFlags.Write);
+        using var autosaveFile = FileAccess.Open("user://AutoSave.save", FileAccess.ModeFlags.Read);
+        while (!autosaveFile.EofReached())
+        {
+            string line = autosaveFile.GetLine();
+            saveFile.StoreLine(line);
+        }
+    }
+
+    public void autoSave() {
+        var saveName = "AutoSave";
+        using var saveFile = FileAccess.Open("user://" + saveName + ".save", FileAccess.ModeFlags.Write);
         var actionArray = actions.ToArray();
         Array.Reverse(actionArray);
         foreach (var action in actionArray) {
