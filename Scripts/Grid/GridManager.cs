@@ -46,7 +46,6 @@ public class Grid {
 	}
 
 	public bool CanPlant(int x, int y, int plantType) {
-		GD.Print("CanPlant: ", FetchCell(x, y).plantType, " ", inventory);
 		if (FetchCell(x, y).plantType != 0 || (int)inventory.Call("GetItemAmnt", plantType - 1) <= 0) return false;
 		else return true;
 	}
@@ -60,6 +59,49 @@ public class Grid {
 		for (int i = 0; i < currentCells.Length; i++) {
 			currentCells[i].waterLevel = 0;  currentCells[i].sunLevel = 0; currentCells[i].plantType = 0; currentCells[i].plantLevel = 0;
 		}
+	}
+
+		// Check if the cell is valid
+	bool IsCellValid(Cell cell){
+		return cell.waterLevel != -1000;
+	}
+
+	// Checks if the plant in the cell can grow
+	bool CheckPlantRequirements(Cell cell, int x, int y) {
+		PlantGrowthRequirement requirements = op.GetPlantRequirements(cell.plantType);
+		// Check the simple requirements that don't require other cells
+		if (!requirements.checkSimpleRequirements(cell)) {
+			return false;
+		}
+
+		// Check the requirements that require other cells
+		int adjacentPlants = 0;
+		int likePlants = 0;
+		// Check the 8 adjacent cells 
+		for (int dx = -1; dx <= 1; dx++) {
+			for (int dy = -1; dy <= 1; dy++) {
+				if (dx == 0 && dy == 0) continue; // Skip the current cell
+				Cell adjacentCell = FetchCell(x + dx, y + dy);
+				if (!IsCellValid(adjacentCell)) {
+					continue;
+				}
+				if (adjacentCell.plantType != 0){
+					adjacentPlants++;
+				}
+				if (adjacentCell.plantType == cell.plantType) {
+					likePlants++;
+				}
+			}
+		}
+
+		// Check if the number of adjacent plants and like plants meet the requirements
+		if (adjacentPlants < requirements.minAdjPlants || 
+		likePlants < requirements.minLikePlants || 
+		likePlants > requirements.maxLikePlants || 
+		adjacentPlants > requirements.maxAdjPlants) {
+			return false;
+		}
+		return true;
 	}
 
 	// Returns a list of all the cells that grew a plant
@@ -94,7 +136,7 @@ public class Grid {
 
 			// If the plant can grow, grow it
 			if (CheckPlantRequirements(currentCells[i], x, y)) {
-				swapCells[i].plantLevel++;
+				swapCells[i].plantLevel = currentCells[i].plantLevel + 1;
 				swapCells[i].waterLevel -= op.GetPlantRequirements(swapCells[i].plantType).waterRequirement;
 				growth.Add(x);
 				growth.Add(y);
@@ -118,6 +160,8 @@ public class Grid {
 		int index = y * op.gridDimensions + x;
 		currentCells[index].plantType = 0;
 		currentCells[index].plantLevel = 0;
+		swapCells[index].plantType = 0;
+		swapCells[index].plantLevel = 0;
 	}
 
 	public void UnStepTime(int waterSeed, int sunSeed, int[] actionInfo) {
@@ -188,49 +232,6 @@ public class Grid {
 		return cell;
 	}
 
-		// Check if the cell is valid
-	bool IsCellValid(Cell cell){
-		return cell.waterLevel != -1000;
-	}
-
-	// Checks if the plant in the cell can grow
-	bool CheckPlantRequirements(Cell cell, int x, int y) {
-		PlantGrowthRequirement requirements = op.GetPlantRequirements(cell.plantType);
-		// Check the simple requirements that don't require other cells
-		if (!requirements.checkSimpleRequirements(cell)) {
-			return false;
-		}
-
-		// Check the requirements that require other cells
-		int adjacentPlants = 0;
-		int likePlants = 0;
-		// Check the 8 adjacent cells 
-		for (int dx = -1; dx <= 1; dx++) {
-			for (int dy = -1; dy <= 1; dy++) {
-				if (dx == 0 && dy == 0) continue; // Skip the current cell
-				Cell adjacentCell = FetchCell(x + dx, y + dy);
-				if (!IsCellValid(adjacentCell)) {
-					continue;
-				}
-				if (adjacentCell.plantType != 0){
-					adjacentPlants++;
-				}
-				if (adjacentCell.plantType == cell.plantType) {
-					likePlants++;
-				}
-			}
-		}
-
-		// Check if the number of adjacent plants and like plants meet the requirements
-		if (adjacentPlants < requirements.minAdjPlants || 
-		likePlants < requirements.minLikePlants || 
-		likePlants > requirements.maxLikePlants || 
-		adjacentPlants > requirements.maxAdjPlants) {
-			return false;
-		}
-		return true;
-	}
-
 }
 
 public partial class GridManager : Node
@@ -246,7 +247,7 @@ public partial class GridManager : Node
 	[Export] Node2D inventory;
 
 	public Grid grid;
-	public ActionTracker actionTracker;
+	[Export] public Node actionTracker;
 
 	public GridRenderer gridRenderer;
 	
@@ -255,11 +256,10 @@ public partial class GridManager : Node
 	public override void _Ready()
 	{
 		grid = new Grid(options, inventory);
-		actionTracker = new();
 		gridRenderer = new(grid, options, this);
 
-		GD.Seed((uint)actionTracker.GetSeed());
-		baseSeed = actionTracker.GetSeed();
+		GD.Seed((uint)actionTracker.Call("get_seed"));
+		baseSeed = (int)actionTracker.Call("get_seed");
 
 		// Set the player's movement distance		
 		player.Call("init", gridRenderer.GetCellSize(), options.gridDimensions-1, 
@@ -275,7 +275,7 @@ public partial class GridManager : Node
 	int[] StepTime(int seed) {
 		int[] grownPlants = grid.StepTime(seed);
 		gridRenderer.RenderGrid();
-		actionTracker.autoSave();
+		actionTracker.Call("auto_save");
 		return grownPlants;
 	}
 
@@ -284,7 +284,7 @@ public partial class GridManager : Node
 		EmitSignal("PlantSeedSignal", plantType - 1, -1);
 		grid.PlantSeed(x, y, plantType);
 		gridRenderer.RenderCell(x, y);
-		actionTracker.autoSave();
+		actionTracker.Call("auto_save");
 	}
 
 	
@@ -292,7 +292,7 @@ public partial class GridManager : Node
 		EmitSignal("HarvestPlantSignal", grid.FetchCell(x, y).plantType - 1, 1);
 		grid.HarvestPlant(x, y);
 		gridRenderer.RenderCell(x, y);
-		actionTracker.autoSave();
+		actionTracker.Call("auto_save");
 	}
 
 
@@ -301,7 +301,7 @@ public partial class GridManager : Node
 
 	public void TryPlantSeed(int x, int y, int plantType) {
 		if (!grid.CanPlant(x, y, plantType)) return;
-		actionTracker.PlantSeed(x, y, plantType);
+		actionTracker.Call("plant_seed", x, y, plantType);
 		PlantSeed(x, y, plantType);	
 	}
 
@@ -311,46 +311,48 @@ public partial class GridManager : Node
 	public void TryHarvestPlant(int x, int y) {
 		if (!grid.CanHarvest(x, y)) return;
 		Cell cell = grid.FetchCell(x, y);
-		actionTracker.HarvestPlant(x, y, cell.plantType);
+		actionTracker.Call("harvest_plant", x, y, cell.plantType);
 		HarvestPlant(x, y);
 	}
 
 	
 	public void ProgressTimeButton() {
 		 // Progress time by one step
-		int timeStepSeed = actionTracker.GetNextSeed();
+		int timeStepSeed = (int)actionTracker.Call("get_next_seed");
 		int[] grownPlants = StepTime(timeStepSeed);
-		actionTracker.StepTime(timeStepSeed, grownPlants);
-		actionTracker.autoSave();
+		actionTracker.Call("step_time", timeStepSeed, grownPlants);
+		actionTracker.Call("auto_save");
 	}
 
 	public void UnPlantSeed(int[] actionInfo) {
 		grid.UnPlantSeed(actionInfo);
 		EmitSignal("PlantSeedSignal", actionInfo[3] - 1, 1);
 		gridRenderer.RenderCell(actionInfo[1], actionInfo[2]);
-		actionTracker.autoSave();
+		actionTracker.Call("auto_save");
 	}
 
 	public void UnHarvestPlant(int[] actionInfo) {
 		grid.UnHarvestPlant(actionInfo);
 		EmitSignal("HarvestPlantSignal", actionInfo[3] - 1, -1);
 		gridRenderer.RenderCell(actionInfo[1], actionInfo[2]);
-		actionTracker.autoSave();
+		actionTracker.Call("auto_save");
 	}
 
 	public void UnStepTime(int[] actionInfo) {
 		int waterSeed = actionInfo[1];
 		int sunSeed = actionInfo[1] - 1;
-		if (sunSeed < actionTracker.GetSeed()) sunSeed = 0;
+		if (sunSeed < (int)actionTracker.Call("get_seed")) sunSeed = 0;
 		grid.UnStepTime(waterSeed, sunSeed, actionInfo);
-		actionTracker.UnStepTime();
+		actionTracker.Call("un_step_time");
 		gridRenderer.RenderGrid();
-		actionTracker.autoSave();
+		actionTracker.Call("auto_save");
 	}
 
 	public void UndoActionButton() {
-		int[] actionInfo = actionTracker.UndoAction();
-		if (actionInfo == null) return;
+		Godot.Collections.Array variants = (Godot.Collections.Array)actionTracker.Call("undo_action");
+		int[] actionInfo = ConvertGodotArrayToArray(variants);
+		GD.Print("Action info: ", actionInfo.Stringify());
+		if (actionInfo == null || actionInfo.Length == 0) return;
 
 		if (actionInfo[0] == 0) {
 			UnStepTime(actionInfo);
@@ -362,8 +364,9 @@ public partial class GridManager : Node
 	}
 
 	public void RedoActionButton() {
-		int[] actionInfo = actionTracker.RedoAction();
-		if (actionInfo == null) return;
+		Godot.Collections.Array variants = (Godot.Collections.Array)actionTracker.Call("redo_action");
+		int[] actionInfo = ConvertGodotArrayToArray(variants);
+		if (actionInfo == null || actionInfo.Length == 0) return;
 
 		if (actionInfo[0] == 0) {
 			StepTime(actionInfo[1]);
@@ -375,18 +378,23 @@ public partial class GridManager : Node
 	}
 
 	public void Save(string saveName) {
-		actionTracker.Save(saveName);
+		actionTracker.Call("save",saveName);
 	}
 
 	public void Load(string saveName) {
 		GD.Print("Loading save file: ", saveName);
-		int[][] actions = actionTracker.Load(saveName);
+		Godot.Collections.Array actions = (Godot.Collections.Array)actionTracker.Call("load", saveName);
+		int[][] actionsArray = new int[actions.Count][];
+		for (int i = 0; i < actions.Count; i++) {
+			actionsArray[i] = ConvertGodotArrayToArray((Godot.Collections.Array)actions[i]);
+		}
+
 		if (actions == null) return;
 		GetTree().Paused = true;
 		grid.ClearBoard();
 		inventory.Call("ResetInventory");
-		actions = actions.Reverse().ToArray();
-		foreach (var actionInfo in actions) {
+		foreach (var actionInfo in actionsArray) {
+			GD.Print("Loaded action info: ", actionInfo.Stringify());
 			if (actionInfo[0] == 0) {
 				StepTime(actionInfo[1]);
 				GD.Print("Loaded step time");
@@ -397,8 +405,21 @@ public partial class GridManager : Node
 				HarvestPlant(actionInfo[1], actionInfo[2]);
 				GD.Print("Loaded harvest plant at ", actionInfo[1], " ",actionInfo[2]);
 			}
+			GD.Print("\n");
 		}
 		GetTree().Paused = false;
 		gridRenderer.RenderGrid();
+	}
+
+	public int[] ConvertGodotArrayToArray(Godot.Collections.Array godotArray) {
+		int[] array = new int[godotArray.Count];
+		try{
+			for (int i = 0; i < godotArray.Count; i++) {
+				array[i] = (int)godotArray[i];
+			}
+		}catch(Exception e){
+			return null;
+		}
+		return array;
 	}
 }

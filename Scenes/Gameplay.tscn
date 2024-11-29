@@ -1,6 +1,7 @@
-[gd_scene load_steps=11 format=3 uid="uid://bgh1ayrmhacoe"]
+[gd_scene load_steps=12 format=3 uid="uid://bgh1ayrmhacoe"]
 
 [ext_resource type="Script" path="res://Scripts/Character/Inventory.gd" id="1_0qa61"]
+[ext_resource type="Script" path="res://Scripts/Data/ActionTracker.gd" id="1_7atv3"]
 [ext_resource type="Texture2D" uid="uid://dm1v2tfuxacr4" path="res://Sprites/Character/bean-294077_1280.png" id="1_lv6rf"]
 [ext_resource type="Resource" uid="uid://boc2rni7drg05" path="res://GridOptions.tres" id="2_iycgm"]
 [ext_resource type="Script" path="res://Scripts/Grid/GridManager.cs" id="3_03wem"]
@@ -13,6 +14,9 @@
 
 [node name="Node2D" type="Node2D"]
 
+[node name="TempActionManager" type="Node2D" parent="."]
+script = ExtResource("1_7atv3")
+
 [node name="Camera2D" type="Camera2D" parent="."]
 scale = Vector2(0.243182, 0.243182)
 zoom = Vector2(0.3, 0.3)
@@ -22,12 +26,13 @@ position = Vector2(-1678, -709)
 script = ExtResource("1_0qa61")
 itemSlotScene = ExtResource("7_x7taq")
 
-[node name="GridManager" type="Node2D" parent="." node_paths=PackedStringArray("player", "inventory")]
+[node name="GridManager" type="Node2D" parent="." node_paths=PackedStringArray("player", "inventory", "actionTracker")]
 script = ExtResource("3_03wem")
 options = ExtResource("2_iycgm")
 player = NodePath("../Character")
 cellScene = ExtResource("6_o1l52")
 inventory = NodePath("../Inventory")
+actionTracker = NodePath("../TempActionManager")
 
 [node name="Character" type="Sprite2D" parent="." node_paths=PackedStringArray("grid_manager")]
 scale = Vector2(0.2, 0.2)

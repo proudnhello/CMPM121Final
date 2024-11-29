@@ -198,7 +198,6 @@ func _on_plant_seed_signal(plantType, number):
     CheckWin()
 
 func _ready():
-    print(itemSlotScene)
     itemSlotSprites = []
     for i in range(numUniqueItems):
         itemSlotSprites.append(null)

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 
-public class ActionTracker 
+public partial class ActionTracker : Node
 {
     Stack<int[]> actions;
     Stack<int[]> redoActions;
