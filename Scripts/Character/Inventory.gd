@@ -1,3 +1,4 @@
+'''
 using Godot;
 using System;
 using System.Collections.Generic;
@@ -121,3 +122,101 @@ public partial class Inventory : Node
 		
 	}
 }
+
+'''
+
+# Translated GDScript code
+
+extends Node
+
+@export var numUniqueItems : int = 6
+@export var itemSlotScene : PackedScene = null
+@export var numStartSeed1 : int = 3
+@export var numStartSeed2 : int = 3
+@export var numStartSeed3 : int = 8
+
+enum ItemType {
+    SEED1,
+    SEED2,
+    SEED3, 
+    PLANT1,
+    PLANT2,
+    PLANT3
+}
+
+var items : Array = []
+var itemSlotSprites : Array = []
+
+func WinGame():
+    get_tree().change_scene("res://Scenes/Victory.tscn")
+
+func CheckWin():
+    if items[ItemType.PLANT1] >= 3 and items[ItemType.PLANT2] >= 3 and items[ItemType.PLANT3] >= 3:
+        WinGame()
+
+func DisplayInventorySlot(slotNum):
+    var pixelsBetweenSlots = 215
+    var inventorySize = numUniqueItems
+    if itemSlotSprites[slotNum] == null:
+        var slotNode = itemSlotScene.instantiate() as Node2D
+        var slotSprite = slotNode.get_node("Slot") as Sprite2D
+        slotNode.position = Vector2(0, (slotNum - inventorySize / 2.0) * slotSprite.texture.get_width() + slotNum * pixelsBetweenSlots)
+        itemSlotSprites[slotNum] = slotNode
+        add_child(itemSlotSprites[slotNum])
+
+    var slotScript = itemSlotSprites[slotNum]
+    slotScript.update_amount(items[slotNum])
+
+func DisplayInventory():
+    if itemSlotScene == null:
+        return
+    for i in range(numUniqueItems):
+        DisplayInventorySlot(i)
+
+func InitializeInventory():
+    items.append(numStartSeed1)
+    items.append(numStartSeed2)
+    items.append(numStartSeed3)
+    for i in range(3):
+        items.append(0)
+
+func ResetInventory():
+    items.clear()
+    InitializeInventory()
+    DisplayInventory()
+
+func _on_harvest_plant_signal(plantType, number):
+    print("Harvesting plant")
+    var item = plantType + 3
+    AddItem(item, number)
+    CheckWin()
+
+func _on_plant_seed_signal(plantType, number):
+    print("Planting seed")
+    var item = plantType
+    AddItem(item, number)
+    CheckWin()
+
+func _ready():
+    print(itemSlotScene)
+    itemSlotSprites = []
+    for i in range(numUniqueItems):
+        itemSlotSprites.append(null)
+    InitializeInventory()
+    DisplayInventory()
+
+func AddItem(item, amount):
+    items[item] += amount
+    var slotScript = itemSlotSprites[item]
+    slotScript.call("update_amount", items[item])
+
+func RemoveItem(item, amount):
+    if items[item] >= amount:
+        items[item] -= amount
+        var slotScript = itemSlotSprites[item]
+        slotScript.call("update_amount", items[item])
+        return true
+    return false
+
+func GetItemAmnt(item):
+    return items[item]

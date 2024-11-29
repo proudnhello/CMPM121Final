@@ -16,12 +16,14 @@ public class Grid {
 	public Cell[] currentCells;
 	Cell[] swapCells;
 	GridOptions op;
+	Node inventory;
 
 	
-	public Grid(GridOptions _op) {
+	public Grid(GridOptions _op, Node inventory) {
 		op = _op;
 		currentCells = new Cell[op.gridDimensions * op.gridDimensions];
 		swapCells = new Cell[op.gridDimensions * op.gridDimensions];
+		this.inventory = inventory;
 	}
 
 	// Fetch the cell at (x, y) in the grid
@@ -44,7 +46,8 @@ public class Grid {
 	}
 
 	public bool CanPlant(int x, int y, int plantType) {
-		if (FetchCell(x, y).plantType != 0 || Inventory.instance.items[plantType - 1] <= 0) return false;
+		GD.Print("CanPlant: ", FetchCell(x, y).plantType, " ", inventory);
+		if (FetchCell(x, y).plantType != 0 || (int)inventory.Call("GetItemAmnt", plantType - 1) <= 0) return false;
 		else return true;
 	}
 
@@ -251,7 +254,7 @@ public partial class GridManager : Node
 
 	public override void _Ready()
 	{
-		grid = new Grid(options);
+		grid = new Grid(options, inventory);
 		actionTracker = new();
 		gridRenderer = new(grid, options, this);
 
@@ -381,7 +384,7 @@ public partial class GridManager : Node
 		if (actions == null) return;
 		GetTree().Paused = true;
 		grid.ClearBoard();
-		Inventory.instance.ResetInventory();
+		inventory.Call("ResetInventory");
 		actions = actions.Reverse().ToArray();
 		foreach (var actionInfo in actions) {
 			if (actionInfo[0] == 0) {
@@ -395,8 +398,6 @@ public partial class GridManager : Node
 				GD.Print("Loaded harvest plant at ", actionInfo[1], " ",actionInfo[2]);
 			}
 		}
-
-		Inventory.instance.LoadFromMemory(actions);
 		GetTree().Paused = false;
 		gridRenderer.RenderGrid();
 	}
