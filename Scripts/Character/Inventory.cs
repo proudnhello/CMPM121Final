@@ -48,8 +48,8 @@ public partial class Inventory : Node
 			AddChild(itemSlotSprites[slotNum]);
 		}
 
-		UpdateItemSlot slotScript = (UpdateItemSlot)itemSlotSprites[slotNum];
-		slotScript.UpdateAmount(items[slotNum]);
+		Node2D slotScript = itemSlotSprites[slotNum];
+		slotScript.Call("update_amount", items[slotNum]);
 	}
 
 	public void DisplayInventory(){
@@ -99,15 +99,15 @@ public partial class Inventory : Node
 
 	public void AddItem(ItemType item, int amount){
 		items[(int)item] += amount;
-		UpdateItemSlot slotScript = (UpdateItemSlot)itemSlotSprites[(int)item];
-		slotScript.UpdateAmount(items[(int)item]);
+		Node2D slotScript = itemSlotSprites[(int)item];
+		slotScript.Call("update_amount", items[(int)item]);
 	}
 
 	public bool RemoveItem(ItemType item, int amount){
 		if(items[(int)item] >= amount){
 			items[(int)item] -= amount;
-			UpdateItemSlot slotScript = (UpdateItemSlot)itemSlotSprites[(int)item];
-			slotScript.UpdateAmount(items[(int)item]);
+			Node2D slotScript = itemSlotSprites[(int)item];
+		slotScript.Call("update_amount", items[(int)item]);
 			return true;
 		}
 		return false;

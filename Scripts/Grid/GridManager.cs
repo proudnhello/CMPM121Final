@@ -247,7 +247,6 @@ public partial class GridManager : Node
 
 	public GridRenderer gridRenderer;
 	
-	Node2D[][] gridSprites;
 	public int baseSeed;
 
 	public override void _Ready()
