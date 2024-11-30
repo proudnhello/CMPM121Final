@@ -260,20 +260,20 @@ public partial class GridManager : Node
 	public Grid grid;
 	[Export] public Node actionTracker;
 
-	public GridRenderer gridRenderer;
+	[Export] public Node gridRenderer;
 	
 	public int baseSeed;
 
 	public override void _Ready()
 	{
 		grid = new Grid(options, inventory);
-		gridRenderer = new(grid, options, this);
+		gridRenderer.Call("init", this, options);
 
 		GD.Seed((uint)actionTracker.Call("get_seed"));
 		baseSeed = (int)actionTracker.Call("get_seed");
 
 		// Set the player's movement distance		
-		player.Call("init", gridRenderer.GetCellSize(), (int) options.Get("gridDimensions")-1, 
+		player.Call("init", gridRenderer.Call("get_cell_size"), (int) options.Get("gridDimensions")-1, 
 			new Vector2(Mathf.FloorToInt((int) options.Get("gridDimensions")/2), Mathf.FloorToInt((int) options.Get("gridDimensions")/2)));
 
 		// this is already GD script, but commented out until everything else gets translated
@@ -282,10 +282,13 @@ public partial class GridManager : Node
 		//	Load(SceneSwitcher.filepath);
 	}
 
+	public int[] fetchCellArray(int x, int y) {
+		return grid.FetchCell(x, y).toArray();
+	}
 	
 	int[] StepTime(int seed) {
 		int[] grownPlants = grid.StepTime(seed);
-		gridRenderer.RenderGrid();
+		gridRenderer.Call("render_grid");
 		return grownPlants;
 	}
 
@@ -293,14 +296,14 @@ public partial class GridManager : Node
 	void PlantSeed(int x, int y, int plantType) {
 		EmitSignal("PlantSeedSignal", plantType - 1, -1);
 		grid.PlantSeed(x, y, plantType);
-		gridRenderer.RenderCell(x, y);
+		gridRenderer.Call("render_cell", x, y);
 	}
 
 	
 	void HarvestPlant(int x, int y) {
 		EmitSignal("HarvestPlantSignal", grid.FetchCell(x, y).plantType - 1, 1);
 		grid.HarvestPlant(x, y);
-		gridRenderer.RenderCell(x, y);
+		gridRenderer.Call("render_cell", x, y);
 	}
 
 
@@ -334,13 +337,13 @@ public partial class GridManager : Node
 	public void UnPlantSeed(int[] actionInfo) {
 		grid.UnPlantSeed(actionInfo);
 		EmitSignal("PlantSeedSignal", actionInfo[3] - 1, 1);
-		gridRenderer.RenderCell(actionInfo[1], actionInfo[2]);
+		gridRenderer.Call("render_cell", actionInfo[1], actionInfo[2]);
 	}
 
 	public void UnHarvestPlant(int[] actionInfo) {
 		grid.UnHarvestPlant(actionInfo);
 		EmitSignal("HarvestPlantSignal", actionInfo[3] - 1, -1);
-		gridRenderer.RenderCell(actionInfo[1], actionInfo[2]);
+		gridRenderer.Call("render_cell", actionInfo[1], actionInfo[2]);
 	}
 
 	public void UnStepTime(int[] actionInfo) {
@@ -349,7 +352,7 @@ public partial class GridManager : Node
 		if (sunSeed < (int)actionTracker.Call("get_seed")) sunSeed = 0;
 		grid.UnStepTime(waterSeed, sunSeed, actionInfo);
 		actionTracker.Call("un_step_time");
-		gridRenderer.RenderGrid();
+		gridRenderer.Call("render_grid");
 	}
 
 	public void UndoActionButton() {
@@ -412,7 +415,7 @@ public partial class GridManager : Node
 			GD.Print("\n");
 		}
 		GetTree().Paused = false;
-		gridRenderer.RenderGrid();
+		gridRenderer.Call("render_grid");
 	}
 
 	public int[] ConvertGodotArrayToArray(Godot.Collections.Array godotArray) {
