@@ -53,7 +53,6 @@ public class GridRenderer
 		}
 
 		// Set the cell's levels
-		UpdateCell cellScript = (UpdateCell)gridSprites[x][y];
-		cellScript.UpdateLabels(cell);
+		gridSprites[x][y].Call("update_labels", cell.toArray());
 	}
 }

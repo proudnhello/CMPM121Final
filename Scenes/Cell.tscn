@@ -1,18 +1,18 @@
 [gd_scene load_steps=5 format=3 uid="uid://ctgicajw68chx"]
 
-[ext_resource type="Script" path="res://Scripts/Grid/UpdateCell.cs" id="1_2f3j7"]
+[ext_resource type="Script" path="res://Scripts/Grid/UpdateCell.gd" id="1_aaqtu"]
 [ext_resource type="LabelSettings" uid="uid://q6pelwgu6mad" path="res://TextSettings/CellLabelSettings.tres" id="1_t4g1h"]
 
 [sub_resource type="CanvasTexture" id="CanvasTexture_a33ga"]
 
 [sub_resource type="CanvasTexture" id="CanvasTexture_geoto"]
 
-[node name="Cell" type="Node2D" node_paths=PackedStringArray("waterLevelLabel", "sunLevelLabel", "plantTypeLabel", "growthLevelLabel")]
-script = ExtResource("1_2f3j7")
-waterLevelLabel = NodePath("Water")
-sunLevelLabel = NodePath("Sunlight")
-plantTypeLabel = NodePath("Plant")
-growthLevelLabel = NodePath("Growth")
+[node name="Cell" type="Node2D" node_paths=PackedStringArray("water_level_label", "sun_level_label", "plant_type_label", "growth_level_label")]
+script = ExtResource("1_aaqtu")
+water_level_label = NodePath("Water")
+sun_level_label = NodePath("Sunlight")
+plant_type_label = NodePath("Plant")
+growth_level_label = NodePath("Growth")
 
 [node name="Background" type="Sprite2D" parent="."]
 modulate = Color(0, 0, 0, 1)

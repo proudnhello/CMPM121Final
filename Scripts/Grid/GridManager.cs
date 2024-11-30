@@ -10,6 +10,17 @@ public struct Cell {
 	public int sunLevel;
 	public int plantType;
 	public int plantLevel;
+
+	public int[] toArray() {
+		return new int[] {waterLevel, sunLevel, plantType, plantLevel};
+	}
+
+	public void fromArray(int[] array) {
+		waterLevel = array[0];
+		sunLevel = array[1];
+		plantType = array[2];
+		plantLevel = array[3];
+	}
 }
 
 public class Grid {
