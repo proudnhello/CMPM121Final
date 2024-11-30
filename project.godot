@@ -17,8 +17,8 @@ config/icon="res://icon.svg"
 
 [autoload]
 
-SceneSwitcher="*res://Scripts/Data/SceneSwitcher.cs"
 Inventory="*res://Scripts/Character/Inventory.gd"
+SceneSwitcher="*res://Scripts/Data/SceneSwitcher.gd"
 
 [display]
 

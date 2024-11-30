@@ -1,8 +1,8 @@
 [gd_scene load_steps=4 format=3 uid="uid://cg0j6nm1ryjg0"]
 
-[ext_resource type="Script" path="res://Scripts/Data/StartButton.cs" id="1_4j5vt"]
-[ext_resource type="Script" path="res://Scripts/Data/TutorialButton.cs" id="2_u2h3x"]
-[ext_resource type="Script" path="res://Scenes/ContinueButton.cs" id="3_n2ptc"]
+[ext_resource type="Script" path="res://Scripts/Data/StartButton.gd" id="1_qse6a"]
+[ext_resource type="Script" path="res://Scripts/Data/TutorialButton.gd" id="2_b66rq"]
+[ext_resource type="Script" path="res://Scripts/Data/ContinueButton.gd" id="3_414h1"]
 
 [node name="Control" type="Control"]
 layout_mode = 3
@@ -23,7 +23,7 @@ offset_top = 435.0
 offset_right = 560.0
 offset_bottom = 492.0
 text = "Start Game"
-script = ExtResource("1_4j5vt")
+script = ExtResource("1_qse6a")
 
 [node name="Label" type="Label" parent="."]
 layout_mode = 0
@@ -41,7 +41,7 @@ offset_top = 505.0
 offset_right = 559.0
 offset_bottom = 562.0
 text = "Tutorial"
-script = ExtResource("2_u2h3x")
+script = ExtResource("2_b66rq")
 
 [node name="Button3" type="Button" parent="."]
 layout_mode = 0
@@ -50,7 +50,7 @@ offset_top = 364.0
 offset_right = 560.0
 offset_bottom = 421.0
 text = "Continue? "
-script = ExtResource("3_n2ptc")
+script = ExtResource("3_414h1")
 
 [connection signal="pressed" from="Button" to="Button" method="_on_pressed"]
 [connection signal="pressed" from="Button2" to="Button2" method="_on_pressed"]

@@ -265,10 +265,10 @@ public partial class GridManager : Node
 		player.Call("init", gridRenderer.GetCellSize(), options.gridDimensions-1, 
 			new Vector2(Mathf.FloorToInt(options.gridDimensions/2), Mathf.FloorToInt(options.gridDimensions/2)));
 
-		if(SceneSwitcher.Instance.filepath != null){
-			GD.Print("save file: ", SceneSwitcher.Instance.filepath);
-			Load(SceneSwitcher.Instance.filepath);
-		}
+		// this is already GD script, but commented out until everything else gets translated
+		//if(SceneSwitcher.filepath != null):
+		//	print("save file: ", SceneSwitcher.filepath);
+		//	Load(SceneSwitcher.filepath);
 	}
 
 	
@@ -321,21 +321,18 @@ public partial class GridManager : Node
 		int timeStepSeed = (int)actionTracker.Call("get_next_seed");
 		int[] grownPlants = StepTime(timeStepSeed);
 		actionTracker.Call("step_time", timeStepSeed, grownPlants);
-		actionTracker.Call("auto_save");
 	}
 
 	public void UnPlantSeed(int[] actionInfo) {
 		grid.UnPlantSeed(actionInfo);
 		EmitSignal("PlantSeedSignal", actionInfo[3] - 1, 1);
 		gridRenderer.RenderCell(actionInfo[1], actionInfo[2]);
-		actionTracker.Call("auto_save");
 	}
 
 	public void UnHarvestPlant(int[] actionInfo) {
 		grid.UnHarvestPlant(actionInfo);
 		EmitSignal("HarvestPlantSignal", actionInfo[3] - 1, -1);
 		gridRenderer.RenderCell(actionInfo[1], actionInfo[2]);
-		actionTracker.Call("auto_save");
 	}
 
 	public void UnStepTime(int[] actionInfo) {
@@ -345,7 +342,6 @@ public partial class GridManager : Node
 		grid.UnStepTime(waterSeed, sunSeed, actionInfo);
 		actionTracker.Call("un_step_time");
 		gridRenderer.RenderGrid();
-		actionTracker.Call("auto_save");
 	}
 
 	public void UndoActionButton() {

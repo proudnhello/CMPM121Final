@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://coxggvb3me7fq"]
 
-[ext_resource type="Script" path="res://Scripts/Data/BackButton.cs" id="1_nhrg5"]
+[ext_resource type="Script" path="res://Scripts/Data/BackButton.gd" id="1_qqir4"]
 
 [node name="Control" type="Control"]
 layout_mode = 3
@@ -16,7 +16,7 @@ offset_top = 584.0
 offset_right = 148.0
 offset_bottom = 648.0
 text = "Back"
-script = ExtResource("1_nhrg5")
+script = ExtResource("1_qqir4")
 
 [node name="Label" type="Label" parent="."]
 layout_mode = 0
