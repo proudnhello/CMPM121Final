@@ -27,6 +27,7 @@ func get_next_seed():
 func step_time(step_seed, grown_plants):
 	var type_seed = [0, step_seed]
 	actions.append(type_seed + Array(grown_plants))
+	auto_save()
 	redo_actions.clear()
 
 func un_step_time():
@@ -34,10 +35,12 @@ func un_step_time():
 
 func plant_seed(x, y, plant_type):
 	actions.append([1, x, y, plant_type])
+	auto_save()
 	redo_actions.clear()
 
 func harvest_plant(x, y, plant_type):
 	actions.append([2, x, y, plant_type])
+	auto_save()
 	redo_actions.clear()
 
 func undo_action():
@@ -45,6 +48,7 @@ func undo_action():
 		return null
 	var action = actions.pop_back()
 	redo_actions.append(action)
+	auto_save()
 	return action
 
 func redo_action():
@@ -52,6 +56,7 @@ func redo_action():
 		return null
 	var action = redo_actions.pop_back()
 	actions.append(action)
+	auto_save()
 	return action
 
 func save(save_name):

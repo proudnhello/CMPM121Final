@@ -275,7 +275,6 @@ public partial class GridManager : Node
 	int[] StepTime(int seed) {
 		int[] grownPlants = grid.StepTime(seed);
 		gridRenderer.RenderGrid();
-		actionTracker.Call("auto_save");
 		return grownPlants;
 	}
 
@@ -284,7 +283,6 @@ public partial class GridManager : Node
 		EmitSignal("PlantSeedSignal", plantType - 1, -1);
 		grid.PlantSeed(x, y, plantType);
 		gridRenderer.RenderCell(x, y);
-		actionTracker.Call("auto_save");
 	}
 
 	
@@ -292,7 +290,6 @@ public partial class GridManager : Node
 		EmitSignal("HarvestPlantSignal", grid.FetchCell(x, y).plantType - 1, 1);
 		grid.HarvestPlant(x, y);
 		gridRenderer.RenderCell(x, y);
-		actionTracker.Call("auto_save");
 	}
 
 
