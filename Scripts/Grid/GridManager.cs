@@ -15,34 +15,34 @@ public struct Cell {
 public class Grid {
 	public Cell[] currentCells;
 	Cell[] swapCells;
-	GridOptions op;
+	Resource op;
 	Node inventory;
 
 	
-	public Grid(GridOptions _op, Node inventory) {
+	public Grid(Resource _op, Node inventory) {
 		op = _op;
-		currentCells = new Cell[op.gridDimensions * op.gridDimensions];
-		swapCells = new Cell[op.gridDimensions * op.gridDimensions];
+		currentCells = new Cell[(int) op.Get("gridDimensions") * (int) op.Get("gridDimensions")];
+		swapCells = new Cell[(int) op.Get("gridDimensions") * (int) op.Get("gridDimensions")];
 		this.inventory = inventory;
 	}
 
 	// Fetch the cell at (x, y) in the grid
 	public Cell FetchCell(int x, int y) {
-		if (x < 0 || x >= op.gridDimensions || y < 0 || y >= op.gridDimensions) {
+		if (x < 0 || x >= (int) op.Get("gridDimensions") || y < 0 || y >= (int) op.Get("gridDimensions")) {
 			Cell invalidCell = new Cell();
 			// -1000 is an invalid water level
 			invalidCell.waterLevel = -1000;
 			return invalidCell;
 		}
-		return currentCells[y * op.gridDimensions + x];
+		return currentCells[y * (int) op.Get("gridDimensions") + x];
 	}
 
 	public void SetCell(int x, int y, Cell cell) {
-		currentCells[y * op.gridDimensions + x] = cell;
+		currentCells[y * (int) op.Get("gridDimensions") + x] = cell;
 	}
 
 	public int FetchIndex(int x, int y){
-		return y * op.gridDimensions + x;
+		return y * (int) op.Get("gridDimensions") + x;
 	}
 
 	public bool CanPlant(int x, int y, int plantType) {
@@ -68,7 +68,7 @@ public class Grid {
 
 	// Checks if the plant in the cell can grow
 	bool CheckPlantRequirements(Cell cell, int x, int y) {
-		PlantGrowthRequirement requirements = op.GetPlantRequirements(cell.plantType);
+		PlantGrowthRequirement requirements = (PlantGrowthRequirement) op.Call("get_plant_requirements", cell.plantType);
 		// Check the simple requirements that don't require other cells
 		if (!requirements.checkSimpleRequirements(cell)) {
 			return false;
@@ -116,14 +116,14 @@ public class Grid {
 		sunRNG.Seed = (ulong)seed;
 		// iterate through currentCells and store changes in swapCells, then swap pointers;
 		for (int i = 0; i < currentCells.Length; i++) {
-			int x = i % op.gridDimensions;
-			int y = Mathf.FloorToInt(i / op.gridDimensions);
+			int x = i % (int) op.Get("gridDimensions");
+			int y = Mathf.FloorToInt(i / (int) op.Get("gridDimensions"));
 			
 			// Increase water level by a random amount
-			swapCells[i].waterLevel = currentCells[i].waterLevel + waterRNG.RandiRange(0, op.maxWaterLevelIncrease);
+			swapCells[i].waterLevel = currentCells[i].waterLevel + waterRNG.RandiRange(0, (int) op.Get("maxWaterLevelIncrease"));
 
 			// Set sun level to a random amount
-			swapCells[i].sunLevel = sunRNG.RandiRange(0, op.maxSunLevel);
+			swapCells[i].sunLevel = sunRNG.RandiRange(0, (int) op.Get("maxSunLevel"));
 
 			// If the cell has a plant, save the plant type across
 			swapCells[i].plantType = currentCells[i].plantType;
@@ -137,7 +137,7 @@ public class Grid {
 			// If the plant can grow, grow it
 			if (CheckPlantRequirements(currentCells[i], x, y)) {
 				swapCells[i].plantLevel = currentCells[i].plantLevel + 1;
-				swapCells[i].waterLevel -= op.GetPlantRequirements(swapCells[i].plantType).waterRequirement;
+				swapCells[i].waterLevel -= ((PlantGrowthRequirement) op.Call("get_plant_requirements", swapCells[i].plantType)).waterRequirement;
 				growth.Add(x);
 				growth.Add(y);
 			}else{
@@ -151,13 +151,13 @@ public class Grid {
 
 	
 	public void PlantSeed(int x, int y, int plantType) {
-		int index = y * op.gridDimensions + x;
+		int index = y * (int) op.Get("gridDimensions") + x;
 		currentCells[index].plantType = plantType;
 		currentCells[index].plantLevel = 1;
 	}
 
 	public void HarvestPlant(int x, int y) {
-		int index = y * op.gridDimensions + x;
+		int index = y * (int) op.Get("gridDimensions") + x;
 		currentCells[index].plantType = 0;
 		currentCells[index].plantLevel = 0;
 		swapCells[index].plantType = 0;
@@ -172,7 +172,7 @@ public class Grid {
 			int index = FetchIndex(x, y);
 
 			currentCells[index].plantLevel--;
-			currentCells[index].waterLevel += op.GetPlantRequirements(currentCells[index].plantType).waterRequirement;
+			currentCells[index].waterLevel += ((PlantGrowthRequirement) op.Call("get_plant_requirements", currentCells[index].plantType)).waterRequirement;
 		}
 
 		RandomNumberGenerator waterRNG = new RandomNumberGenerator();
@@ -181,17 +181,17 @@ public class Grid {
 		sunRNG.Seed = (ulong)sunSeed;
 		// iterate through currentCells and store changes in swapCells, then swap pointers;
 		for (int i = 0; i < currentCells.Length; i++) {
-			int x = i % op.gridDimensions;
-			int y = Mathf.FloorToInt(i / op.gridDimensions);
+			int x = i % (int) op.Get("gridDimensions");
+			int y = Mathf.FloorToInt(i / (int) op.Get("gridDimensions"));
 			
 			// Decreace water level by the same random amount
-			swapCells[i].waterLevel = currentCells[i].waterLevel - waterRNG.RandiRange(0, op.maxWaterLevelIncrease);
+			swapCells[i].waterLevel = currentCells[i].waterLevel - waterRNG.RandiRange(0, (int) op.Get("maxWaterLevelIncrease"));
 
 			// If the sun seed is 0, that means we've reached the start of the game, so we need to set the sun level to 0
 			if (sunSeed == 0){
 				swapCells[i].sunLevel = 0;
 			}else{
-				swapCells[i].sunLevel = sunRNG.RandiRange(0, op.maxSunLevel);
+				swapCells[i].sunLevel = sunRNG.RandiRange(0, (int) op.Get("maxSunLevel"));
 			}
 
 			// If the cell has a plant, save the plant type across
@@ -217,7 +217,7 @@ public class Grid {
 		int x = actionInfo[1];
 		int y = actionInfo[2];
 		Cell cell = FetchCell(x, y);
-		PlantGrowthRequirement requirements = op.GetPlantRequirements(actionInfo[3]);
+		PlantGrowthRequirement requirements = (PlantGrowthRequirement) op.Call("get_plant_requirements", actionInfo[3]);
 		
 		cell.plantType = actionInfo[3];
 		cell.plantLevel = requirements.maxGrowthLevel;
@@ -228,7 +228,7 @@ public class Grid {
 	// Grows the plant in the cell, returns the new plant level
 	Cell GrowPlant(Cell cell) {
 		cell.plantLevel++;
-		cell.waterLevel -= op.GetPlantRequirements(cell.plantType).waterRequirement;
+		cell.waterLevel -= ((PlantGrowthRequirement) op.Call("get_plant_requirements", cell.plantType)).waterRequirement;
 		return cell;
 	}
 
@@ -236,7 +236,7 @@ public class Grid {
 
 public partial class GridManager : Node
 {
-	[Export] GridOptions options;
+	[Export] Resource options;
 	
 	[Export] Node player;
 
@@ -262,8 +262,8 @@ public partial class GridManager : Node
 		baseSeed = (int)actionTracker.Call("get_seed");
 
 		// Set the player's movement distance		
-		player.Call("init", gridRenderer.GetCellSize(), options.gridDimensions-1, 
-			new Vector2(Mathf.FloorToInt(options.gridDimensions/2), Mathf.FloorToInt(options.gridDimensions/2)));
+		player.Call("init", gridRenderer.GetCellSize(), (int) options.Get("gridDimensions")-1, 
+			new Vector2(Mathf.FloorToInt((int) options.Get("gridDimensions")/2), Mathf.FloorToInt((int) options.Get("gridDimensions")/2)));
 
 		// this is already GD script, but commented out until everything else gets translated
 		//if(SceneSwitcher.filepath != null):

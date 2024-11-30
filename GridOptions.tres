@@ -1,12 +1,12 @@
 [gd_resource type="Resource" load_steps=5 format=3 uid="uid://boc2rni7drg05"]
 
 [ext_resource type="Resource" uid="uid://bfcgve3frs5aa" path="res://zPlantReqs/plantGrowthReqs1.tres" id="1_8duo3"]
-[ext_resource type="Script" path="res://Scripts/Grid/GridOptions.cs" id="1_uuxn8"]
 [ext_resource type="Resource" uid="uid://d0u5l8h8fo5p8" path="res://zPlantReqs/plantGrowthReqs2.tres" id="2_v8gqo"]
 [ext_resource type="Resource" uid="uid://0kqksewhbv38" path="res://zPlantReqs/plantGrowthReqs3.tres" id="3_71jsm"]
+[ext_resource type="Script" path="res://Scripts/Grid/GridOptions.gd" id="4_bjg4f"]
 
 [resource]
-script = ExtResource("1_uuxn8")
+script = ExtResource("4_bjg4f")
 gridDimensions = 5
 maxWaterLevelIncrease = 5
 maxSunLevel = 10
