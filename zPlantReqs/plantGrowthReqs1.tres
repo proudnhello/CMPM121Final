@@ -1,13 +1,13 @@
-[gd_resource type="Resource" script_class="PlantGrowthRequirement" load_steps=2 format=3 uid="uid://bfcgve3frs5aa"]
+[gd_resource type="Resource" load_steps=2 format=3 uid="uid://bfcgve3frs5aa"]
 
-[ext_resource type="Script" path="res://Scripts/Grid/PlantGrowthRequirement.cs" id="1_1ysul"]
+[ext_resource type="Script" path="res://Scripts/Grid/PlantGrowthRequirements.gd" id="1_r8xcr"]
 
 [resource]
-script = ExtResource("1_1ysul")
-waterRequirement = 5
-sunRequirement = 8
-maxGrowthLevel = 3
-minLikePlants = 0
-maxLikePlants = 2
-minAdjPlants = 0
-maxAdjPlants = 2
+script = ExtResource("1_r8xcr")
+water_requirement = 2
+sun_requirement = 8
+max_growth_level = 3
+min_like_plants = 0
+max_like_plants = 4
+min_adj_plants = 0
+max_adj_plants = 4

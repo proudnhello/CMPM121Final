@@ -79,9 +79,9 @@ public class Grid {
 
 	// Checks if the plant in the cell can grow
 	bool CheckPlantRequirements(Cell cell, int x, int y) {
-		PlantGrowthRequirement requirements = (PlantGrowthRequirement) op.Call("get_plant_requirements", cell.plantType);
+		Resource requirements = (Resource) op.Call("get_plant_requirements", cell.plantType);
 		// Check the simple requirements that don't require other cells
-		if (!requirements.checkSimpleRequirements(cell)) {
+		if (!(bool)requirements.Call("check_simple_requirements", cell.toArray())) {
 			return false;
 		}
 
@@ -106,10 +106,10 @@ public class Grid {
 		}
 
 		// Check if the number of adjacent plants and like plants meet the requirements
-		if (adjacentPlants < requirements.minAdjPlants || 
-		likePlants < requirements.minLikePlants || 
-		likePlants > requirements.maxLikePlants || 
-		adjacentPlants > requirements.maxAdjPlants) {
+		if (adjacentPlants < (int) requirements.Get("min_adj_plants") || 
+		likePlants < (int) requirements.Get("min_like_plants") || 
+		likePlants > (int) requirements.Get("max_adj_plants") || 
+		adjacentPlants > (int) requirements.Get("max_adj_plants")) {
 			return false;
 		}
 		return true;
@@ -148,7 +148,7 @@ public class Grid {
 			// If the plant can grow, grow it
 			if (CheckPlantRequirements(currentCells[i], x, y)) {
 				swapCells[i].plantLevel = currentCells[i].plantLevel + 1;
-				swapCells[i].waterLevel -= ((PlantGrowthRequirement) op.Call("get_plant_requirements", swapCells[i].plantType)).waterRequirement;
+				swapCells[i].waterLevel -= (int)((Resource) op.Call("get_plant_requirements", swapCells[i].plantType)).Get("water_requirement");
 				growth.Add(x);
 				growth.Add(y);
 			}else{
@@ -183,7 +183,7 @@ public class Grid {
 			int index = FetchIndex(x, y);
 
 			currentCells[index].plantLevel--;
-			currentCells[index].waterLevel += ((PlantGrowthRequirement) op.Call("get_plant_requirements", currentCells[index].plantType)).waterRequirement;
+			currentCells[index].waterLevel += (int)((Resource) op.Call("get_plant_requirements", currentCells[index].plantType)).Get("water_requirement");
 		}
 
 		RandomNumberGenerator waterRNG = new RandomNumberGenerator();
@@ -228,10 +228,10 @@ public class Grid {
 		int x = actionInfo[1];
 		int y = actionInfo[2];
 		Cell cell = FetchCell(x, y);
-		PlantGrowthRequirement requirements = (PlantGrowthRequirement) op.Call("get_plant_requirements", actionInfo[3]);
+		Resource requirements = (Resource) op.Call("get_plant_requirements", actionInfo[3]);
 		
 		cell.plantType = actionInfo[3];
-		cell.plantLevel = requirements.maxGrowthLevel;
+		cell.plantLevel = (int) requirements.Get("max_growth_level");
 
 		SetCell(x, y, cell);
 	}
@@ -239,7 +239,7 @@ public class Grid {
 	// Grows the plant in the cell, returns the new plant level
 	Cell GrowPlant(Cell cell) {
 		cell.plantLevel++;
-		cell.waterLevel -= ((PlantGrowthRequirement) op.Call("get_plant_requirements", cell.plantType)).waterRequirement;
+		cell.waterLevel -= (int)((Resource) op.Call("get_plant_requirements", cell.plantType)).Get("water_requirement");
 		return cell;
 	}
 
@@ -417,11 +417,13 @@ public partial class GridManager : Node
 
 	public int[] ConvertGodotArrayToArray(Godot.Collections.Array godotArray) {
 		int[] array = new int[godotArray.Count];
-		try{
+        try
+        {
 			for (int i = 0; i < godotArray.Count; i++) {
 				array[i] = (int)godotArray[i];
 			}
-		}catch(Exception e){
+		}catch (Exception)
+        {
 			return null;
 		}
 		return array;
