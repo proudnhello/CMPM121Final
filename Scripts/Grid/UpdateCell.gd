@@ -25,7 +25,7 @@ extends Node2D
 @export var growth_level_label: Label
 
 func update_labels(cell_array):
-    water_level_label.text = str(cell_array[0])
-    sun_level_label.text = str(cell_array[1])
-    plant_type_label.text = str(cell_array[2])
-    growth_level_label.text = str(cell_array[3])
+	water_level_label.text = str(cell_array[0])
+	sun_level_label.text = str(cell_array[1])
+	plant_type_label.text = str(cell_array[2])
+	growth_level_label.text = str(cell_array[3])
