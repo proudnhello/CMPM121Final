@@ -8,5 +8,4 @@ extends Resource
 @export var maxWater: int = 25
 
 func get_plant_requirements(plant_type: int) -> Resource:
-	print(plant_type)
 	return plantRequirements[plant_type - 1]

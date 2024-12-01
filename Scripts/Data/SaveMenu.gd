@@ -10,8 +10,8 @@ func _ready() -> void:
 func _save_to_file(fileID: int) -> void:
 	match fileID:
 		1:
-			grid_manager.Save("File1")
+			grid_manager._save("File1")
 		2:
-			grid_manager.Save("File2")
+			grid_manager._save("File2")
 		3:
-			grid_manager.Save("File3")
+			grid_manager._save("File3")

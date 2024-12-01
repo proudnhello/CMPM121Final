@@ -29,8 +29,8 @@ func _ready() -> void:
 func _load_from_file(fileID: int) -> void:
 	match fileID:
 		1:
-			grid_manager.Load("File1")
+			grid_manager._load_file("File1")
 		2:
-			grid_manager.Load("File2")
+			grid_manager._load_file("File2")
 		3:
-			grid_manager.Load("File3")
+			grid_manager._load_file("File3")

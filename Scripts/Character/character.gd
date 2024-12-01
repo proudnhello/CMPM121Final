@@ -102,6 +102,6 @@ func _process(_delta: float) -> void:
 	for i in range(1, grid_manager.numberOfPlantTypes + 1):
 		# If the player presses a number key, plant the corresponding seed
 		if Input.is_action_just_pressed("plant_seed" + str(i)):
-			grid_manager.TryPlantSeed(int(grid_position.x), int(grid_position.y), i)
+			grid_manager._try_plant_seed(int(grid_position.x), int(grid_position.y), i)
 	if Input.is_action_just_pressed("harvest"):
-		grid_manager.TryHarvestPlant(int(grid_position.x), int(grid_position.y))
+		grid_manager._try_harvest_plant(int(grid_position.x), int(grid_position.y))

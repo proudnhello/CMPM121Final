@@ -23,6 +23,7 @@ public struct Cell {
 	}
 }
 
+
 public class Grid {
 	public Cell[] currentCells;
 	Cell[] swapCells;
