@@ -1,9 +1,11 @@
 [gd_resource type="Resource" load_steps=2 format=3 uid="uid://d0u5l8h8fo5p8"]
 
-[ext_resource type="Script" path="res://Scripts/Grid/PlantGrowthRequirements.gd" id="1_vfg11"]
+[ext_resource type="Script" path="res://Scripts/Grid/PlantType.gd" id="1_aq7x4"]
 
 [resource]
-script = ExtResource("1_vfg11")
+script = ExtResource("1_aq7x4")
+plantName = ""
+startingSeedCount = 0
 water_requirement = 10
 sun_requirement = 2
 max_growth_level = 3
