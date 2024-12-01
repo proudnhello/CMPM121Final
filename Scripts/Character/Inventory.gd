@@ -51,9 +51,8 @@ func DisplayInventory():
 		DisplayInventorySlot(i)
 
 func InitializeInventory():
-	items.append(PlantTypes[0]["startSeeds"])
-	items.append(PlantTypes[1]["startSeeds"])
-	items.append(PlantTypes[2]["startSeeds"])
+	for i in range(PlantTypes.size()):
+		items.append(PlantTypes[i]["startSeeds"])
 	for i in range(PlantTypes.size()):
 		items.append(0)
 
@@ -75,11 +74,38 @@ func _on_plant_seed_signal(plantType, number):
 	CheckWin()
 
 func _ready():
-	PlantTypes.append({"plantName": "Plant1", "waterRequirement": 2, "sunRequirement": 8, "maxGrowthLevel": 3, "minLikePlants": 0, "maxLikePlants": 4, "minAdjPlants": 0, "maxAdjPlants": 4, "startSeeds": 3})
+	PlantTypes.append({
+		"plantName": "Plant1", 
+		"waterRequirement": 2, 
+		"sunRequirement": 8, 
+		"maxGrowthLevel": 3, 
+		"minLikePlants": 0, 
+		"maxLikePlants": 4,
+		"minAdjPlants": 0, 
+		"maxAdjPlants": 4, 
+		"startSeeds": 3})
 
-	PlantTypes.append({"plantName": "Plant2", "waterRequirement": 10, "sunRequirement": 2, "maxGrowthLevel": 3, "minLikePlants": 0, "maxLikePlants": 2, "minAdjPlants": 0, "maxAdjPlants": 2, "startSeeds": 3})
+	PlantTypes.append({
+		"plantName": "Plant2", 
+		"waterRequirement": 10, 
+		"sunRequirement": 2, 
+		"maxGrowthLevel": 3, 
+		"minLikePlants": 0, 
+		"maxLikePlants": 2, 
+		"minAdjPlants": 0, 
+		"maxAdjPlants": 2, 
+		"startSeeds": 3})
 
-	PlantTypes.append({"plantName": "Plant3", "waterRequirement": 2, "sunRequirement": 2, "maxGrowthLevel": 3, "minLikePlants": 4, "maxLikePlants": 10, "minAdjPlants": 4, "maxAdjPlants": 10, "startSeeds": 8})
+	PlantTypes.append({
+		"plantName": "Plant3", 
+		"waterRequirement": 2, 
+		"sunRequirement": 2, 
+		"maxGrowthLevel": 3, 
+		"minLikePlants": 4, 
+		"maxLikePlants": 10, 
+		"minAdjPlants": 4, 
+		"maxAdjPlants": 10, 
+		"startSeeds": 8})
 
 	itemSlotSprites = []
 	for i in range(numUniqueItems):
