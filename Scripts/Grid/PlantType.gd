@@ -1,5 +1,8 @@
 extends Resource
 
+@export var plantName: String
+@export var startingSeedCount: int
+
 @export var water_requirement: int
 @export var sun_requirement: int
 @export var max_growth_level: int

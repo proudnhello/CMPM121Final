@@ -1,0 +1,19 @@
+{
+    "events": [
+        { 
+            "time": 4,
+            "type": "rot",
+            "how_many_tiles": 3
+        },
+        {
+            "time": 6,
+            "type": "grow",
+            "how_many_tiles": 1
+        },
+        {
+            "time": 10,
+            "type": "rot",
+            "how_many_tiles": 2
+        }
+    ]
+}
