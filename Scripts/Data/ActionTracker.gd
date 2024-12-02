@@ -69,7 +69,6 @@ func save(save_name):
 func auto_save():
 	var save_name = "AutoSave"
 	var save_file = FileAccess.open("user://" + save_name + ".save", FileAccess.WRITE)
-	print("autosave file opened");
 	var action_array = actions.duplicate()
 	for action in action_array:
 		var json_action = JSON.stringify(action)

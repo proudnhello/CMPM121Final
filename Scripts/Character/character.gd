@@ -35,7 +35,7 @@ func _process(_delta: float) -> void:
 	if Input.is_action_just_pressed("move_down"):
 		# Move down
 		move_position(0, 1)
-	for i in range(1, grid_manager.numberOfPlantTypes + 1):
+	for i in range(1, PlantDatabase.NumberOfPlantTypes + 1):
 		# If the player presses a number key, plant the corresponding seed
 		if Input.is_action_just_pressed("plant_seed" + str(i)):
 			grid_manager._try_plant_seed(int(grid_position.x), int(grid_position.y), i)

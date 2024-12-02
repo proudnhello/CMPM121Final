@@ -2,59 +2,45 @@
 
 extends Node
 
-@export var numUniqueItems : int = 6
-@export var itemSlotScene : PackedScene = null
+@export var itemSlotScene : PackedScene
 @export var numStartSeed1 : int = 3
 @export var numStartSeed2 : int = 3
 @export var numStartSeed3 : int = 8
+@export	var pixelsBetweenSlots: float = 215
+
 
 # Our DSL for plant types and growth requirements
 
-var PlantTypes: Array = []
+var PlantInfo: Array;
 
-enum ItemType {
-	SEED1,
-	SEED2,
-	SEED3, 
-	PLANT1,
-	PLANT2,
-	PLANT3
-}
-
-var items : Array = []
-var itemSlotSprites : Array = []
+var items : Array
+var itemSlotSprites : Array
 
 func WinGame():
 	get_tree().change_scene_to_file("res://Scenes/Victory.tscn")
 
 func CheckWin():
-	if items[ItemType.PLANT1] >= 3 and items[ItemType.PLANT2] >= 3 and items[ItemType.PLANT3] >= 3:
-		WinGame()
+	for i in range(PlantInfo.size()):
+		if (items[i + PlantInfo.size()]) < 3: return
+	WinGame()
 
-func DisplayInventorySlot(slotNum):
-	var pixelsBetweenSlots = 215
-	var inventorySize = numUniqueItems
-	if itemSlotSprites[slotNum] == null:
-		var slotNode = itemSlotScene.instantiate() as Node2D
-		var slotSprite = slotNode.get_node("Slot") as Sprite2D
-		slotNode.position = Vector2(0, (slotNum - inventorySize / 2.0) * slotSprite.texture.get_width() + slotNum * pixelsBetweenSlots)
-		itemSlotSprites[slotNum] = slotNode
-		add_child(itemSlotSprites[slotNum])
-
+func DisplayInventorySlot(slotNum):		
 	var slotScript = itemSlotSprites[slotNum]
 	slotScript.update_amount(items[slotNum])
 
 func DisplayInventory():
 	if itemSlotScene == null:
 		return
-	for i in range(numUniqueItems):
+	for i in range(items.size()):
 		DisplayInventorySlot(i)
 
 func InitializeInventory():
-	for i in range(PlantTypes.size()):
-		items.append(PlantTypes[i]["startSeeds"])
-	for i in range(PlantTypes.size()):
+	for item in PlantInfo:
+		items.append(item.startSeeds)
+	for i in range(PlantInfo.size()):
 		items.append(0)
+	if (itemSlotScene == null): return;
+		
 
 func ResetInventory():
 	items.clear()
@@ -74,42 +60,16 @@ func _on_plant_seed_signal(plantType, number):
 	CheckWin()
 
 func _ready():
-	PlantTypes.append({
-		"plantName": "Plant1", 
-		"waterRequirement": 2, 
-		"sunRequirement": 8, 
-		"maxGrowthLevel": 3, 
-		"minLikePlants": 0, 
-		"maxLikePlants": 4,
-		"minAdjPlants": 0, 
-		"maxAdjPlants": 4, 
-		"startSeeds": 3})
-
-	PlantTypes.append({
-		"plantName": "Plant2", 
-		"waterRequirement": 10, 
-		"sunRequirement": 2, 
-		"maxGrowthLevel": 3, 
-		"minLikePlants": 0, 
-		"maxLikePlants": 2, 
-		"minAdjPlants": 0, 
-		"maxAdjPlants": 2, 
-		"startSeeds": 3})
-
-	PlantTypes.append({
-		"plantName": "Plant3", 
-		"waterRequirement": 2, 
-		"sunRequirement": 2, 
-		"maxGrowthLevel": 3, 
-		"minLikePlants": 4, 
-		"maxLikePlants": 10, 
-		"minAdjPlants": 4, 
-		"maxAdjPlants": 10, 
-		"startSeeds": 8})
-
+	PlantInfo = PlantDatabase.retreivePlants();
+	if (itemSlotScene == null): return;
+	items = []
 	itemSlotSprites = []
-	for i in range(numUniqueItems):
-		itemSlotSprites.append(null)
+	for i in range(PlantInfo.size()*2):
+		var slotNode = itemSlotScene.instantiate() as Node2D
+		var slotSprite = slotNode.get_node("Slot") as Sprite2D
+		slotNode.position = Vector2(0, (i - items.size() / 2.0) * slotSprite.texture.get_width() + i * pixelsBetweenSlots)
+		itemSlotSprites.append(slotNode);
+		add_child(itemSlotSprites[i])
 	InitializeInventory()
 	DisplayInventory()
 
