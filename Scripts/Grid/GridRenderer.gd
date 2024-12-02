@@ -4,10 +4,12 @@ var options : Dictionary
 var grid_sprites : Array
 var cell_visuals : PackedScene
 var grid_manager : Node
+var eventHappenings: EventHappenings
 
-func init(gd: Node) -> void:
+func init(gd: Node, eH: EventHappenings) -> void:
 	options = GameData.itemData["game settings"];
 	grid_manager = gd
+	eventHappenings = eH;
 	grid_sprites = []
 	for i in range(options["gridSize"]):
 		grid_sprites.append([])
@@ -38,4 +40,11 @@ func render_cell(x : int, y : int) -> void:
 		)
 		grid_sprites[x][y] = cell_node
 		grid_manager.add_child(grid_sprites[x][y])
-	grid_sprites[x][y].update_labels(cell)
+	grid_sprites[x][y].update_labels(cell, retrieve_cell_color())
+
+func retrieve_cell_color() -> Color:
+	if (eventHappenings.current_event == "drought"):
+		return Color8(211, 174, 99, 255);
+	elif(eventHappenings.current_event == "rainstorm"):
+		return Color8(149, 89, 48, 255);
+	return Color8(205, 133, 65, 255);

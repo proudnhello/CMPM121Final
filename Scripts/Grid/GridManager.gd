@@ -17,8 +17,8 @@ func _ready() -> void:
 	options = GameData.itemData["game settings"];
 	grid = Grid.new();
 	grid._create();
-	gridRenderer.init(self);
 	eventHappenings = EventHappenings.new();
+	gridRenderer.init(self, eventHappenings);
 
 	seed(actionTracker.get_seed());
 	baseSeed = actionTracker.get_seed();
@@ -37,9 +37,10 @@ func _fetch_cell_as_array(x, y) -> PackedInt32Array:
 	return grid._fetch_cell(x, y);
 
 func _step_time(curSeed) -> PackedInt32Array:
+	eventHappenings.check_events(actionTracker.get_time());
 	var grown = grid._step_time(curSeed);
 	gridRenderer.render_grid();
-	eventHappenings.check_events(actionTracker.get_time());
+	#print("program_counter: ", actionTracker.get_time(), " ", actionTracker.redo_actions.size());
 	return grown;
 
 signal PlantSeedSignal(plantType: int, number: int)
@@ -66,16 +67,18 @@ func _try_plant_seed(x, y, plantType):
 	if(!_can_plant(x, y, plantType)): return;
 	actionTracker.plant_seed(x, y, plantType);
 	_plant_seed(x, y, plantType);
+	actionTracker.new_action();
 
 func _try_harvest_plant(x, y):
 	if(!grid._can_harvest(x, y)): return;
 	actionTracker.harvest_plant(x, y, grid._fetch_cell(x, y)[2]);
 	_harvest_plant(x, y);
+	actionTracker.new_action();
 
 func _progress_time_button() -> void:
-	var timeStepSeed = actionTracker.get_next_seed();
-	var grownPlants = _step_time(timeStepSeed);
-	actionTracker.step_time(timeStepSeed, grownPlants);
+	var grown = _step_time(actionTracker.get_next_seed());
+	actionTracker.step_time(grown);
+	actionTracker.new_action();
 
 func _unplant_seed(actionInfo: Array):
 	grid._unplant_seed(actionInfo);
@@ -88,18 +91,22 @@ func _unharvest_plant(actionInfo: Array):
 	gridRenderer.render_cell(actionInfo[1], actionInfo[2]);
 
 func _unstep_time(actionInfo: Array):
+	actionTracker.un_step_time();
 	var waterSeed = actionInfo[1];
 	var sunSeed = actionInfo[1] - 1;
 	if(sunSeed < actionTracker.get_seed()):
 		sunSeed = 0;
+
 	grid._unstep_time(waterSeed, sunSeed, actionInfo);
-	actionTracker.un_step_time();
-	gridRenderer.render_grid();	
-	eventHappenings.check_undo_events(actionTracker.get_time());
+
+	var time = actionTracker.get_time()-1;
+	time = 0 if (time < 0) else time;
+	eventHappenings.check_undo_events(time);
+	gridRenderer.render_grid();
+	#print("program_counter: ", actionTracker.get_time());
 
 func _undo_action_button():
 	var actionInfo = actionTracker.undo_action();
-	#print("Action Info: ", actionInfo.stringify());
 	if(actionInfo == null || actionInfo.size() == 0): return;
 
 	if(actionInfo[0] == 0):
@@ -111,15 +118,16 @@ func _undo_action_button():
 
 func _redo_action_button():
 	var actionInfo = actionTracker.redo_action();
-	print("program_counter: ", actionTracker.get_time());
 	if(actionInfo == null || actionInfo.size() == 0): return;
 
 	if(actionInfo[0] == 0):
 		_step_time(actionInfo[1]);
+		actionTracker.increment_program_counter();
 	elif(actionInfo[0] == 1):
 		_plant_seed(actionInfo[1], actionInfo[2], actionInfo[3]);
 	elif(actionInfo[0] == 2):
 		_harvest_plant(actionInfo[1], actionInfo[2]);
+
 
 func _save(saveName):
 	actionTracker.save(saveName);
@@ -135,9 +143,9 @@ func _load_file(saveName):
 	get_tree().paused = true;
 	grid._clear_board();
 	inventory.ResetInventory();
+	eventHappenings.reset();
 	for i in range(actionArray.size()):
 		var actionInfo = actionArray[i];
-		#print("Loaded action info: ", actionInfo.stringify());
 		if(actionInfo[0] == 0):
 			_step_time(actionInfo[1]);
 			print("Loaded step time");
@@ -149,3 +157,4 @@ func _load_file(saveName):
 			print("Loaded harvest plant at ", actionInfo[1], " ",actionInfo[2]);
 	get_tree().paused = false;
 	gridRenderer.render_grid();
+	print(actionTracker.get_time());

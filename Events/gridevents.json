@@ -1,7 +1,7 @@
 {
     "events": [
         {
-            "time": 5,
+            "time": 4,
             "type": "normal"
         },
         { 
@@ -9,8 +9,20 @@
             "type": "drought"
         },
         {
-            "time": 4,
+            "time": 7,
             "type": "rainstorm"
+        },
+        {
+            "time": 11,
+            "type": "normal"
+        },
+        { 
+            "time": 13,
+            "type": "drought"
+        },
+        { 
+            "time": 16,
+            "type": "normal"
         }
     ],
     
@@ -18,8 +30,9 @@
         "min plants": 3,
         "minSunlight": 1,
         "maxSunlight": 10,
-        "minWater": 3,
-        "maxWater": 7,
-        "gridSize": 5
+        "minWaterStep": 3,
+        "maxWaterStep": 7,
+        "gridSize": 5,
+        "maxWater": 25
     }
 }

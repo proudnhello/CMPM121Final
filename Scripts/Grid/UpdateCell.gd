@@ -23,9 +23,12 @@ extends Node2D
 @export var sun_level_label: Label
 @export var plant_type_label: Label
 @export var growth_level_label: Label
+@export var ground_sprite: CanvasItem;
 
-func update_labels(cell_array):
+func update_labels(cell_array, color: Color):
 	water_level_label.text = str(cell_array[0])
 	sun_level_label.text = str(cell_array[1])
 	plant_type_label.text = str(cell_array[2])
 	growth_level_label.text = str(cell_array[3])
+	ground_sprite.self_modulate = color;
+	

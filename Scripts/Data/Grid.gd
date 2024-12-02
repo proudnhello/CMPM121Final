@@ -106,9 +106,6 @@ func _step_time(randSeed) -> Array:
 		for j in range(options["gridSize"]):
 			var index = _fetch_index(i, j);
 			# 0 is water level, 1 is sun level, 2 is plant type, 3 is plant level
-			currentCells[index] += waterRNG.randi_range(options["minWater"], options["maxWater"]);
-
-			currentCells[index + 1] = sunRNG.randi_range(options["minSunlight"], options["maxSunlight"]);
 
 			# if plant can grow
 			if(_check_plant_requirements(i, j)):
@@ -117,6 +114,11 @@ func _step_time(randSeed) -> Array:
 				currentCells[index] -= PlantDatabase.get_requirements(currentCells[index + 2]).waterRequirement;
 				growth.push_back(i);
 				growth.push_back(j);
+
+			# update water and sun levels
+			currentCells[index] += waterRNG.randi_range(options.minWaterStep, options.maxWaterStep);
+
+			currentCells[index + 1] = sunRNG.randi_range(options.minSunlight, options.maxSunlight);
 
 	return growth;
 
@@ -131,11 +133,6 @@ func _harvest_plant(x, y):
 	currentCells[index + 3] = 0;
 
 func _unstep_time(waterSeed, sunSeed, actionInfo: Array):
-	for i in range(2, actionInfo.size(), 2):
-		var index = _fetch_index(actionInfo[i], actionInfo[i + 1]);
-		currentCells[index + 3] -=1;
-		currentCells[index] += PlantDatabase.get_requirements(currentCells[index + 2]).waterRequirement;
-
 	# create random generators based on given seeds
 	var waterRNG = RandomNumberGenerator.new();
 	waterRNG.seed = waterSeed;
@@ -146,12 +143,19 @@ func _unstep_time(waterSeed, sunSeed, actionInfo: Array):
 		for j in range(options["gridSize"]):
 			var index = _fetch_index(i, j);
 			
-			currentCells[index] -= waterRNG.randi_range(options["minWater"], options["maxWater"]);
+			currentCells[index] -= waterRNG.randi_range(options.minWaterStep, options.maxWaterStep);
 			if(sunSeed == 0):
 				currentCells[index + 1] = 0;	
 			else:
 				# no clue why you get a random sun value when you undo here. ?
-				currentCells[index + 1] = sunRNG.randi_range(options["minSunlight"], options["maxSunlight"]);
+				currentCells[index + 1] = sunRNG.randi_range(options.minSunlight, options.maxSunlight);
+
+	for i in range(2, actionInfo.size(), 2):
+		var index = _fetch_index(actionInfo[i], actionInfo[i + 1]);
+		currentCells[index + 3] -=1;
+		currentCells[index] += PlantDatabase.get_requirements(currentCells[index + 2]).waterRequirement;
+
+
 
 # For unplanting and unharvesting, fetch cell used to return a value, but now when we change the 
 # integers, we don't need to call any variant of SetCell.
