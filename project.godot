@@ -19,6 +19,7 @@ config/icon="res://icon.svg"
 
 Inventory="*res://Scripts/Character/Inventory.gd"
 SceneSwitcher="*res://Scripts/Data/SceneSwitcher.gd"
+GameData="*res://Scripts/Data/GameData.gd"
 
 [display]
 
