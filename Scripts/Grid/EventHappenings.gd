@@ -36,15 +36,18 @@ func check_events(time: int):
         current_index += 1
 
 func check_undo_events(time: int):
-    # If the current event is at the start of the list, and it was supposed to happen at this time, revert to default settings by calling the normal event
-    if current_index == 0 && event_list[current_index]["time"] - 1 == time:
-        event_lookup["normal"].call()
-    # If the current event is at the start of the list, and it was not supposed to happen at this time, do nothing
+    # If no events have happened yet, do nothing
     if current_index == 0:
         return
-
-    var event = event_list[current_index]
-    var previousEvent = event_list[current_index - 1]
+    # If only one event has happened, and it was supposed to happen at this time, undo it by returning to the default state
+    if current_index == 1:
+        if event_list[0]["time"] - 1 == time:
+            event_lookup["normal"].call()
+            current_index -= 1
+        return
+    
+    var event = event_list[current_index - 1]
+    var previousEvent = event_list[current_index - 2]
     # If the current event was supposed to happen at this time, undo it by calling the previous event
     if event["time"] - 1 == time:
         if previousEvent["type"] in event_lookup:
