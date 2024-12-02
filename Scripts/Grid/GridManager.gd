@@ -8,6 +8,7 @@ var options: Dictionary
 @export var actionTracker: Node;
 @export var gridRenderer: Node;
 
+var eventHappenings: EventHappenings
 var grid: Grid;
 var baseSeed: int;
 
@@ -17,6 +18,7 @@ func _ready() -> void:
 	grid = Grid.new();
 	grid._create();
 	gridRenderer.init(self);
+	eventHappenings = EventHappenings.new();
 
 	seed(actionTracker.get_seed());
 	baseSeed = actionTracker.get_seed();
@@ -37,6 +39,7 @@ func _fetch_cell_as_array(x, y) -> PackedInt32Array:
 func _step_time(curSeed) -> PackedInt32Array:
 	var grown = grid._step_time(curSeed);
 	gridRenderer.render_grid();
+	eventHappenings.check_events(actionTracker.get_time());
 	return grown;
 
 signal PlantSeedSignal(plantType: int, number: int)
@@ -91,7 +94,8 @@ func _unstep_time(actionInfo: Array):
 		sunSeed = 0;
 	grid._unstep_time(waterSeed, sunSeed, actionInfo);
 	actionTracker.un_step_time();
-	gridRenderer.render_grid();
+	gridRenderer.render_grid();	
+	eventHappenings.check_undo_events(actionTracker.get_time());
 
 func _undo_action_button():
 	var actionInfo = actionTracker.undo_action();
@@ -107,6 +111,7 @@ func _undo_action_button():
 
 func _redo_action_button():
 	var actionInfo = actionTracker.redo_action();
+	print("program_counter: ", actionTracker.get_time());
 	if(actionInfo == null || actionInfo.size() == 0): return;
 
 	if(actionInfo[0] == 0):

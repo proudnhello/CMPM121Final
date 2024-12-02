@@ -33,6 +33,9 @@ func step_time(step_seed, grown_plants):
 func un_step_time():
 	program_counter -= 1
 
+func get_time() -> int:
+	return program_counter
+
 func plant_seed(x, y, plant_type):
 	actions.append([1, x, y, plant_type])
 	auto_save()
@@ -54,6 +57,7 @@ func undo_action():
 func redo_action():
 	if len(redo_actions) == 0:
 		return null
+	program_counter += 1
 	var action = redo_actions.pop_back()
 	actions.append(action)
 	auto_save()
