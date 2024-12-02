@@ -16,7 +16,8 @@ static func lily(info) -> bool:
 
 ## Plant Types
 static var Plants: Array = [
-	{"plantName": "Lily", 
+	{
+		"plantName": "Lily", 
 		"waterRequirement": 2, 
 		"sunRequirement": 8, 
 		"maxGrowthLevel": 3, 
@@ -25,7 +26,8 @@ static var Plants: Array = [
 		"startSeeds": 3,
 		"specialCheck": [Callable(check_condition_requirements), Callable(lily), Callable(check_neighbor_requirements)]
 	},
-	{"plantName": "Sunflower",
+	{
+		"plantName": "Sunflower",
 		"waterRequirement": 10,
 		"sunRequirement": 2,
 		"maxGrowthLevel": 3, 
@@ -33,8 +35,9 @@ static var Plants: Array = [
 		"maxLikePlants": 4, 
 		"startSeeds": 3,
 		"specialCheck": [Callable(check_condition_requirements), Callable(check_neighbor_requirements)]
-		},  
-	{"plantName": "Rafflesia",
+	},  
+	{
+		"plantName": "Rafflesia",
 		"waterRequirement": 2,
 		"sunRequirement": 2,
 		"maxGrowthLevel": 3,
@@ -44,8 +47,9 @@ static var Plants: Array = [
 		"maxAdjPlants": 10, 
 		"startSeeds": 8,
 		"specialCheck": [Callable(check_condition_requirements), Callable(check_neighbor_requirements)]
-		},  
-	{"plantName": "test",
+	},  
+	{
+		"plantName": "test",
 		"waterRequirement": 2,
 		"sunRequirement": 2,
 		"maxGrowthLevel": 10,
@@ -55,7 +59,7 @@ static var Plants: Array = [
 		"maxAdjPlants": 10, 
 		"startSeeds": 8,
 		"specialCheck": [Callable(check_condition_requirements), Callable(check_neighbor_requirements)]
-		}   
+	}
 	]
 ##############################
 
@@ -73,6 +77,15 @@ static func retreivePlants() -> Array:
 		if (!plant.has("startSeeds")): plant.startSeeds = 0;
 		if (!plant.has("specialCheck")): plant.specialCheck = null;
 	NumberOfPlantTypes = Plants.size();
+	for i in range(NumberOfPlantTypes):
+		var action_name = "plant_seed" + str(i+1);
+		if !InputMap.has_action(action_name):
+			InputMap.add_action(action_name);
+		var key_event = InputEventKey.new();
+		# KEY_1 is the enum value for the 1 key, so we add i to it to get the correct key. 
+		# This will create some issues if we have more than 10 plants, but the GUI will will roll off the screen long before that, so eh.
+		key_event.keycode = (KEY_1 + i);
+		InputMap.action_add_event(action_name, key_event);
 	return Plants;
 
 
