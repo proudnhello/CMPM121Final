@@ -91,7 +91,10 @@ func _check_plant_requirements(x, y):
 				if (adjCell[2] != 0):
 					adjacentPlants += 1;
 	
-	return PlantDatabase.check_neighbor_requirements(cell, likePlants, adjacentPlants);
+	if (!PlantDatabase.check_neighbor_requirements(cell, likePlants, adjacentPlants)):
+		return false;
+		
+	return PlantDatabase.check_special_requirements(cell, likePlants, adjacentPlants);
 	
 func _step_time(randSeed) -> Array:
 	# Not a single clue what growth array does, but presumably for the grid renderer?
