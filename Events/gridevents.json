@@ -15,5 +15,9 @@
             "type": "rot",
             "how_many_tiles": 2
         }
-    ]
+    ],
+    
+    "game settings": {
+        "min plants": 3
+    }
 }

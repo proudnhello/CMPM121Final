@@ -17,8 +17,9 @@ func WinGame():
 	get_tree().change_scene_to_file("res://Scenes/Victory.tscn")
 
 func CheckWin():
+	print( GameData.itemData["game settings"]["min plants"])
 	for i in range(PlantInfo.size()):
-		if (items[i + PlantInfo.size()]) < 3: return
+		if (items[i + PlantInfo.size()]) < GameData.itemData["game settings"]["min plants"]: return
 	WinGame()
 
 func DisplayInventorySlot(slotNum):		
