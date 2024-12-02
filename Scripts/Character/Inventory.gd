@@ -3,9 +3,6 @@
 extends Node
 
 @export var itemSlotScene : PackedScene
-@export var numStartSeed1 : int = 3
-@export var numStartSeed2 : int = 3
-@export var numStartSeed3 : int = 8
 @export	var pixelsBetweenSlots: float = 215
 
 
@@ -49,7 +46,7 @@ func ResetInventory():
 
 func _on_harvest_plant_signal(plantType, number):
 	print("Harvesting plant")
-	var item = plantType + 3
+	var item = plantType + PlantInfo.size()
 	AddItem(item, number)
 	CheckWin()
 

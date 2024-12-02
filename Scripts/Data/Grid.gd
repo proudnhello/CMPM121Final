@@ -52,7 +52,7 @@ func _set_cell(x, y, newValues: PackedInt32Array):
 # Check if the cell at x, y has a plant and the plant is level 3 (is harvestable).
 func _can_harvest(x, y) -> bool:
 	var cell = _fetch_cell(x, y);
-	if (cell[2] == 0 || cell[3] < 3):
+	if (cell[2] == 0 || cell[3] < PlantDatabase.get_requirements(cell[2]).maxGrowthLevel):
 		return false;
 	else:
 		return true;
@@ -73,10 +73,12 @@ func _is_valid(x, y) -> bool:
 # Check if the plant in the cell can grow
 func _check_plant_requirements(x, y):
 	var cell = _fetch_cell(x, y);
-	if(!PlantDatabase.check_condition_requirements(cell)):
+
+	# If the cell has no plant, it can't grow.
+	if (cell[2] == 0):
 		return false;
-	
-	#Check the requirements that require the other cells
+
+	# Fetch the adjacent cells and count the number of adjacent plants and like plants.
 	var adjacentPlants = 0;
 	var likePlants = 0;
 	for i in range(-1, 2):
@@ -90,11 +92,8 @@ func _check_plant_requirements(x, y):
 					likePlants += 1;
 				if (adjCell[2] != 0):
 					adjacentPlants += 1;
-	
-	if (!PlantDatabase.check_neighbor_requirements(cell, likePlants, adjacentPlants)):
-		return false;
 		
-	return PlantDatabase.check_special_requirements(cell, likePlants, adjacentPlants);
+	return PlantDatabase.check_requirements(cell, likePlants, adjacentPlants);
 	
 func _step_time(randSeed) -> Array:
 	# Not a single clue what growth array does, but presumably for the grid renderer?
