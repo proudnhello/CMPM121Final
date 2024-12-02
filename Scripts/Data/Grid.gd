@@ -2,7 +2,7 @@ extends Resource
 
 class_name Grid
 @export var currentCells: PackedInt32Array;
-@export var options: Resource;
+var options: Dictionary;
 
 # This is my attempt at creating a system that relies on a single PackedIntArray to store all the data required for the grid.
 # In theory, the array will store 4 int values for each "cell", and the grid will be a 1D array of these "cell" structures.
@@ -17,11 +17,11 @@ var NUMCELLS;
 
 var PlantInfo;
 
-func _create(gridOp: Resource) -> void:
-	options = gridOp;
+func _create() -> void:
+	options = GameData.itemData["game settings"];
 	PlantInfo = PlantDatabase.retreivePlants();
 
-	NUMCELLS = ((options.gridDimensions * options.gridDimensions));
+	NUMCELLS = ((options["gridSize"] * options["gridSize"]));
 	currentCells = PackedInt32Array();
 	for i in range(NUMCELLS):
 		currentCells.push_back(0);
@@ -30,11 +30,10 @@ func _create(gridOp: Resource) -> void:
 		currentCells.push_back(0);
 
 func _fetch_index(x, y) -> int:
-	return (y * options.gridDimensions + x) * CELLSIZE;
+	return (y * options["gridSize"] + x) * CELLSIZE;
 
 func _fetch_cell(x, y) -> PackedInt32Array:
-	# Mind boggling that I can access gridDimensions from the options resource like this. Yuck.
-	if (x < 0 || x >= options.gridDimensions || y < 0 || y >= options.gridDimensions):
+	if (x < 0 || x >= options["gridSize"] || y < 0 || y >= options["gridSize"]):
 		#-1000 is an invalid value for waterLevel, so it will be used to indicate that the cell is out of bounds.
 		return PackedInt32Array([-1000, 0, 0, 0]);
 
@@ -59,8 +58,8 @@ func _can_harvest(x, y) -> bool:
 
 # Clear the board by setting all cells to [0, 0, 0, 0].
 func _clear_board():
-	for i in range(options.gridDimensions):
-		for j in range(options.gridDimensions):
+	for i in range(options["gridSize"]):
+		for j in range(options["gridSize"]):
 			_set_cell(i, j, PackedInt32Array([0, 0, 0, 0]));
 
 # Check if the cell at x, y is a valid cell by comparing the waterIncreaseLevel to -1000.
@@ -103,13 +102,13 @@ func _step_time(randSeed) -> Array:
 
 	waterRNG.seed = randSeed;
 	sunRNG.seed = randSeed;
-	for i in range(options.gridDimensions):
-		for j in range(options.gridDimensions):
+	for i in range(options["gridSize"]):
+		for j in range(options["gridSize"]):
 			var index = _fetch_index(i, j);
 			# 0 is water level, 1 is sun level, 2 is plant type, 3 is plant level
-			currentCells[index] += waterRNG.randi_range(0, options.maxWaterLevelIncrease);
+			currentCells[index] += waterRNG.randi_range(options["minWater"], options["maxWater"]);
 
-			currentCells[index + 1] = sunRNG.randi_range(0, options.maxSunLevel);
+			currentCells[index + 1] = sunRNG.randi_range(options["minSunlight"], options["maxSunlight"]);
 
 			# if plant can grow
 			if(_check_plant_requirements(i, j)):
@@ -143,16 +142,16 @@ func _unstep_time(waterSeed, sunSeed, actionInfo: Array):
 	var sunRNG = RandomNumberGenerator.new();
 	sunRNG.seed = sunSeed;
 
-	for i in range(options.gridDimensions):
-		for j in range(options.gridDimensions):
+	for i in range(options["gridSize"]):
+		for j in range(options["gridSize"]):
 			var index = _fetch_index(i, j);
 			
-			currentCells[index] -= waterRNG.randi_range(0, options.maxWaterLevelIncrease);
+			currentCells[index] -= waterRNG.randi_range(options["minWater"], options["maxWater"]);
 			if(sunSeed == 0):
 				currentCells[index + 1] = 0;	
 			else:
 				# no clue why you get a random sun value when you undo here. ?
-				currentCells[index + 1] = sunRNG.randi_range(0, options.maxSunLevel);
+				currentCells[index + 1] = sunRNG.randi_range(options["minSunlight"], options["maxSunlight"]);
 
 # For unplanting and unharvesting, fetch cell used to return a value, but now when we change the 
 # integers, we don't need to call any variant of SetCell.

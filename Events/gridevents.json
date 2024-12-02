@@ -18,6 +18,11 @@
     ],
     
     "game settings": {
-        "min plants": 3
+        "min plants": 3,
+        "minSunlight": 1,
+        "maxSunlight": 10,
+        "minWater": 3,
+        "maxWater": 7,
+        "gridSize": 5
     }
 }

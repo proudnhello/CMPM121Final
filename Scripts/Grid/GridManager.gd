@@ -1,6 +1,6 @@
 extends Node
 
-@export var options: Resource;
+var options: Dictionary
 @export var player: Node;
 @export var cellScene: PackedScene;
 @export var numberOfPlantTypes := 3;
@@ -13,18 +13,19 @@ var baseSeed: int;
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	options = GameData.itemData["game settings"];
 	grid = Grid.new();
-	grid._create(options);
-	gridRenderer.init(self, options);
+	grid._create();
+	gridRenderer.init(self);
 
 	seed(actionTracker.get_seed());
 	baseSeed = actionTracker.get_seed();
 
 	# Set the player's movement distance		
 	player.init( gridRenderer.get_cell_size(),
-						options.gridDimensions-1, 
-							   Vector2(floor(options.gridDimensions/2),
-										   floor((options.gridDimensions/2))));
+						options["gridSize"]-1, 
+							   Vector2(floor(options["gridSize"]/2),
+										   floor((options["gridSize"]/2))));
 
 	if(SceneSwitcher.filepath != null):
 		print("save file: ", SceneSwitcher.filepath);
