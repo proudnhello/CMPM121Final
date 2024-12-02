@@ -70,8 +70,8 @@ func _is_valid(x, y) -> bool:
 func _check_plant_requirements(x, y):
 	var cell = _fetch_cell(x, y);
 	var begin = _fetch_index(x, y);
-	var requirements = options.call("get_plant_requirements", cell[2]);
-	if(!requirements.call("check_simple_requirements", currentCells.slice(begin, begin + CELLSIZE))):
+	var requirements = options.get_plant_requirements(cell[2]);
+	if(!requirements || !requirements.check_simple_requirements(currentCells.slice(begin, begin + CELLSIZE))):
 		return false;
 	
 	#Check the requirements that require the other cells
@@ -111,13 +111,13 @@ func _step_time(randSeed) -> Array:
 			# 0 is water level, 1 is sun level, 2 is plant type, 3 is plant level
 			currentCells[index] += waterRNG.randi_range(0, options.maxWaterLevelIncrease);
 
-			currentCells[index + 1] += sunRNG.randi_range(0, options.maxSunLevel);
+			currentCells[index + 1] = sunRNG.randi_range(0, options.maxSunLevel);
 
 			# if plant can grow
 			if(_check_plant_requirements(i, j)):
 				# grow plant lol
 				currentCells[index + 3] += 1;
-				currentCells[index] -= options.call("get_plant_requirements", currentCells[index + 2]).water_requirement;
+				currentCells[index] -= options.get_plant_requirements(currentCells[index + 2]).water_requirement;
 				growth.push_back(i);
 				growth.push_back(j);
 
@@ -137,7 +137,7 @@ func _unstep_time(waterSeed, sunSeed, actionInfo: Array):
 	for i in range(2, actionInfo.size(), 2):
 		var index = _fetch_index(actionInfo[i], actionInfo[i + 1]);
 		currentCells[index + 3] -=1;
-		currentCells[index] += options.call("get_plant_requirements", currentCells[index + 2]).water_requirement;
+		currentCells[index] += options.get_plant_requirements(currentCells[index + 2]).water_requirement;
 
 	# create random generators based on given seeds
 	var waterRNG = RandomNumberGenerator.new();
@@ -165,7 +165,7 @@ func _unplant_seed(actionInfo: Array):
 
 func _unharvest_plant(actionInfo: Array):
 	var index = _fetch_index(actionInfo[1], actionInfo[2]);
-	var requirements = options.call("get_plant_requirements", actionInfo[3]);
+	var requirements = options.get_plant_requirements(actionInfo[3]);
 
 	currentCells[index + 2] = actionInfo[3];
 	currentCells[index + 3] = requirements.max_growth_level;

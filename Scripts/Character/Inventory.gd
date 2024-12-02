@@ -25,7 +25,7 @@ var items : Array = []
 var itemSlotSprites : Array = []
 
 func WinGame():
-	get_tree().change_scene("res://Scenes/Victory.tscn")
+	get_tree().change_scene_to_file("res://Scenes/Victory.tscn")
 
 func CheckWin():
 	if items[ItemType.PLANT1] >= 3 and items[ItemType.PLANT2] >= 3 and items[ItemType.PLANT3] >= 3:
@@ -116,13 +116,13 @@ func _ready():
 func AddItem(item, amount):
 	items[item] += amount
 	var slotScript = itemSlotSprites[item]
-	slotScript.call("update_amount", items[item])
+	slotScript.update_amount(items[item])
 
 func RemoveItem(item, amount):
 	if items[item] >= amount:
 		items[item] -= amount
 		var slotScript = itemSlotSprites[item]
-		slotScript.call("update_amount", items[item])
+		slotScript.update_amount(items[item])
 		return true
 	return false
 

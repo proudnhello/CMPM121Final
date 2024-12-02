@@ -35,7 +35,6 @@ script = ExtResource("5_lqpoq")
 options = ExtResource("2_iycgm")
 player = NodePath("../Character")
 cellScene = ExtResource("6_o1l52")
-numberOfPlantTypes = null
 inventory = NodePath("../Inventory")
 actionTracker = NodePath("../TempActionManager")
 gridRenderer = NodePath("../TempGridRenderer")
