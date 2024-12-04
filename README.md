@@ -61,3 +61,63 @@ packet-beta
 As the project has progressed, we have found that many of our design choices are emergent from the requirements present in the assignments. As a result, we have continued to feel that our original role descriptions were not as accurate as they should be. Ethan and Moore continued to work on lower-level functionality that worked closely with engine-specific tools and functions, while Arjun, Igor, and Eric continued to build off of this foundation. For example, after the ActionTracker class was built to make the undo/redo system possible, Igor, Eric, and Arjun utilized that foundation to implement the multiple save file and autosave functionality. We all continued to work closely together in terms of design, allowing us all to offer input regarding specific implementation choices (like how exactly we would track major player actions and when those would be stored). We did choose to add a title screen to our game that allows players to view a quick tutorial that explains controls and the goal of the game, which gives players more clarity regarding their goals and what the gameplay entails.  
   
 We did, however, make one signifgant design change for F2. At the professor's recommendation after looking at our early plan, we tried to get Godot to work with C++ before moving on. To our displeasure, we discoved that C++ was far harder to integrate with Godot than we first anticipated. Because of this, we ultimately decided to swap to GDScript instead, a scripting language made for Godot, instead of C++. Arjun and Ethan both investigated GDScript, as our group members most familiar with Godot, and found it quite similar to Python and easy to learn. While everyone else has no experiance with GDScript, we believe that the extra difficultly involved with learning it will ultimately be less than that of trying to get C++ working with Godot on everyone's computers, especially as we failed to get it working on even one. 
+
+# Devlog Entry 12/4/2024  
+## How we satisfied the software requirements
+### F0+F1
+The strategies behind our implementions F0 and F1 has gone unchanged. We have, however, made some minor code quality adjustments as we worked on translating the code to a different language. For example, what, exactly, should be calling ActionManager functions was unclear, which resulted in several identical saved being made on occasion. We moved all of that into GridManager's do and undo function, as it is our controller, so that made the most sense.  
+### External DSL for Scenario Design
+For our external DSL, we used JSON, as gdscript has a parser for JSON. Two objects are read in by the program, "events" and "game settings". The "events" object will consist of an array of objects, each of which must contain at least a "time" int and a "type" string. The time will define the time step on which the event will start, and the type string defines which event will start at that time. The "game settings" object will contain a number of keys that define the starting values of various parameters. Below, you can see on potential configuration that could be used.
+```
+{
+    "events": [
+        { 
+            "time": 2,
+            "type": "drought"
+        },
+        {
+            "time": 4,
+            "type": "rainstorm"
+        },
+        {
+            "time": 5,
+            "type": "normal"
+        }
+    ],
+    
+    "game settings": {
+        "min plants": 3,
+        "minSunlight": 1,
+        "maxSunlight": 10,
+        "minWater": 3,
+        "maxWater": 7,
+        "gridSize": 5
+    }
+}
+```
+First, the events. This array would mean that conditions start normally, but at time step 2, a drought would begin, which reduces the amount of water growth and increaces the amount of sun every cell gets every timestep. This continues until time step 4, at which point a rainstorm starts, which lowers the maximum level of sun a tile can recieve, but increaces the amount of water the cells get per time step. Finally, at time step 5, the conditions return to normal, which reverts all the rates of change back to their defaults.  
+Then, game settings. With this configuration, the player will need to harvest 3 plants of each type to win. Every tile will, on each time step, have at least 1 sunlight but no more than 10, and will gain at least 3 water, but no more than 7. Finally, the game will take place on a 5x5 grid. 
+### Internal DSL for Plants and Growth Conditions
+For our internal DSL, 
+```
+{
+		"plantName": "Lily", 
+		"waterRequirement": 2, 
+		"sunRequirement": 8, 
+		"maxGrowthLevel": 3, 
+		"minAdjPlants": 0, 
+		"maxAdjPlants": 4, 
+		"startSeeds": 3,
+		"specialCheck": [Callable(check_condition_requirements), Callable(lily), Callable(check_neighbor_requirements)]
+},
+{
+		"plantName": "Sunflower",
+		"waterRequirement": 10,
+		"sunRequirement": 2,
+		"maxGrowthLevel": 3, 
+		"minLikePlants": 1, 
+		"maxLikePlants": 4, 
+		"startSeeds": 3,
+		"specialCheck": [Callable(check_condition_requirements), Callable(check_neighbor_requirements)]
+},  
+```
