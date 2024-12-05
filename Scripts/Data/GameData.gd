@@ -2,7 +2,7 @@ extends Node
 
 var itemData = {};
 
-var dataFilepath = "Events/gridevents.json"
+var dataFilepath = "res://Events/gridevents.json"
 
 func LoadJSONFile(filepath: String):
 	if FileAccess.file_exists(filepath):

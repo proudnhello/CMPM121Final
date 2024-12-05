@@ -1,6 +1,7 @@
-extends Node2D
+class_name Character extends Node2D
 
-@export var grid_manager: Node
+@export var grid_manager: Node;
+
 var movement_distance = -1
 var grid_position = Vector2.ZERO
 var max_dimension = 0
@@ -38,6 +39,13 @@ func _process(_delta: float) -> void:
 	for i in range(1, PlantDatabase.NumberOfPlantTypes + 1):
 		# If the player presses a number key, plant the corresponding seed
 		if Input.is_action_just_pressed("plant_seed" + str(i)):
-			grid_manager._try_plant_seed(int(grid_position.x), int(grid_position.y), i)
+			plant_seed(i)
 	if Input.is_action_just_pressed("harvest"):
-		grid_manager._try_harvest_plant(int(grid_position.x), int(grid_position.y))
+		harvest_plant()
+
+
+func plant_seed(seedIndex: int):
+	grid_manager._try_plant_seed(int(grid_position.x), int(grid_position.y), seedIndex)
+
+func harvest_plant():
+	grid_manager._try_harvest_plant(int(grid_position.x), int(grid_position.y))

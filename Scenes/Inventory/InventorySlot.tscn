@@ -5,19 +5,32 @@
 
 [sub_resource type="CanvasTexture" id="CanvasTexture_awvi3"]
 
-[node name="InventorySlot" type="Node2D" node_paths=PackedStringArray("amount_label")]
+[node name="InventorySlot" type="Node2D" node_paths=PackedStringArray("amount_label", "selected_border")]
 script = ExtResource("1_1j3cp")
 amount_label = NodePath("Label")
+selected_border = NodePath("Selected")
+
+[node name="Selected" type="Sprite2D" parent="."]
+self_modulate = Color(0.149214, 0.406204, 0.660216, 1)
+scale = Vector2(370, 370)
+texture = SubResource("CanvasTexture_awvi3")
 
 [node name="Slot" type="Sprite2D" parent="."]
-self_modulate = Color(0.357368, 0.203627, 6.73831e-07, 1)
-scale = Vector2(200, 200)
+self_modulate = Color(0.25455, 0.456036, 0.192664, 1)
+scale = Vector2(350, 350)
 texture = SubResource("CanvasTexture_awvi3")
 
 [node name="Label" type="Label" parent="."]
 offset_left = 52.0
 offset_top = -10.0
-offset_right = 98.0
-offset_bottom = 100.0
+offset_right = 123.0
+offset_bottom = 128.0
 text = "0"
 label_settings = ExtResource("2_uw5mo")
+
+[node name="Button" type="Button" parent="."]
+modulate = Color(1, 1, 1, 0)
+offset_left = -185.0
+offset_top = -185.0
+offset_right = 185.0
+offset_bottom = 185.0

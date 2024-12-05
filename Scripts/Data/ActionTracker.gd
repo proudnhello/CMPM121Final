@@ -65,6 +65,7 @@ func redo_action():
 
 func save(save_name):
 	var save_file = FileAccess.open("user://" + save_name + ".save", FileAccess.WRITE)
+	if (!FileAccess.file_exists("user://AutoSave.save")): auto_save()
 	var autosave_file = FileAccess.open("user://AutoSave.save", FileAccess.READ)
 	while not autosave_file.eof_reached():
 		var line = autosave_file.get_line()

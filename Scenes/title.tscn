@@ -9,12 +9,13 @@ layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 115.0
-offset_top = -16.0
-offset_right = 115.0
-offset_bottom = -16.0
+offset_left = 51.0
+offset_top = -160.0
+offset_right = -911.0
+offset_bottom = -476.0
 grow_horizontal = 2
 grow_vertical = 2
+scale = Vector2(2, 2)
 
 [node name="Button" type="Button" parent="."]
 layout_mode = 0
