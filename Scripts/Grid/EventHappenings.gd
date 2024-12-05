@@ -72,7 +72,7 @@ func check_undo_events(time: int):
     print(current_event);
 
 func _drought():
-    GameData.itemData["game settings"].minWaterStep = -10;
+    GameData.itemData["game settings"].minWaterStep = -20;
     GameData.itemData["game settings"].maxWaterStep = 2;
     GameData.itemData["game settings"].minSunlight = 12;
     GameData.itemData["game settings"].maxSunlight = 25;
