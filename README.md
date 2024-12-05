@@ -61,3 +61,71 @@ packet-beta
 As the project has progressed, we have found that many of our design choices are emergent from the requirements present in the assignments. As a result, we have continued to feel that our original role descriptions were not as accurate as they should be. Ethan and Moore continued to work on lower-level functionality that worked closely with engine-specific tools and functions, while Arjun, Igor, and Eric continued to build off of this foundation. For example, after the ActionTracker class was built to make the undo/redo system possible, Igor, Eric, and Arjun utilized that foundation to implement the multiple save file and autosave functionality. We all continued to work closely together in terms of design, allowing us all to offer input regarding specific implementation choices (like how exactly we would track major player actions and when those would be stored). We did choose to add a title screen to our game that allows players to view a quick tutorial that explains controls and the goal of the game, which gives players more clarity regarding their goals and what the gameplay entails.  
   
 We did, however, make one signifgant design change for F2. At the professor's recommendation after looking at our early plan, we tried to get Godot to work with C++ before moving on. To our displeasure, we discoved that C++ was far harder to integrate with Godot than we first anticipated. Because of this, we ultimately decided to swap to GDScript instead, a scripting language made for Godot, instead of C++. Arjun and Ethan both investigated GDScript, as our group members most familiar with Godot, and found it quite similar to Python and easy to learn. While everyone else has no experiance with GDScript, we believe that the extra difficultly involved with learning it will ultimately be less than that of trying to get C++ working with Godot on everyone's computers, especially as we failed to get it working on even one. 
+
+# Devlog Entry 12/4/2024  
+## How we satisfied the software requirements
+### F0+F1
+The strategies behind our implementions F0 and F1 has gone unchanged, but we did make a few minor adjustments. We did have to change how the array of cells was stored - GDScript doesn't have structs that store their data contiguously like C sharp. So, instead, we store a PackedInt32Array which is an array of contiguous 32 bit ints. Each cell is reprsented by 4 ints in a row, where index 0 is the water level, 1 the sun level, 2 the plant type, and 3 the growth level. Ultimately, it is still an array of structs, but it is stored slightly different due to GDScript being a higher level language. We have, however, made some minor code quality adjustments as we worked on translating the code to a different language. For example, what, exactly, should be calling ActionManager functions was unclear, which resulted in several identical saved being made on occasion. We moved all of that into GridManager's do and undo function, as it is our controller, so that made the most sense.  
+### External DSL for Scenario Design
+For our external DSL, we used JSON, as gdscript has a parser for JSON. Two objects are read in by the program, "events" and "game settings". The "events" object will consist of an array of objects, each of which must contain at least a "time" int and a "type" string. The time will define the time step on which the event will start, and the type string defines which event will start at that time. The "game settings" object will contain a number of keys that define the starting values of various parameters. Below, you can see on potential configuration that could be used.
+```
+{
+    "events": [
+        { 
+            "time": 2,
+            "type": "drought"
+        },
+        {
+            "time": 4,
+            "type": "rainstorm"
+        },
+        {
+            "time": 5,
+            "type": "normal"
+        }
+    ],
+    
+    "game settings": {
+        "min plants": 3,
+        "minSunlight": 1,
+        "maxSunlight": 10,
+        "minWater": 3,
+        "maxWater": 7,
+        "gridSize": 5
+    }
+}
+```
+First, the events. This array would mean that conditions start normally, but at time step 2, a drought would begin, which reduces the amount of water growth and increaces the amount of sun every cell gets every timestep. This continues until time step 4, at which point a rainstorm starts, which lowers the maximum level of sun a tile can recieve, but increaces the amount of water the cells get per time step. Finally, at time step 5, the conditions return to normal, which reverts all the rates of change back to their defaults.  
+Then, game settings. With this configuration, the player will need to harvest 3 plants of each type to win. Every tile will, on each time step, have at least 1 sunlight but no more than 10, and will gain at least 3 water, but no more than 7. Finally, the game will take place on a 5x5 grid. 
+### Internal DSL for Plants and Growth Conditions
+For our internal DSL, we implemented an array of dictionaries in GDScript, which is Godot's custom scripting language. It works by containing a number of parameters about when the plant can grow and a list of functions. When the grid checks if a plant can grow, it calls all of those functions with data about the cell in a dictionary, which all return a boolean based on if the plant currently meets the defined requirements to grow. If all of them return true, the plant will grow, otherwise nothing happens. You can see two plants' implemntations below.
+```
+[{
+		"plantName": "Lily", 
+		"waterRequirement": 2, 
+		"sunRequirement": 8, 
+		"maxGrowthLevel": 3, 
+		"minAdjPlants": 0, 
+		"maxAdjPlants": 4, 
+		"startSeeds": 3,
+		"specialCheck": [Callable(check_condition_requirements), Callable(special_lilly_check), Callable(check_neighbor_requirements)]
+},  
+{
+		"plantName": "Rafflesia",
+		"waterRequirement": 2,
+		"sunRequirement": 2,
+		"maxGrowthLevel": 3,
+		"minLikePlants": 4,
+		"maxLikePlants": 10,
+		"minAdjPlants": 4, 
+		"maxAdjPlants": 10, 
+		"startSeeds": 8,
+		"specialCheck": [Callable(check_condition_requirements), Callable(check_neighbor_requirements)]
+}]  
+```
+In natural language, we have two plants, Lilies and Rafflesia. Lilies require 2 water and 8 sun to grow, and can be harvested once they reach growth level 3. They can have, at most, 4 plants adjacent to them if they are to grow, otherwise they don't get enough nutrients and can't. When their growth is checked, we check for the correct enviromental conditions, a special specific lilly check, and the number of neighbors they have. Rafflesia, on the other hand, can grow with only two water and 2 sun, and it must be adjacent to at least 4 other Rafflesia in order to be able to grow. It can be harvested when it reaches a growth level of 10. When we check its growth, we check for the correct eviroment and then that it has the right number of neighbors to be able to grow.  
+### Switch to Alternate Platform
+Finally, like we mentioned in the previous devlog, we swapped from C Sharp to GDScript. As previously mentioned, we had to rework the array of structs we were using to not actually include any structs, and instead be a long array with clumps of ints. We also had to decouple Grid from the GridManager more, as we could no longer represent them within the same file. This probably improved our overall code quality, as Grid was a bit more intertwined with GridManager than it probably should have been. Asides from that, most things stayed the same. Godot actually suports having scripts of both types similtaniously, so for most of the scripts all we did was ask Github Copilot to translate the file, then test it. We had to make a few changes here and there before testing, due to there being some workarounds nessisary for the staticly typed C Sharp to work together with the dynamically typed GDScript, but being able to test as we went made the translation much more managable.  
+## Reflection
+We really, *really* dogded a bullet swapping to GDScript instead of C++. Despite being a completely new language, GDScript was close enough to python that no one really had any difficultly learning it. The team behind Godot put a load of work making GDScript and C Sharp scripts work together, which as discussed, made our life much easier when we were translating it over. And while this wasn't really realivant for F2, for F3 Godot's mobile module only supports GDScript. It doesn't have the Unity feature where you can compile it into java for mobile, anything execpt GDScript simply doesn't work. We are similarly lucky we decided to go from C Sharp to GDScript instead of the other way aroud, as I'm not sure what we would have done if we discoved that we had to swap platform *again*.   
+We do plan to make shuffle the roles a little bit into F3. Ethan has experiance with mobile builds, so we plan to designate him as the person in charge of our mobile builds. Asides from that, we plan to stick to the plan we've made.

@@ -7,12 +7,13 @@
 
 [sub_resource type="CanvasTexture" id="CanvasTexture_geoto"]
 
-[node name="Cell" type="Node2D" node_paths=PackedStringArray("water_level_label", "sun_level_label", "plant_type_label", "growth_level_label")]
+[node name="Cell" type="Node2D" node_paths=PackedStringArray("water_level_label", "sun_level_label", "plant_type_label", "growth_level_label", "ground_sprite")]
 script = ExtResource("1_aaqtu")
 water_level_label = NodePath("Water")
 sun_level_label = NodePath("Sunlight")
 plant_type_label = NodePath("Plant")
 growth_level_label = NodePath("Growth")
+ground_sprite = NodePath("Ground")
 
 [node name="Background" type="Sprite2D" parent="."]
 modulate = Color(0, 0, 0, 1)
@@ -20,7 +21,7 @@ scale = Vector2(400, 400)
 texture = SubResource("CanvasTexture_a33ga")
 
 [node name="Ground" type="Sprite2D" parent="."]
-self_modulate = Color(0.803922, 0.521569, 0.247059, 1)
+self_modulate = Color(0.803922, 0.521569, 0.254902, 1)
 scale = Vector2(375, 375)
 texture = SubResource("CanvasTexture_geoto")
 

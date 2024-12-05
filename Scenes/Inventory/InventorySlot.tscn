@@ -10,7 +10,7 @@ script = ExtResource("1_1j3cp")
 amount_label = NodePath("Label")
 
 [node name="Slot" type="Sprite2D" parent="."]
-self_modulate = Color(1, 0.82133, 0.649871, 1)
+self_modulate = Color(0.357368, 0.203627, 6.73831e-07, 1)
 scale = Vector2(200, 200)
 texture = SubResource("CanvasTexture_awvi3")
 

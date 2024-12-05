@@ -21,27 +21,31 @@ func get_seed():
 
 func get_next_seed():
 	var step_seed = localSeed + program_counter
-	program_counter += 1
 	return step_seed
 
-func step_time(step_seed, grown_plants):
-	var type_seed = [0, step_seed]
-	actions.append(type_seed + Array(grown_plants))
-	auto_save()
+func new_action():
 	redo_actions.clear()
+	auto_save()
+
+func increment_program_counter():
+	program_counter += 1
+
+func step_time(grown_plants):
+	var type_seed = [0, get_next_seed()]
+	actions.append(type_seed + Array(grown_plants))
+	program_counter += 1
 
 func un_step_time():
 	program_counter -= 1
 
+func get_time() -> int:
+	return program_counter
+
 func plant_seed(x, y, plant_type):
 	actions.append([1, x, y, plant_type])
-	auto_save()
-	redo_actions.clear()
 
 func harvest_plant(x, y, plant_type):
 	actions.append([2, x, y, plant_type])
-	auto_save()
-	redo_actions.clear()
 
 func undo_action():
 	if len(actions) <= 1:
@@ -69,7 +73,6 @@ func save(save_name):
 func auto_save():
 	var save_name = "AutoSave"
 	var save_file = FileAccess.open("user://" + save_name + ".save", FileAccess.WRITE)
-	print("autosave file opened");
 	var action_array = actions.duplicate()
 	for action in action_array:
 		var json_action = JSON.stringify(action)
@@ -110,9 +113,6 @@ func load(save_name):
 		return null
 	localSeed = action_array[0][1]
 
-	program_counter = -1
-	for action in action_array:
-		if action[0] == 0:
-			program_counter += 1
+	program_counter = 0
 
 	return action_array
