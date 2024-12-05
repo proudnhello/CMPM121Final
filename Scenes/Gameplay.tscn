@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://bgh1ayrmhacoe"]
+[gd_scene load_steps=20 format=3 uid="uid://bgh1ayrmhacoe"]
 
 [ext_resource type="Script" path="res://Scripts/Character/Inventory.gd" id="1_0qa61"]
 [ext_resource type="Script" path="res://Scripts/Data/ActionTracker.gd" id="1_7atv3"]
@@ -9,8 +9,13 @@
 [ext_resource type="PackedScene" uid="uid://ctgicajw68chx" path="res://Scenes/Cell.tscn" id="6_o1l52"]
 [ext_resource type="Texture2D" uid="uid://f64e06o4povh" path="res://Sprites/UI/FloppyDisk.png" id="7_73caw"]
 [ext_resource type="PackedScene" uid="uid://jeilmlgew1bx" path="res://Scenes/Inventory/InventorySlot.tscn" id="7_x7taq"]
+[ext_resource type="Texture2D" uid="uid://hbn7oblapbs3" path="res://Sprites/undo.png" id="9_62i5f"]
+[ext_resource type="Texture2D" uid="uid://dm2kiv0skfsnr" path="res://Sprites/Items/plant.png" id="9_famal"]
 [ext_resource type="Script" path="res://Scripts/Data/SaveMenu.gd" id="10_2b0bm"]
+[ext_resource type="Texture2D" uid="uid://cm5utkgrdcx30" path="res://Sprites/Items/shovel.png" id="10_dap18"]
+[ext_resource type="Texture2D" uid="uid://ip4ownjwdeaj" path="res://Sprites/redo.png" id="10_qq07h"]
 [ext_resource type="Script" path="res://Scripts/Data/LoadMenu.gd" id="11_7etfo"]
+[ext_resource type="Texture2D" uid="uid://5ca3juvaajho" path="res://Sprites/right-arrow.png" id="11_xopcs"]
 [ext_resource type="Script" path="res://Scripts/InputManager/InputManager.gd" id="12_ep27m"]
 
 [sub_resource type="CanvasTexture" id="CanvasTexture_w61lt"]
@@ -35,33 +40,6 @@ offset = Vector2(600, -200)
 scale = Vector2(1.705, 1.705)
 transform = Transform2D(1.705, 0, 0, 1.705, 600, -200)
 follow_viewport_enabled = true
-
-[node name="ProgressTimeButton" type="Button" parent="Camera2D/UI"]
-offset_left = 735.484
-offset_top = -849.853
-offset_right = 881.484
-offset_bottom = -768.853
-scale = Vector2(3.24, 3.24)
-focus_mode = 0
-text = "PROGRESS TIME"
-
-[node name="UndoButton" type="Button" parent="Camera2D/UI"]
-offset_left = 1319.06
-offset_top = -853.372
-offset_right = 1465.06
-offset_bottom = -769.372
-scale = Vector2(3.24, 3.24)
-focus_mode = 0
-text = "UNDO"
-
-[node name="RedoButton" type="Button" parent="Camera2D/UI"]
-offset_left = 715.542
-offset_top = -560.704
-offset_right = 861.542
-offset_bottom = -470.704
-scale = Vector2(3.24, 3.24)
-focus_mode = 0
-text = "REDO"
 
 [node name="SaveMenu" type="MenuButton" parent="Camera2D/UI" node_paths=PackedStringArray("grid_manager")]
 offset_left = 1564.4
@@ -108,71 +86,82 @@ character = NodePath("../../../Character")
 
 [node name="PlantButton" type="TouchScreenButton" parent="Camera2D/UI/InputManager"]
 self_modulate = Color(1, 1, 1, 0.537255)
-position = Vector2(1324.93, 671.554)
+position = Vector2(1229.33, 671.554)
 scale = Vector2(440.103, 440.103)
 texture_normal = SubResource("CanvasTexture_w61lt")
 
-[node name="RichTextLabel" type="RichTextLabel" parent="Camera2D/UI/InputManager/PlantButton"]
-clip_contents = false
-custom_minimum_size = Vector2(37.055, 0)
-anchors_preset = -1
-anchor_right = 0.47
-anchor_bottom = 0.853
-offset_left = -0.618357
-offset_top = 0.301183
-offset_right = 92.9116
-offset_bottom = 164.448
-scale = Vector2(0.01, 0.01)
-pivot_offset = Vector2(0.405, 0)
-text = "PLANT"
-visible_characters = 1851
-visible_ratio = 264.429
+[node name="Plant" type="Sprite2D" parent="Camera2D/UI/InputManager/PlantButton"]
+position = Vector2(0.509079, 0.503748)
+scale = Vector2(0.00147347, 0.00152553)
+texture = ExtResource("9_famal")
 
 [node name="HarvestButton" type="TouchScreenButton" parent="Camera2D/UI/InputManager"]
 self_modulate = Color(1, 1, 1, 0.537255)
-position = Vector2(800, 671.554)
+position = Vector2(747.214, 671.554)
 scale = Vector2(440.103, 440.103)
 texture_normal = SubResource("CanvasTexture_w61lt")
 
-[node name="RichTextLabel" type="RichTextLabel" parent="Camera2D/UI/InputManager/HarvestButton"]
-clip_contents = false
-custom_minimum_size = Vector2(37.055, 0)
-anchors_preset = -1
-anchor_right = 0.47
-anchor_bottom = 0.853
-offset_left = -0.618357
-offset_top = 0.301183
-offset_right = 92.9116
-offset_bottom = 164.448
-scale = Vector2(0.01, 0.01)
-pivot_offset = Vector2(0.405, 0)
-text = "HARVEST"
-visible_characters = 1851
-visible_ratio = 264.429
+[node name="Shovel" type="Sprite2D" parent="Camera2D/UI/InputManager/HarvestButton"]
+position = Vector2(0.513076, 0.52507)
+scale = Vector2(0.000631648, 0.000668666)
+texture = ExtResource("10_dap18")
 
 [node name="Up_Button" type="TouchScreenButton" parent="Camera2D/UI/InputManager"]
 self_modulate = Color(1, 1, 1, 0.537255)
-position = Vector2(1056.3, -133.724)
+position = Vector2(1108.5, -122.581)
 scale = Vector2(300, 300)
 texture_normal = SubResource("CanvasTexture_4aamd")
 
 [node name="Left_Button" type="TouchScreenButton" parent="Camera2D/UI/InputManager"]
 self_modulate = Color(1, 1, 1, 0.537255)
-position = Vector2(723.167, 197.067)
+position = Vector2(766.569, 214.076)
 scale = Vector2(300, 300)
 texture_normal = SubResource("CanvasTexture_4aamd")
 
 [node name="Down_Button" type="TouchScreenButton" parent="Camera2D/UI/InputManager"]
 self_modulate = Color(1, 1, 1, 0.537255)
-position = Vector2(1056.3, 199.413)
+position = Vector2(1112.02, 214.076)
 scale = Vector2(300, 300)
 texture_normal = SubResource("CanvasTexture_4aamd")
 
 [node name="Right_Button" type="TouchScreenButton" parent="Camera2D/UI/InputManager"]
 self_modulate = Color(1, 1, 1, 0.537255)
-position = Vector2(1396.48, 199.413)
+position = Vector2(1453.37, 218.182)
 scale = Vector2(300, 300)
 texture_normal = SubResource("CanvasTexture_4aamd")
+
+[node name="Undo_Button" type="TouchScreenButton" parent="Camera2D/UI/InputManager"]
+self_modulate = Color(1, 1, 1, 0.537255)
+position = Vector2(1094.43, -872.141)
+scale = Vector2(332.551, 302.639)
+texture_normal = SubResource("CanvasTexture_4aamd")
+
+[node name="Undo" type="Sprite2D" parent="Camera2D/UI/InputManager/Undo_Button"]
+position = Vector2(0.484127, 0.495155)
+scale = Vector2(0.00160177, 0.00185093)
+texture = ExtResource("9_62i5f")
+
+[node name="Redo_Button" type="TouchScreenButton" parent="Camera2D/UI/InputManager"]
+self_modulate = Color(1, 1, 1, 0.537255)
+position = Vector2(1093.26, -536.657)
+scale = Vector2(332.551, 342.522)
+texture_normal = SubResource("CanvasTexture_4aamd")
+
+[node name="Redo" type="Sprite2D" parent="Camera2D/UI/InputManager/Redo_Button"]
+position = Vector2(0.51037, 0.492928)
+scale = Vector2(0.00168527, 0.0017449)
+texture = ExtResource("10_qq07h")
+
+[node name="Progress_Time" type="TouchScreenButton" parent="Camera2D/UI/InputManager"]
+self_modulate = Color(1, 1, 1, 0.537255)
+position = Vector2(1468.62, -874.487)
+scale = Vector2(327.273, 302.639)
+texture_normal = SubResource("CanvasTexture_4aamd")
+
+[node name="Right-arrow" type="Sprite2D" parent="Camera2D/UI/InputManager/Progress_Time"]
+position = Vector2(0.503154, 0.499496)
+scale = Vector2(0.0018428, 0.00186031)
+texture = ExtResource("11_xopcs")
 
 [node name="Inventory" type="Node2D" parent="Camera2D" node_paths=PackedStringArray("inputManager")]
 position = Vector2(-11575.7, -5111.4)
@@ -196,14 +185,14 @@ texture = ExtResource("1_lv6rf")
 script = ExtResource("6_a5swx")
 grid_manager = NodePath("../GridManager")
 
-[connection signal="pressed" from="Camera2D/UI/ProgressTimeButton" to="GridManager" method="_progress_time_button"]
-[connection signal="pressed" from="Camera2D/UI/UndoButton" to="GridManager" method="_undo_action_button"]
-[connection signal="pressed" from="Camera2D/UI/RedoButton" to="GridManager" method="_redo_action_button"]
 [connection signal="pressed" from="Camera2D/UI/InputManager/PlantButton" to="Camera2D/UI/InputManager" method="press_plant"]
 [connection signal="pressed" from="Camera2D/UI/InputManager/HarvestButton" to="Camera2D/UI/InputManager" method="press_harvest"]
 [connection signal="pressed" from="Camera2D/UI/InputManager/Up_Button" to="Camera2D/UI/InputManager" method="press_up"]
 [connection signal="pressed" from="Camera2D/UI/InputManager/Left_Button" to="Camera2D/UI/InputManager" method="press_left"]
 [connection signal="pressed" from="Camera2D/UI/InputManager/Down_Button" to="Camera2D/UI/InputManager" method="press_down"]
 [connection signal="pressed" from="Camera2D/UI/InputManager/Right_Button" to="Camera2D/UI/InputManager" method="press_right"]
+[connection signal="pressed" from="Camera2D/UI/InputManager/Undo_Button" to="GridManager" method="_undo_action_button"]
+[connection signal="pressed" from="Camera2D/UI/InputManager/Redo_Button" to="GridManager" method="_redo_action_button"]
+[connection signal="pressed" from="Camera2D/UI/InputManager/Progress_Time" to="GridManager" method="_progress_time_button"]
 [connection signal="HarvestPlantSignal" from="GridManager" to="Camera2D/Inventory" method="_on_harvest_plant_signal"]
 [connection signal="PlantSeedSignal" from="GridManager" to="Camera2D/Inventory" method="_on_plant_seed_signal"]

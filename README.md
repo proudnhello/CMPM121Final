@@ -129,3 +129,9 @@ Finally, like we mentioned in the previous devlog, we swapped from C Sharp to GD
 ## Reflection
 We really, *really* dogded a bullet swapping to GDScript instead of C++. Despite being a completely new language, GDScript was close enough to python that no one really had any difficultly learning it. The team behind Godot put a load of work making GDScript and C Sharp scripts work together, which as discussed, made our life much easier when we were translating it over. And while this wasn't really realivant for F2, for F3 Godot's mobile module only supports GDScript. It doesn't have the Unity feature where you can compile it into java for mobile, anything execpt GDScript simply doesn't work. We are similarly lucky we decided to go from C Sharp to GDScript instead of the other way aroud, as I'm not sure what we would have done if we discoved that we had to swap platform *again*.   
 We do plan to make shuffle the roles a little bit into F3. Ethan has experiance with mobile builds, so we plan to designate him as the person in charge of our mobile builds. Asides from that, we plan to stick to the plan we've made.
+
+# Usage Notes
+Shovel Image from https://pixabay.com/vectors/sand-shovel-tool-158804/ 
+Plant image by freepik https://pixabay.com/vectors/sand-shovel-tool-158804/
+Undo image by freepik https://www.freepik.com/icon/undo_7456081 
+Redo image by freepik https://www.freepik.com/icon/redo_7456086#fromView=resource_detail&position=95 
