@@ -1,58 +1,105 @@
-[gd_scene load_steps=4 format=3 uid="uid://cg0j6nm1ryjg0"]
+[gd_scene load_steps=9 format=3 uid="uid://cg0j6nm1ryjg0"]
 
 [ext_resource type="Script" path="res://Scripts/Data/StartButton.gd" id="1_qse6a"]
 [ext_resource type="Script" path="res://Scripts/Data/TutorialButton.gd" id="2_b66rq"]
 [ext_resource type="Script" path="res://Scripts/Data/ContinueButton.gd" id="3_414h1"]
+[ext_resource type="Script" path="res://Scripts/Data/ChangeLocal.gd" id="4_bvnqu"]
+[ext_resource type="Texture2D" uid="uid://o17gmsn7dtni" path="res://Sprites/UI/Flag_of_the_United_States.svg.png" id="5_pftfq"]
+[ext_resource type="Texture2D" uid="uid://c4xxryhlf4i1r" path="res://Sprites/UI/Flag_of_Brazil.svg.png" id="6_a0rw3"]
+[ext_resource type="Texture2D" uid="uid://buvvo0luhyhlu" path="res://Sprites/UI/Flag_of_Israel.svg.png" id="7_ay1wr"]
+[ext_resource type="Texture2D" uid="uid://c870e08jcqyve" path="res://Sprites/UI/Flag_of_the_People's_Republic_of_China.svg.png" id="8_iff0r"]
 
 [node name="Control" type="Control"]
+layout_direction = 2
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 51.0
-offset_top = -160.0
-offset_right = -911.0
-offset_bottom = -476.0
+offset_left = -8.0
+offset_top = 5.0
+offset_right = -1928.0
+offset_bottom = -533.0
 grow_horizontal = 2
 grow_vertical = 2
 scale = Vector2(2, 2)
 
 [node name="Button" type="Button" parent="."]
 layout_mode = 0
-offset_left = 381.0
-offset_top = 435.0
-offset_right = 560.0
-offset_bottom = 492.0
-text = "Start Game"
+offset_left = 393.5
+offset_top = 248.0
+offset_right = 572.5
+offset_bottom = 305.0
+text = "START"
 script = ExtResource("1_qse6a")
 
 [node name="Label" type="Label" parent="."]
 layout_mode = 0
-offset_left = 239.0
-offset_top = 133.0
-offset_right = 691.0
-offset_bottom = 256.0
+offset_left = 251.5
+offset_top = 23.5
+offset_right = 703.5
+offset_bottom = 146.5
 theme_override_font_sizes/font_size = 40
-text = "CMPM 121 Final Project"
+text = "TITLE"
 
 [node name="Button2" type="Button" parent="."]
 layout_mode = 0
-offset_left = 382.0
-offset_top = 505.0
-offset_right = 559.0
-offset_bottom = 562.0
-text = "Tutorial"
+offset_left = 394.5
+offset_top = 318.0
+offset_right = 571.5
+offset_bottom = 375.0
+text = "TUTORIAL"
 script = ExtResource("2_b66rq")
 
 [node name="Button3" type="Button" parent="."]
 layout_mode = 0
-offset_left = 381.0
-offset_top = 364.0
-offset_right = 560.0
-offset_bottom = 421.0
-text = "Continue? "
+offset_left = 393.5
+offset_top = 177.0
+offset_right = 572.5
+offset_bottom = 234.0
+text = "CONTINUE"
 script = ExtResource("3_414h1")
+
+[node name="Control" type="Control" parent="."]
+anchors_preset = 0
+script = ExtResource("4_bvnqu")
+
+[node name="Button" type="Button" parent="Control"]
+layout_mode = 0
+offset_left = 236.5
+offset_top = 433.0
+offset_right = 341.5
+offset_bottom = 495.0
+icon = ExtResource("5_pftfq")
+expand_icon = true
+
+[node name="Button2" type="Button" parent="Control"]
+offset_left = 375.5
+offset_top = 433.5
+offset_right = 462.5
+offset_bottom = 495.5
+icon = ExtResource("6_a0rw3")
+expand_icon = true
+
+[node name="Button3" type="Button" parent="Control"]
+offset_left = 498.0
+offset_top = 433.5
+offset_right = 580.0
+offset_bottom = 495.5
+icon = ExtResource("7_ay1wr")
+expand_icon = true
+
+[node name="Button4" type="Button" parent="Control"]
+offset_left = 622.0
+offset_top = 433.0
+offset_right = 708.0
+offset_bottom = 495.0
+icon = ExtResource("8_iff0r")
+expand_icon = true
 
 [connection signal="pressed" from="Button" to="Button" method="_on_pressed"]
 [connection signal="pressed" from="Button2" to="Button2" method="_on_pressed"]
 [connection signal="pressed" from="Button3" to="Button3" method="_on_pressed"]
+[connection signal="button_down" from="Control/Button" to="Control" method="change_local" binds= ["en"]]
+[connection signal="pressed" from="Control/Button2" to="Control" method="change_local" binds= ["pt"]]
+[connection signal="button_down" from="Control/Button3" to="Control" method="change_local" binds= ["he"]]
+[connection signal="button_down" from="Control/Button4" to="Control" method="change_local" binds= ["cmn"]]

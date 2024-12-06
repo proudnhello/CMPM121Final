@@ -136,6 +136,7 @@ func _load_file(saveName):
 	print("Loading save file: ", saveName);
 	var actions = actionTracker.load(saveName);
 	var actionArray = [];
+	if actions == null: return;
 	for i in range(actions.size()):
 		actionArray.append(actions[i]);
 	

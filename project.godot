@@ -63,6 +63,10 @@ harvest={
 
 pointing/emulate_touch_from_mouse=true
 
+[internationalization]
+
+locale/translations=PackedStringArray("res://Localization/CMPM 121 Localization - Sheet1.cmn.translation", "res://Localization/CMPM 121 Localization - Sheet1.en.translation", "res://Localization/CMPM 121 Localization - Sheet1.he.translation", "res://Localization/CMPM 121 Localization - Sheet1.pt.translation")
+
 [rendering]
 
 renderer/rendering_method="mobile"

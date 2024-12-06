@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://5ca3juvaajho"
-path="res://.godot/imported/right-arrow.png-aa73fc0e16fbb72e4b57a0967023e944.ctex"
+uid="uid://cv0pn3s6epw7q"
+path="res://.godot/imported/Flag_of_Brazil.svg.png-4d641f06508ba46a9b863072aab69161.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Sprites/right-arrow.png"
-dest_files=["res://.godot/imported/right-arrow.png-aa73fc0e16fbb72e4b57a0967023e944.ctex"]
+source_file="res://Localization/Flag_of_Brazil.svg.png"
+dest_files=["res://.godot/imported/Flag_of_Brazil.svg.png-4d641f06508ba46a9b863072aab69161.ctex"]
 
 [params]
 

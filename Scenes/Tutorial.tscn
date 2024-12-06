@@ -1,6 +1,12 @@
-[gd_scene load_steps=2 format=3 uid="uid://coxggvb3me7fq"]
+[gd_scene load_steps=4 format=3 uid="uid://coxggvb3me7fq"]
 
 [ext_resource type="Script" path="res://Scripts/Data/BackButton.gd" id="1_qqir4"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_y31d3"]
+font_size = 48
+
+[sub_resource type="LabelSettings" id="LabelSettings_b7r8n"]
+font_size = 40
 
 [node name="Control" type="Control"]
 layout_mode = 3
@@ -12,35 +18,41 @@ grow_vertical = 2
 
 [node name="Button" type="Button" parent="."]
 layout_mode = 0
-offset_top = 584.0
-offset_right = 148.0
-offset_bottom = 648.0
-text = "Back"
+offset_left = 742.0
+offset_top = 884.0
+offset_right = 1047.0
+offset_bottom = 1029.0
 script = ExtResource("1_qqir4")
+
+[node name="Label3" type="Label" parent="Button"]
+offset_left = -3.0
+offset_top = 17.0
+offset_right = 302.0
+offset_bottom = 136.0
+theme_override_font_sizes/font_size = 35
+text = "BACK"
+label_settings = SubResource("LabelSettings_y31d3")
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="Label" type="Label" parent="."]
 layout_mode = 0
-offset_left = 392.0
-offset_top = 27.0
-offset_right = 703.0
-offset_bottom = 113.0
+offset_left = 810.0
+offset_top = 29.0
+offset_right = 1121.0
+offset_bottom = 115.0
 theme_override_font_sizes/font_size = 35
-text = "Gameplay Tutorial"
+text = "TUT_TITLE"
 
 [node name="Label2" type="Label" parent="."]
 layout_mode = 0
 offset_left = 41.0
-offset_top = 95.0
-offset_right = 1112.0
-offset_bottom = 365.0
+offset_top = 122.0
+offset_right = 1881.0
+offset_bottom = 749.0
 theme_override_font_sizes/font_size = 26
-text = "- WASD keys to move
-- Space key to harvest
-- Number keys \"1\", \"2\", and \"3\" to plant
-- Click \"Progress Time\" to increment water level as well as randomize sun level
-- \"Undo\" button to undo action, \"Redo\" Button to redo action 
-- Each plant has different requirements for growth
-- Win condition = Harvest 3 plants of each
-- Enjoy :3"
+text = "TUT_TEXT"
+label_settings = SubResource("LabelSettings_b7r8n")
+autowrap_mode = 3
 
 [connection signal="pressed" from="Button" to="Button" method="_on_pressed"]

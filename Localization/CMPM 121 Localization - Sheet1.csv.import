@@ -1,0 +1,17 @@
+[remap]
+
+importer="csv_translation"
+type="Translation"
+uid="uid://b4xapllryxuxp"
+
+[deps]
+
+files=["res://Localization/CMPM 121 Localization - Sheet1.en.translation", "res://Localization/CMPM 121 Localization - Sheet1.pt.translation", "res://Localization/CMPM 121 Localization - Sheet1.he.translation", "res://Localization/CMPM 121 Localization - Sheet1.cmn.translation"]
+
+source_file="res://Localization/CMPM 121 Localization - Sheet1.csv"
+dest_files=["res://Localization/CMPM 121 Localization - Sheet1.en.translation", "res://Localization/CMPM 121 Localization - Sheet1.pt.translation", "res://Localization/CMPM 121 Localization - Sheet1.he.translation", "res://Localization/CMPM 121 Localization - Sheet1.cmn.translation"]
+
+[params]
+
+compress=true
+delimiter=0

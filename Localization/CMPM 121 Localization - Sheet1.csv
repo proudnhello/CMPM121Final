@@ -1,0 +1,57 @@
+keys,en,pt,he,cmn
+TITLE,CMPM 121 Final Project,Projeto Final CMPM 121,פרויקט גמר CMPM 121,CMPM 121 最终项目
+CONTINUE,Continue?,Continuar?,לְהַמשִׁיך?,继续？
+START,Start Game,Iniciar jogo,התחל משחק,开始游戏
+TUTORIAL,Tutorial,Tutorial,שֶׁל מוֹרֶה,教程
+TUT_TITLE,Gameplay Tutorial,Tutorial de jogabilidade,הדרכה למשחקים,游戏教程
+TUT_TEXT,"- Press the blank arrow keys to move
+- Press the shovel button to harvest
+- Press the plant button to plant a plant
+- The brown boxes represent the number of seeds in your inventory. 
+Tap on one to select the plant you'd like to plant.
+- Press the arrow pointing right to increment water level as well as randomize sun level
+- Press the cicle arrow facing left to undo action.
+- Press the circle arrow pointing right to redo an action.
+- Each plant has different requirements for growth, experiment to work out how. 
+- Remember that you can undo planted plants if they don't grow.
+- Win condition = Harvest 3 plants of each type.
+- Enjoy :3","- Pressione as teclas de seta em branco para mover
+- Pressione o botão de pá para colher
+- Pressione o botão de planta para plantar uma planta
+- As caixas marrons representam o número de sementes em seu inventário. 
+Toque em uma para selecionar a planta que você gostaria de plantar.
+- Pressione a seta apontando para a direita para aumentar o nível de água, bem como randomizar o nível do sol
+- Pressione a seta circular voltada para a esquerda para desfazer a ação.
+- Pressione a seta circular apontando para a direita para refazer uma ação.
+- Cada planta tem diferentes requisitos para o crescimento, experimente para descobrir como. 
+- Lembre-se de que você pode desfazer as plantas plantadas se elas não crescerem.
+- Condição de vitória = Colha 3 plantas de cada tipo.
+- Divirta-se :3","- לחץ על מקשי החצים הריקים כדי לזוז
+- לחץ על כפתור האת כדי לקצור
+- לחץ על כפתור הצמח כדי לשתול צמח
+- הקופסאות החומות מייצגות את מספר הזרעים במלאי שלך. 
+הקש על אחד כדי לבחור את הצמח שברצונך לשתול.
+- לחץ על החץ המצביע ימינה כדי להגדיל את מפלס המים וכן להגדיר את מפלס השמש באופן אקראי
+- לחץ על חץ המעגל הפונה שמאלה כדי לבטל את הפעולה.
+- לחץ על חץ העיגול המצביע ימינה כדי לבצע פעולה מחדש.
+- לכל צמח יש דרישות שונות לצמיחה, ניסוי כדי להבין איך. 
+- זכור שאתה יכול לבטל צמחים נטועים אם הם לא גדלים.
+- מצב זכייה = קציר 3 צמחים מכל סוג.
+- תהנה!","- 按空白箭头键移动
+- 按铲子按钮收获
+- 按植物按钮种植植物
+- 棕色框代表库存中的种子数量。
+点击一个即可选择您想要种植的植物。
+- 按指向右侧的箭头增加水位并随机化日照水平
+- 按指向左侧的圆形箭头撤消操作。
+- 按指向右侧的圆形箭头重做操作。
+- 每种植物的生长要求不同，请进行实验以找出方法。
+- 请记住，如果种植的植物没有生长，您可以撤消它们。
+- 获胜条件 = 收获每种类型的 3 株植物。
+- 享受 :3"
+BACK,Back,Voltar,בְּחֲזָרָה,后退
+VICTORY,"YOU WIN!!
+ALT F4 NOW","VOCÊ GANHOU!!
+ALT F4 AGORA","אתה מנצח!!
+ALT F4 עכשיו","你赢了！！
+现在按 ALT F4"
