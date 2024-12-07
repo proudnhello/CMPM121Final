@@ -64,11 +64,14 @@ func _ready():
 	for i in range(PlantInfo.size()*2):
 		var slotNode = itemSlotScene.instantiate() as Node2D
 		var slotSprite = slotNode.get_node("Slot") as Sprite2D
-		slotNode.position = Vector2(0, (i - items.size() / 2.0) * slotSprite.texture.get_width() + i * pixelsBetweenSlots)
 		if (i < PlantInfo.size()): 
+			slotNode.position = Vector2(0, (i - items.size() / 2.0) * slotSprite.texture.get_width() + i * pixelsBetweenSlots)
 			slotSprite.self_modulate = Color.hex(0x5b3400ff)
 			var touchButton = slotNode.get_node("Button") as Button
 			touchButton.button_down.connect(SelectSeed.bind(i))
+		else:
+			var effectiveIndex = i - PlantInfo.size()
+			slotNode.position = Vector2(slotSprite.texture.get_width() + pixelsBetweenSlots, (effectiveIndex - items.size() / 2) * slotSprite.texture.get_width() + effectiveIndex * pixelsBetweenSlots)
 		itemSlotSprites.append(slotNode);
 		add_child(itemSlotSprites[i])
 	InitializeInventory()

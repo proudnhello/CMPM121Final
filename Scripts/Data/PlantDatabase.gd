@@ -47,19 +47,7 @@ static var Plants: Array = [
 		"maxAdjPlants": 10, 
 		"startSeeds": 8,
 		"specialCheck": [Callable(check_condition_requirements), Callable(check_neighbor_requirements)]
-	},  
-	{
-		"plantName": "test",
-		"waterRequirement": 2,
-		"sunRequirement": 2,
-		"maxGrowthLevel": 10,
-		"minLikePlants": 4,
-		"maxLikePlants": 10,
-		"minAdjPlants": 4, 
-		"maxAdjPlants": 10, 
-		"startSeeds": 8,
-		"specialCheck": [Callable(check_condition_requirements), Callable(check_neighbor_requirements)]
-	}
+	}, 
 	]
 ##############################
 
