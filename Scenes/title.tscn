@@ -73,6 +73,7 @@ icon = ExtResource("5_pftfq")
 expand_icon = true
 
 [node name="Button2" type="Button" parent="Control"]
+layout_mode = 0
 offset_left = 375.5
 offset_top = 433.5
 offset_right = 462.5
@@ -81,6 +82,7 @@ icon = ExtResource("6_a0rw3")
 expand_icon = true
 
 [node name="Button3" type="Button" parent="Control"]
+layout_mode = 0
 offset_left = 498.0
 offset_top = 433.5
 offset_right = 580.0
@@ -89,6 +91,7 @@ icon = ExtResource("7_ay1wr")
 expand_icon = true
 
 [node name="Button4" type="Button" parent="Control"]
+layout_mode = 0
 offset_left = 622.0
 offset_top = 433.0
 offset_right = 708.0

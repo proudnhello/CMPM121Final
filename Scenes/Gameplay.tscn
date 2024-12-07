@@ -31,14 +31,14 @@ script = ExtResource("1_7atv3")
 script = ExtResource("2_gq5sw")
 
 [node name="Camera2D" type="Camera2D" parent="."]
-position = Vector2(600, 0)
+position = Vector2(600, 271)
 scale = Vector2(0.243182, 0.243182)
 zoom = Vector2(0.3, 0.3)
 
 [node name="UI" type="CanvasLayer" parent="Camera2D"]
-offset = Vector2(600, -200)
+offset = Vector2(600, 0)
 scale = Vector2(1.705, 1.705)
-transform = Transform2D(1.705, 0, 0, 1.705, 600, -200)
+transform = Transform2D(1.705, 0, 0, 1.705, 600, 0)
 follow_viewport_enabled = true
 
 [node name="SaveMenu" type="MenuButton" parent="Camera2D/UI" node_paths=PackedStringArray("grid_manager")]
@@ -48,10 +48,10 @@ anchor_left = 0.815
 anchor_top = -0.487
 anchor_right = 0.916
 anchor_bottom = -0.291
-offset_left = -0.400024
-offset_top = -0.139954
-offset_right = 73.6799
-offset_bottom = 52.18
+offset_left = 49.8627
+offset_top = -313.923
+offset_right = 123.943
+offset_bottom = -261.603
 scale = Vector2(0.728246, 0.804006)
 tooltip_text = "Save Game"
 text = "
@@ -74,10 +74,10 @@ anchor_left = 0.812
 anchor_top = -0.269
 anchor_right = 0.92
 anchor_bottom = -0.071
-offset_left = 206.36
-offset_top = 214.42
-offset_right = 263.0
-offset_bottom = 264.58
+offset_left = 273.218
+offset_top = -120.037
+offset_right = 329.858
+offset_bottom = -69.8772
 rotation = -3.13759
 scale = Vector2(0.784271, 0.812167)
 tooltip_text = "Load Game"
@@ -98,7 +98,7 @@ character = NodePath("../../../Character")
 
 [node name="PlantButton" type="TouchScreenButton" parent="Camera2D/UI/InputManager"]
 self_modulate = Color(1, 1, 1, 0.537255)
-position = Vector2(1229.33, 671.554)
+position = Vector2(980.645, -586.51)
 scale = Vector2(440.103, 440.103)
 texture_normal = SubResource("CanvasTexture_w61lt")
 
@@ -109,7 +109,7 @@ texture = ExtResource("9_famal")
 
 [node name="HarvestButton" type="TouchScreenButton" parent="Camera2D/UI/InputManager"]
 self_modulate = Color(1, 1, 1, 0.537255)
-position = Vector2(747.214, 671.554)
+position = Vector2(980.645, -118.475)
 scale = Vector2(440.103, 440.103)
 texture_normal = SubResource("CanvasTexture_w61lt")
 
@@ -120,31 +120,31 @@ texture = ExtResource("10_dap18")
 
 [node name="Up_Button" type="TouchScreenButton" parent="Camera2D/UI/InputManager"]
 self_modulate = Color(1, 1, 1, 0.537255)
-position = Vector2(1108.5, -122.581)
+position = Vector2(1058.06, 525.513)
 scale = Vector2(300, 300)
 texture_normal = SubResource("CanvasTexture_4aamd")
 
 [node name="Left_Button" type="TouchScreenButton" parent="Camera2D/UI/InputManager"]
 self_modulate = Color(1, 1, 1, 0.537255)
-position = Vector2(766.569, 214.076)
+position = Vector2(716.129, 862.17)
 scale = Vector2(300, 300)
 texture_normal = SubResource("CanvasTexture_4aamd")
 
 [node name="Down_Button" type="TouchScreenButton" parent="Camera2D/UI/InputManager"]
 self_modulate = Color(1, 1, 1, 0.537255)
-position = Vector2(1112.02, 214.076)
+position = Vector2(1061.58, 862.17)
 scale = Vector2(300, 300)
 texture_normal = SubResource("CanvasTexture_4aamd")
 
 [node name="Right_Button" type="TouchScreenButton" parent="Camera2D/UI/InputManager"]
 self_modulate = Color(1, 1, 1, 0.537255)
-position = Vector2(1453.37, 218.182)
+position = Vector2(1402.93, 866.276)
 scale = Vector2(300, 300)
 texture_normal = SubResource("CanvasTexture_4aamd")
 
 [node name="Undo_Button" type="TouchScreenButton" parent="Camera2D/UI/InputManager"]
 self_modulate = Color(1, 1, 1, 0.537255)
-position = Vector2(1094.43, -872.141)
+position = Vector2(-511.437, 862.757)
 scale = Vector2(332.551, 302.639)
 texture_normal = SubResource("CanvasTexture_4aamd")
 
@@ -155,18 +155,18 @@ texture = ExtResource("9_62i5f")
 
 [node name="Redo_Button" type="TouchScreenButton" parent="Camera2D/UI/InputManager"]
 self_modulate = Color(1, 1, 1, 0.537255)
-position = Vector2(1093.26, -536.657)
-scale = Vector2(332.551, 342.522)
+position = Vector2(-144.277, 862.757)
+scale = Vector2(332.551, 302.639)
 texture_normal = SubResource("CanvasTexture_4aamd")
 
 [node name="Redo" type="Sprite2D" parent="Camera2D/UI/InputManager/Redo_Button"]
-position = Vector2(0.51037, 0.492928)
-scale = Vector2(0.00168527, 0.0017449)
+position = Vector2(0.500867, 0.492928)
+scale = Vector2(0.00148904, 0.0017449)
 texture = ExtResource("10_qq07h")
 
 [node name="Progress_Time" type="TouchScreenButton" parent="Camera2D/UI/InputManager"]
 self_modulate = Color(1, 1, 1, 0.537255)
-position = Vector2(1468.62, -874.487)
+position = Vector2(-883.871, 860.411)
 scale = Vector2(327.273, 302.639)
 texture_normal = SubResource("CanvasTexture_4aamd")
 
@@ -176,7 +176,7 @@ scale = Vector2(0.0018428, 0.00186031)
 texture = ExtResource("11_xopcs")
 
 [node name="Inventory" type="Node2D" parent="Camera2D" node_paths=PackedStringArray("inputManager")]
-position = Vector2(-11575.7, -5111.4)
+position = Vector2(-11575.7, -5991.4)
 scale = Vector2(4.11215, 4.11215)
 script = ExtResource("1_0qa61")
 itemSlotScene = ExtResource("7_x7taq")
