@@ -1,9 +1,10 @@
-[gd_scene load_steps=20 format=3 uid="uid://bgh1ayrmhacoe"]
+[gd_scene load_steps=22 format=3 uid="uid://bgh1ayrmhacoe"]
 
 [ext_resource type="Script" path="res://Scripts/Character/Inventory.gd" id="1_0qa61"]
 [ext_resource type="Script" path="res://Scripts/Data/ActionTracker.gd" id="1_7atv3"]
 [ext_resource type="Texture2D" uid="uid://dm1v2tfuxacr4" path="res://Sprites/Character/bean-294077_1280.png" id="1_lv6rf"]
 [ext_resource type="Script" path="res://Scripts/Grid/GridRenderer.gd" id="2_gq5sw"]
+[ext_resource type="Texture2D" uid="uid://dl0waefcueyeg" path="res://Sprites/UI/LoadFile.png" id="5_4yhyn"]
 [ext_resource type="Script" path="res://Scripts/Grid/GridManager.gd" id="5_lqpoq"]
 [ext_resource type="Script" path="res://Scripts/Character/character.gd" id="6_a5swx"]
 [ext_resource type="PackedScene" uid="uid://ctgicajw68chx" path="res://Scenes/Cell.tscn" id="6_o1l52"]
@@ -17,6 +18,9 @@
 [ext_resource type="Script" path="res://Scripts/Data/LoadMenu.gd" id="11_7etfo"]
 [ext_resource type="Texture2D" uid="uid://5ca3juvaajho" path="res://Sprites/UI/right-arrow.png" id="11_xopcs"]
 [ext_resource type="Script" path="res://Scripts/InputManager/InputManager.gd" id="12_ep27m"]
+
+[sub_resource type="Theme" id="Theme_ne1d1"]
+default_font_size = 100
 
 [sub_resource type="CanvasTexture" id="CanvasTexture_w61lt"]
 
@@ -54,15 +58,16 @@ offset_right = 123.943
 offset_bottom = -261.603
 scale = Vector2(0.728246, 0.804006)
 tooltip_text = "Save Game"
+theme = SubResource("Theme_ne1d1")
 text = "
 "
 icon = ExtResource("7_73caw")
 item_count = 3
-popup/item_0/text = "1"
+popup/item_0/text = " 1 "
 popup/item_0/id = 1
-popup/item_1/text = "2"
+popup/item_1/text = " 2 "
 popup/item_1/id = 2
-popup/item_2/text = "3"
+popup/item_2/text = " 3 "
 popup/item_2/id = 3
 script = ExtResource("10_2b0bm")
 grid_manager = NodePath("../../../GridManager")
@@ -70,24 +75,26 @@ grid_manager = NodePath("../../../GridManager")
 [node name="LoadMenu" type="MenuButton" parent="Camera2D/UI" node_paths=PackedStringArray("grid_manager")]
 layout_direction = 2
 anchors_preset = -1
-anchor_left = 0.812
-anchor_top = -0.269
-anchor_right = 0.92
-anchor_bottom = -0.071
-offset_left = 273.218
-offset_top = -120.037
-offset_right = 329.858
-offset_bottom = -69.8772
-rotation = -3.13759
-scale = Vector2(0.784271, 0.812167)
-tooltip_text = "Load Game"
-icon = ExtResource("7_73caw")
+anchor_left = 0.815
+anchor_top = -0.487
+anchor_right = 0.916
+anchor_bottom = -0.291
+offset_left = 49.8627
+offset_top = -92.2219
+offset_right = 123.943
+offset_bottom = -39.9019
+scale = Vector2(0.728246, 0.804006)
+tooltip_text = "Save Game"
+theme = SubResource("Theme_ne1d1")
+text = "
+"
+icon = ExtResource("5_4yhyn")
 item_count = 3
-popup/item_0/text = "1"
+popup/item_0/text = " 1 "
 popup/item_0/id = 1
-popup/item_1/text = "2"
+popup/item_1/text = " 2 "
 popup/item_1/id = 2
-popup/item_2/text = "3"
+popup/item_2/text = " 3 "
 popup/item_2/id = 3
 script = ExtResource("11_7etfo")
 grid_manager = NodePath("../../../GridManager")
@@ -97,6 +104,7 @@ script = ExtResource("12_ep27m")
 character = NodePath("../../../Character")
 
 [node name="PlantButton" type="TouchScreenButton" parent="Camera2D/UI/InputManager"]
+modulate = Color(0.97, 0.97, 0.97, 1)
 self_modulate = Color(1, 1, 1, 0.537255)
 position = Vector2(980.645, -586.51)
 scale = Vector2(440.103, 440.103)
