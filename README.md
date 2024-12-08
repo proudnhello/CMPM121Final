@@ -153,11 +153,11 @@ Similarly, the localization was a breeze as well. Godot is well set up to deal w
 All in all, our plans didn't change this time around, because everything just went exactly to plan. Thanks to a bit of luck with our engine choice and our group members skills, F3 was all very smooth sailing.
 
 # Usage Notes
-Shovel Image from https://pixabay.com/vectors/sand-shovel-tool-158804/ 
-Plant image by freepik https://pixabay.com/vectors/sand-shovel-tool-158804/
-Undo image by freepik https://www.freepik.com/icon/undo_7456081 
-Redo image by freepik https://www.freepik.com/icon/redo_7456086#fromView=resource_detail&position=95 
-American flag from https://commons.wikimedia.org/wiki/File:Flag_of_the_United_States.svg 
-Brazil flag from https://en.wikipedia.org/wiki/File:Flag_of_Brazil.svg 
-Israeli flag from https://commons.wikimedia.org/wiki/File:Flag_of_Brazil_%281960%E2%80%931968%29.svg 
-Chinese flag from https://commons.wikimedia.org/wiki/File:Flag_of_the_People%27s_Republic_of_China.svg 
+Shovel Image from https://pixabay.com/vectors/sand-shovel-tool-158804/  
+Plant image by freepik https://pixabay.com/vectors/sand-shovel-tool-158804/  
+Undo image by freepik https://www.freepik.com/icon/undo_7456081   
+Redo image by freepik https://www.freepik.com/icon/redo_7456086#fromView=resource_detail&position=95  
+American flag from https://commons.wikimedia.org/wiki/File:Flag_of_the_United_States.svg  
+Brazil flag from https://en.wikipedia.org/wiki/File:Flag_of_Brazil.svg  
+Israeli flag from https://commons.wikimedia.org/wiki/File:Flag_of_Brazil_%281960%E2%80%931968%29.svg  
+Chinese flag from https://commons.wikimedia.org/wiki/File:Flag_of_the_People%27s_Republic_of_China.svg  
