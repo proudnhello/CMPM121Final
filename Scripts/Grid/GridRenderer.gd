@@ -41,6 +41,7 @@ func render_cell(x : int, y : int) -> void:
 		grid_sprites[x][y] = cell_node
 		grid_manager.add_child(grid_sprites[x][y])
 	grid_sprites[x][y].update_labels(cell, retrieve_cell_color())
+	print(eventHappenings.current_event);
 
 func retrieve_cell_color() -> Color:
 	if (eventHappenings.current_event == "drought"):

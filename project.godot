@@ -65,7 +65,7 @@ pointing/emulate_touch_from_mouse=true
 
 [internationalization]
 
-locale/translations=PackedStringArray("res://Localization/CMPM 121 Localization - Sheet1.cmn.translation", "res://Localization/CMPM 121 Localization - Sheet1.en.translation", "res://Localization/CMPM 121 Localization - Sheet1.he.translation", "res://Localization/CMPM 121 Localization - Sheet1.pt.translation")
+locale/translations=PackedStringArray("res://Localization/CMPM 121 Localization.cmn.translation", "res://Localization/CMPM 121 Localization.en.translation", "res://Localization/CMPM 121 Localization.he.translation", "res://Localization/CMPM 121 Localization.pt.translation")
 
 [rendering]
 

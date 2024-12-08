@@ -35,13 +35,10 @@ func check_events(time: int):
     if event["time"] == time:
         if event["type"] in event_lookup:
             event_lookup[event["type"]].call()
-            current_event = event["type"]
         else :
             print("Event type not found: ", event["type"])
             event_lookup["normal"].call()
-            current_event = "normal"
         current_index += 1
-    print(current_event);
 
 func check_undo_events(time: int):
     # If no events have happened yet, do nothing
@@ -51,9 +48,7 @@ func check_undo_events(time: int):
     if current_index == 1:
         if event_list[0]["time"] - 1 == time:
             event_lookup["normal"].call()
-            current_event = "normal";
             current_index -= 1
-        print(current_event);
         return;
     
     var event = event_list[current_index - 1]
@@ -63,15 +58,14 @@ func check_undo_events(time: int):
     if event["time"] - 1 == time:
         if previousEvent["type"] in event_lookup:
             event_lookup[previousEvent["type"]].call()
-            current_event = previousEvent["type"];
         else :
             print("Event type not found: ", event["type"])
             event_lookup["normal"].call()
-            current_event = "normal";
         current_index -= 1
     print(current_event);
 
 func _drought():
+    current_event = "drought"
     GameData.itemData["game settings"].minWaterStep = -20;
     GameData.itemData["game settings"].maxWaterStep = 2;
     GameData.itemData["game settings"].minSunlight = 12;
@@ -79,6 +73,7 @@ func _drought():
     pass
 
 func _rainstorm():
+    current_event = "rainstorm"
     GameData.itemData["game settings"].minWaterStep = 5;
     GameData.itemData["game settings"].maxWaterStep = 12;
     GameData.itemData["game settings"].minSunlight = 0;
@@ -86,6 +81,7 @@ func _rainstorm():
     pass
 
 func _normal():
+    current_event = "normal"
     GameData.itemData["game settings"].minWaterStep = default_game_settings.minWaterStep;
     GameData.itemData["game settings"].maxWaterStep = default_game_settings.maxWaterStep;
     GameData.itemData["game settings"].minSunlight = default_game_settings.minSunlight;

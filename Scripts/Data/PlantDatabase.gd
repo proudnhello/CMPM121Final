@@ -24,7 +24,13 @@ static var Plants: Array = [
 		"minAdjPlants": 0, 
 		"maxAdjPlants": 4, 
 		"startSeeds": 3,
-		"specialCheck": [Callable(check_condition_requirements), Callable(lily), Callable(check_neighbor_requirements)]
+		"specialCheck": [
+			Callable(check_growth_level),
+			Callable(check_water_level),
+			Callable(check_sun_level), 
+			Callable(lily), 
+			Callable(check_neighbor_requirements)
+		]
 	},
 	{
 		"plantName": "Sunflower",
@@ -34,7 +40,12 @@ static var Plants: Array = [
 		"minLikePlants": 1, 
 		"maxLikePlants": 4, 
 		"startSeeds": 3,
-		"specialCheck": [Callable(check_condition_requirements), Callable(check_neighbor_requirements)]
+		"specialCheck": [
+			Callable(check_growth_level),
+			Callable(check_water_level),
+			Callable(check_sun_level), 
+			Callable(check_neighbor_requirements)
+		]
 	},  
 	{
 		"plantName": "Rafflesia",
@@ -46,8 +57,28 @@ static var Plants: Array = [
 		"minAdjPlants": 4, 
 		"maxAdjPlants": 10, 
 		"startSeeds": 8,
-		"specialCheck": [Callable(check_condition_requirements), Callable(check_neighbor_requirements)]
-	}, 
+		"specialCheck": [
+			Callable(check_growth_level),
+			Callable(check_water_level),
+			Callable(check_sun_level),  
+			Callable(check_neighbor_requirements)
+		]
+	},  
+	{
+		"plantName": "Cactus",
+		"sunRequirement": 5,
+		"maxGrowthLevel": 5,
+		"minLikePlants": 2,
+		"maxLikePlants": 4,
+		"minAdjPlants": 2, 
+		"maxAdjPlants": 4, 
+		"startSeeds": 8,
+		"specialCheck": [
+			Callable(check_growth_level),
+			Callable(check_sun_level),  
+			Callable(check_neighbor_requirements)
+		]
+	}
 	]
 ##############################
 
@@ -76,14 +107,23 @@ static func retreivePlants() -> Array:
 		InputMap.action_add_event(action_name, key_event);
 	return Plants;
 
-
-static func check_condition_requirements(info) -> bool:
+static func check_water_level(info) -> bool:
 	var plant = retreivePlants()[info.get("cell")[2]-1];
-	var cell = info.get("cell");
+	if info.get("cell")[0] < plant.waterRequirement:
+		return false;
+	return true;
 
-	if cell[0] < plant.waterRequirement or cell[1] < plant.sunRequirement or cell[3] >= plant.maxGrowthLevel:
-		return false
-	return true
+static func check_sun_level(info) -> bool:
+	var plant = retreivePlants()[info.get("cell")[2]-1];
+	if info.get("cell")[1] < plant.sunRequirement:
+		return false;
+	return true;
+
+static func check_growth_level(info) -> bool:
+	var plant = retreivePlants()[info.get("cell")[2]-1];
+	if info.get("cell")[3] >= plant.maxGrowthLevel:
+		return false;
+	return true;
 
 static func check_neighbor_requirements(info) -> bool:
 	var plant = retreivePlants()[info.get("cell")[2]-1];
