@@ -130,6 +130,26 @@ Finally, like we mentioned in the previous devlog, we swapped from C Sharp to GD
 We really, *really* dogded a bullet swapping to GDScript instead of C++. Despite being a completely new language, GDScript was close enough to python that no one really had any difficultly learning it. The team behind Godot put a load of work making GDScript and C Sharp scripts work together, which as discussed, made our life much easier when we were translating it over. And while this wasn't really realivant for F2, for F3 Godot's mobile module only supports GDScript. It doesn't have the Unity feature where you can compile it into java for mobile, anything execpt GDScript simply doesn't work. We are similarly lucky we decided to go from C Sharp to GDScript instead of the other way aroud, as I'm not sure what we would have done if we discoved that we had to swap platform *again*.   
 We do plan to make shuffle the roles a little bit into F3. Ethan has experiance with mobile builds, so we plan to designate him as the person in charge of our mobile builds. Asides from that, we plan to stick to the plan we've made.
 
+# Devlog Entry 12/8/2024  
+## How we satisfied the software requirements
+### F0+F1+F2
+All previous F requirements continue to be met. Keybindings for player movement and planting/harvesting seeds remain functional, while the game's UI was updated to support mobile interaction with new buttons. Additionally, we replaced text-based buttons for progressing time, undoing, and redoing with icons to enhance internationalization and improve accessibility. Otherwise, no other major changes were made.
+### Internationalization
+Godot has a built-in [internationalization system](https://docs.godotengine.org/en/stable/tutorials/assets_pipeline/importing_translations.html) set up to separate internal strings from those shown to the player. It relies on key-value pairs in translation objects, which can be created by importing a CSV file that has been organized according to the style guide in the link above. We set up a google sheet that manages the translations from english to the other supported languages.
+The process to add another language is straightforward: the user would have to first add their translations to the english keys in the .csv file following the style guide in the link above. They would then re-import the file into Godot's localization menu, where a .translation object will be created corresponding to the languages entered. Based on the currently set locale code, Godot replaces all text instances of the keys defined with their respective translations. 
+If they want, the user can also add a button to the title scene that, when pressed, invokes the "ChangeLocal.change_local(string s)" function, where the parameter s represents the locale code of the language added.
+### Localization
+We localized the game into Brazilian Portuguese, Hebrew (right-to-left), and Simplified Chinese (logographic). These languages were chosen because team members are native speakers or fluent in them. We set up a google sheet with one english key in each row, and everyone filled out their corresponding translations on their own time. 
+On the title screen, players can select their preferred language by clicking flags representing each option. This triggers the ChangeLocal.change_local(locale_code) function to dynamically switch the game's language.
+### Mobile Installation
+Ethan: The process was surprisingly only somewhat painful. A few things worked out in our favor: Godot only has Android support since it's open-source and iOS isn't, but I have an Android phone and already have experience porting games to Android. Additionally, Godot's mobile support for projects written in C# is limited, so we had to switch to the regular version of Godot instead of the .NET build. Since all our scripts were already written in GDScript, this was very easy. The harder part was making the app itself.
+
+I used this tutorial and documentation page to figure out most of it with a few hiccups along the way. I had Android SDK 34 already installed, but the build was failing to export since my version of OpenJDK didn't seem to be supported by Godot. I downloaded the recommended OpenJDK 17 through some company called Eclipse Temurin and changed my environment variable $JAVA_HOME to link to the new JDK. From there, the build was still failing so I had to use the new OpenJDK version to generate a new debug keystore to sign the game, then just followed the steps in the video and the export worked! I took the generated .apk file, transferred it to my phone, and successfully installed it locally.
+### Mobile Play (Offline)
+Because our game is installed locally, there is no online functionality and thus always works offline. We did however have to make a few changes to ensure it played well on mobile. The game's resolution was too small so we sized it up to 1080p. Then, we replaced all the user input with mobile-friendly UI buttons and rearranged everything to fit within the screen comfortably and that was it! 
+## Reflection
+
+
 # Usage Notes
 Shovel Image from https://pixabay.com/vectors/sand-shovel-tool-158804/ 
 Plant image by freepik https://pixabay.com/vectors/sand-shovel-tool-158804/
