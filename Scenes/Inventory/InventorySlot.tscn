@@ -21,12 +21,13 @@ scale = Vector2(350, 350)
 texture = SubResource("CanvasTexture_awvi3")
 
 [node name="Label" type="Label" parent="."]
-offset_left = 52.0
+offset_left = -98.0
 offset_top = -10.0
 offset_right = 123.0
-offset_bottom = 128.0
+offset_bottom = 155.0
 text = "0"
 label_settings = ExtResource("2_uw5mo")
+horizontal_alignment = 2
 
 [node name="Button" type="Button" parent="."]
 modulate = Color(1, 1, 1, 0)

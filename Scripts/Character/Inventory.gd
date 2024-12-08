@@ -24,7 +24,7 @@ func CheckWin():
 
 func DisplayInventorySlot(slotNum):		
 	var slotScript = itemSlotSprites[slotNum]
-	slotScript.update_amount(items[slotNum])
+	slotScript.update_amount(items[slotNum], slotNum >= PlantInfo.size())
 	slotScript.update_selection(slotNum == currentSeed);
 
 func DisplayInventory():
@@ -80,14 +80,12 @@ func _ready():
 
 func AddItem(item, amount):
 	items[item] += amount
-	var slotScript = itemSlotSprites[item]
-	slotScript.update_amount(items[item])
+	DisplayInventorySlot(item)
 
 func RemoveItem(item, amount):
 	if items[item] >= amount:
 		items[item] -= amount
-		var slotScript = itemSlotSprites[item]
-		slotScript.update_amount(items[item])
+		DisplayInventorySlot(item)
 		return true
 	return false
 
