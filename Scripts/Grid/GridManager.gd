@@ -149,6 +149,7 @@ func _load_file(saveName):
 		var actionInfo = actionArray[i];
 		if(actionInfo[0] == 0):
 			_step_time(actionInfo[1]);
+			actionTracker.increment_program_counter();
 			print("Loaded step time");
 		elif(actionInfo[0] == 1):
 			_plant_seed(actionInfo[1], actionInfo[2], actionInfo[3]);

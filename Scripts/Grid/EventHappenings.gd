@@ -62,7 +62,6 @@ func check_undo_events(time: int):
             print("Event type not found: ", event["type"])
             event_lookup["normal"].call()
         current_index -= 1
-    print(current_event);
 
 func _drought():
     current_event = "drought"
